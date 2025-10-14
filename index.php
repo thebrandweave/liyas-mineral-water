@@ -91,8 +91,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="about-images">
-                        <img src="assets/images/water-top.png" alt="Premium Water" class="about-image-main fade-in">
-                        <img src="assets/images/water.png" alt="Natural Water" class="about-image-secondary fade-in">
+                        <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main fade-in">
+                        <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary fade-in">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -162,8 +162,12 @@
     <button class="btn-all-products mt-5">All Products</button>
   </section>
     
+    <!-- Hollow Title -->
+    <?php include 'components/hollow-title.php'; ?>
+
     <!-- Footer -->
     <?php include 'components/footer.php'; ?>
+
 
     <script>
 

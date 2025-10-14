@@ -30,36 +30,16 @@
                         </a>
                     </div>
                 </div>
-                
-                <div class="footer-links">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#product">Product</a></li>
-                        <li><a href="#benefits">Benefits</a></li>
-                    </ul>
+                <div class="hollow-text-section d-flex justify-content-center align-items-center">
+                <h1 class="hollow-text">
+                    <span class="outline-letter">L</span>
+                    <span class="outline-letter">I</span>
+                    <span class="outline-letter">Y</span>
+                    <span class="outline-letter">A</span>
+                    <span class="outline-letter">S</span>
+                </h1>
                 </div>
-                
-                <div class="footer-links">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Returns</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-links">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Sustainability</a></li>
-                        <li><a href="#">Careers</a></li>
-                    </ul>
-                </div>
+
             </div>
             
             <div class="footer-bottom">
