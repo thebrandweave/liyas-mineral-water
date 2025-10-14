@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaPure - Premium Natural Water</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Liyas-mineral Water</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
+
     <!-- Social Icons Sidebar -->
     <div class="social-sidebar">
         <a href="https://facebook.com" target="_blank" class="social-icon">
@@ -557,6 +558,7 @@
     </footer>
 
     <script>
+
         // Quantity selector functionality
         const quantityBtns = document.querySelectorAll('.quantity-btn');
         const quantityValue = document.querySelector('.quantity-value');
@@ -587,23 +589,6 @@
             });
         });
 
-        // Navbar scroll effect
-        let lastScroll = 0;
-        const navbar = document.querySelector('nav');
-
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                navbar.style.padding = '15px 80px';
-                navbar.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.12)';
-            } else {
-                navbar.style.padding = '25px 80px';
-                navbar.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.08)';
-            }
-            
-            lastScroll = currentScroll;
-        });
 
         // Animate elements on scroll
         const observerOptions = {
@@ -624,6 +609,7 @@
         document.querySelectorAll('.feature-card, .benefit-card, .testimonial-card, .gallery-item').forEach(el => {
             observer.observe(el);
         });
+
     </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
