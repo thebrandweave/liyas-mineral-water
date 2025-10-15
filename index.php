@@ -11,241 +11,299 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <style>
+        /* Splash Screen Styles */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 9999;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f8ff;
+        }
 
+        .splash-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 12px 15px rgba(0,0,0,0.2);
+            background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+            animation: white 2.5s ease-out forwards;
+        }
+
+        .logo-text {
+            position: relative;
+            z-index: 3;
+            font-size: 60px;
+            font-weight: 700;
+            color: #0078d4;
+            opacity: 0;
+            letter-spacing: 2px;
+            animation: logoFade 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s forwards;
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .math-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            perspective: 1000px;
+        }
+
+        .math-particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: particleFloat 4s infinite;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-particle:nth-child(3n) {
+            background: linear-gradient(135deg, #00a2ed, #0078d4);
+            width: 12px;
+            height: 12px;
+        }
+
+        .math-particle:nth-child(3n+1) {
+            background: #ffffff;
+            width: 8px;
+            height: 8px;
+        }
+
+        .math-particle:nth-child(3n+2) {
+            background: rgba(0, 120, 212, 0.8);
+            width: 6px;
+            height: 6px;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(0) translateX(0) translateZ(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            50% { transform: translateY(-50px) translateX(var(--x-offset)) translateZ(var(--z-offset)) rotate(180deg); opacity: 0.9; }
+            100% { transform: translateY(-150px) translateX(calc(var(--x-offset) * 2)) translateZ(calc(var(--z-offset) * 0.5)) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes black {
+            0%   { border-radius: 100%; width: 0; height: 0; top: 50%; transform: translateY(-50%) scale(0); }
+            10%  { width: 300px; height: 300px; border-radius: 50%; transform: translateY(-50%) scale(1); }
+            25%,100% { width: 100%; height: 100%; border-radius: 0; top: 0; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes white {
+            0%,30% { border-radius: 100%; width: 0; height: 0; top: 50%; transform: translateY(-50%) scale(0); }
+            40%    { width: 300px; height: 300px; border-radius: 50%; transform: translateY(-50%) scale(1); }
+            55%,100% { width: 100%; height: 100%; border-radius: 0; top: 0; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes logoFade {
+            from { opacity: 0; transform: translateY(10px) scale(0.9); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .splash-fadeout {
+            animation: splashFadeOut 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+        }
+        
+        @keyframes splashFadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to   { opacity: 0; visibility: hidden; transform: scale(1.05); }
+        }
+
+        /* AOS handles reveal animations globally */
     </style>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" aria-hidden="true">
+        <div class="splash-layer" aria-hidden="true"></div>
+        <div class="logo-text">Liyas</div>
+        <div class="math-particles" aria-hidden="true" id="mathParticles"></div>
+    </div>
 
     <!-- Social Icons Sidebar -->
     <div class="social-sidebar">
-        <a href="https://facebook.com" target="_blank" class="social-icon">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="https://x.com" target="_blank" class="social-icon">
-            <i class="fab fa-x-twitter"></i>
-        </a>
-        <a href="https://instagram.com" target="_blank" class="social-icon">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://linkedin.com" target="_blank" class="social-icon">
-            <i class="fab fa-linkedin-in"></i>
-        </a>
-        <a href="https://github.com" target="_blank" class="social-icon">
-            <i class="fab fa-github"></i>
-        </a>
+        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
     </div>
     
     <!-- Back to Top Button -->
-    <button id="backToTop" title="Go to top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
+    <section class="hero" id="home" data-aos="fade-up">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="hero-content">
+                    <div class="hero-content" data-aos="fade-right" data-aos-delay="50">
                         <div class="hero-subtitle">PURE WATER</div>
                         <h1>DELIVERY SERVICE</h1>
                         <p>We now deliver different types of bottled water. To drink the best water please come to us and give us an order and take safe and sound water for you.</p>
                         <div class="hero-buttons">
                             <a href="#" class="btn-primary">Order Now</a>
-                            <a href="#about" class="btn-secondary">
-                                Read More
-                            </a>
+                            <a href="#about" class="btn-secondary">Read More</a>
                         </div>
-                    </div>
-                    <div class="hero-float">
-                        <div class="floating-element float-1"></div>
-                        <div class="floating-element float-2"></div>
-                        <div class="floating-element float-3"></div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="hero-image">
+                    <div class="hero-image" data-aos="fade-left" data-aos-delay="100">
                         <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
                     </div>
                 </div>
             </div>
         </div>
-        <svg class="wave-svg" viewBox="0 0 1440 490" xmlns="http://www.w3.org/2000/svg">
-            <path
-            d="M 0,400 L 0,225 C 130.27,247.4 260.53,269.8 419,238 
-                C 577.47,206.2 764.13,120.2 939,84 
-                C 1113.87,47.8 1276.93,61.4 1440,75 
-                L 1440,400 L 0,400 Z"
-            fill="#ffffff"
-            ></path>
-        </svg>
+        <svg class="wave-svg" viewBox="0 0 1440 490"><path d="M0,400 L0,225 C130.27,247.4 260.53,269.8 419,238 C577.47,206.2 764.13,120.2 939,84 C1113.87,47.8 1276.93,61.4 1440,75 L1440,400 L0,400 Z" fill="#ffffff"></path></svg>
     </section>
 
     <!-- About Section -->
-    <section class="about-section" id="about">
+    <section class="about-section" id="about" data-aos="fade-up">
         <div class="container">
-            <div class="about-title fade-in">
+            <div class="about-title fade-in" data-aos="fade-up">
                 <div class="about-subtitle">PURE NATURAL WATER</div>
                 <h2 class="about-heading">BEAUTIFUL WATER WITH BEAUTIFUL CARE & UNIQUE QUALITY</h2>
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="about-images">
+                    <div class="about-images" data-aos="zoom-in" data-aos-delay="50">
                         <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main fade-in">
                         <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary fade-in">
                     </div>
                 </div>
                 <div class="col-lg-6">
-                <div class="about-content">
-                    <div class="about-text fade-in">
-                        <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
-                        <p>Our water is sourced from protected mountain springs, carefully filtered, and bottled in our state-of-the-art facility. We take pride in delivering not just water, but a premium hydration experience.</p>
-                        <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
-                        <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
+                    <div class="about-content" data-aos="fade-left" data-aos-delay="100">
+                        <div class="about-text fade-in">
+                            <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
+                            <p>Our water is sourced from protected mountain springs, carefully filtered, and bottled in our state-of-the-art facility. We take pride in delivering not just water, but a premium hydration experience.</p>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Product section  -->
-    <section class="product-section container">
-    <h2>CHOOSE YOUR <span>WATER</span></h2>
-    <p>BOTTLES WE DELIVER</p>
+    <?php include 'components/whychooseus.php'; ?>
 
-    <div class="row g-4 justify-content-center">
-
-      <!-- Product 1 -->
-      <div class="col-md-6 col-lg-4">
-        <div class="card product-card position-relative p-3">
-          <span class="badge-sale">SALE</span>
-          <img src="assets/images/bottle-1.jpg" alt="3 Bottles">
-          <div class="card-body">
-            <h5 class="card-title mt-3">Three bottles of mineral water</h5>
-            <div class="rating">★★★★★</div>
-            <p class="price">₹13.25</p>
-            <button class="btn btn-outline-primary">Add to cart</button>
-          </div>
+    <!-- Product Section -->
+    <section class="product-section container" data-aos="fade-up">
+        <h2>CHOOSE YOUR <span>WATER</span></h2>
+        <p>BOTTLES WE DELIVER</p>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card product-card position-relative p-3" data-aos="fade-up" data-aos-delay="0">
+                    <span class="badge-sale">SALE</span>
+                    <img src="assets/images/bottle-1.jpg" alt="3 Bottles">
+                    <div class="card-body">
+                        <h5 class="card-title mt-3">Three bottles of mineral water</h5>
+                        <div class="rating">★★★★★</div>
+                        <p class="price">₹13.25</p>
+                        <button class="btn btn-outline-primary">Add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card product-card p-3" data-aos="fade-up" data-aos-delay="100">
+                    <img src="assets/images/bottle-1.jpg" alt="1 Big Bottle">
+                    <div class="card-body">
+                        <h5 class="card-title mt-3">One big bottle of mineral water</h5>
+                        <div class="rating">★★★★★</div>
+                        <p class="price">₹10</p>
+                        <button class="btn btn-outline-primary">Add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card product-card p-3" data-aos="fade-up" data-aos-delay="200">
+                    <img src="assets/images/bottle-1.jpg" alt="Small Bottles">
+                    <div class="card-body">
+                        <h5 class="card-title mt-3">Small bottles of mineral water</h5>
+                        <div class="rating">★★★★★</div>
+                        <p class="price">₹10</p>
+                        <button class="btn btn-outline-primary">Add to cart</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <button class="btn-view-more mt-5">View More</button>
+    </section>
 
-      <!-- Product 2 -->
-      <div class="col-md-6 col-lg-4">
-        <div class="card product-card p-3">
-          <img src="assets/images/bottle-1.jpg" alt="1 Big Bottle">
-          <div class="card-body">
-            <h5 class="card-title mt-3">One big bottle of mineral water</h5>
-            <div class="rating">★★★★★</div>
-            <p class="price">₹10</p>
-            <button class="btn btn-outline-primary">Add to cart</button>
-          </div>
-        </div>
-      </div>
+    <?php include 'components/order-delivery.php'; ?>
 
-      <!-- Product 3 -->
-      <div class="col-md-6 col-lg-4">
-        <div class="card product-card p-3">
-          <img src="assets/images/bottle-1.jpg" alt="Small Bottles">
-          <div class="card-body">
-            <h5 class="card-title mt-3">Small bottles of mineral water</h5>
-            <div class="rating">★★★★★</div>
-            <p class="price">₹10</p>
-            <button class="btn btn-outline-primary">Add to cart</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn-view-more mt-5">View More</button>
-  </section>
-    
-    <!-- Hollow Title -->
-    <?php include 'components/hollow-carousel.php'; ?>
-
-    <!-- Footer -->
-    <?php include 'components/footer.php'; ?>
-
-
-
+    <?php include 'components/contact.php'; ?>
 
     <script>
-
-        // Quantity selector functionality
-        const quantityBtns = document.querySelectorAll('.quantity-btn');
-        const quantityValue = document.querySelector('.quantity-value');
-        let quantity = 1;
-
-        quantityBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if (btn.textContent === '+') {
-                    quantity++;
-                } else if (btn.textContent === '−' && quantity > 1) {
-                    quantity--;
-                }
-                quantityValue.textContent = quantity;
-            });
-        });
-
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-
-        // Animate elements on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all animated elements
-        document.querySelectorAll('.feature-card, .benefit-card, .testimonial-card, .gallery-item, .fade-in, .product-card').forEach(el => {
-            observer.observe(el);
-        });
-
-    </script>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Back to Top Button Functionality
-        const backToTop = document.getElementById("backToTop");
-        
-        // Show button after scrolling down
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 300) {
-                backToTop.style.display = "flex";
-            } else {
-                backToTop.style.display = "none";
+    // Splash screen functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const splash = document.getElementById('splash-screen');
+        const mathParticles = document.getElementById('mathParticles');
+        createMathParticles();
+        function createMathParticles() {
+            const particleCount = 24;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'math-particle';
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 2;
+                const xOffset = Math.random() * 200 - 100;
+                const zOffset = Math.random() * 300;
+                particle.style.left = `${x}%`;
+                particle.style.top = `${y}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.setProperty('--x-offset', `${xOffset}px`);
+                particle.style.setProperty('--z-offset', `${zOffset}px`);
+                mathParticles.appendChild(particle);
             }
-        });
-        
-        // Smooth scroll to top
-        backToTop.addEventListener("click", () => {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
+        }
+        document.body.style.overflow = 'hidden';
+        const layer = document.querySelector('.splash-layer');
+        const fallbackTimeout = setTimeout(finishSplash, 4000);
+        layer.addEventListener('animationend', finishSplash);
+        function finishSplash() {
+            clearTimeout(fallbackTimeout);
+            layer.removeEventListener('animationend', finishSplash);
+            splash.classList.add('splash-fadeout');
+            setTimeout(() => {
+                splash.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 800);
+        }
+    });
+
+    // AOS init
+    document.addEventListener("DOMContentLoaded", function() {
+        AOS.init({ duration: 700, easing: 'ease-out', once: true, offset: 80 });
+    });
+
+    // Back to Top Button
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+        backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
+    });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
