@@ -17,8 +17,8 @@
         <a href="https://facebook.com" target="_blank" class="social-icon">
             <i class="fab fa-facebook-f"></i>
         </a>
-        <a href="https://twitter.com" target="_blank" class="social-icon">
-            <i class="fab fa-twitter"></i>
+        <a href="https://x.com" target="_blank" class="social-icon">
+            <i class="fab fa-x-twitter"></i>
         </a>
         <a href="https://instagram.com" target="_blank" class="social-icon">
             <i class="fab fa-instagram"></i>
