@@ -92,36 +92,36 @@
     }
 
     .btn-outline-primary {
-      border-radius: 30px;
-      padding: 12px 30px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      border-color: #3498db;
-      color: #3498db;
+      border-radius: 30px !important;
+      padding: 12px 30px !important;
+      font-weight: 600 !important;
+      transition: all 0.3s ease !important;
+      border-color: #3498db !important;
+      color: #3498db !important;
     }
 
     .btn-outline-primary:hover {
-      background-color: #3498db;
-      color: #fff;
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      background-color: #3498db !important;
+      color: #fff !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
     }
 
-    .btn-all-products {
-      background: #3498db;
-      color: #fff;
-      border: none;
-      border-radius: 30px;
-      padding: 12px 30px;
-      margin-top: 40px;
-      font-weight: 600;
-      transition: all 0.3s ease;
+    .btn-view-more {
+      background: #3498db !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: 30px !important;
+      padding: 12px 30px !important;
+      margin-top: 40px !important;
+      font-weight: 600 !important;
+      transition: all 0.3s ease !important;
     }
 
-    .btn-all-products:hover {
-      background: #2980b9;
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    .btn-view-more:hover {
+      background: #2980b9 !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
     }
     
     /* Animation for elements */

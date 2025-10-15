@@ -30,15 +30,6 @@
                         </a>
                     </div>
                 </div>
-                <div class="hollow-text-section d-flex justify-content-center align-items-center">
-                <h1 class="hollow-text">
-                    <span class="outline-letter">L</span>
-                    <span class="outline-letter">I</span>
-                    <span class="outline-letter">Y</span>
-                    <span class="outline-letter">A</span>
-                    <span class="outline-letter">S</span>
-                </h1>
-                </div>
 
             </div>
             

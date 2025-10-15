@@ -100,10 +100,8 @@
                     <div class="about-text fade-in">
                         <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
                         <p>Our water is sourced from protected mountain springs, carefully filtered, and bottled in our state-of-the-art facility. We take pride in delivering not just water, but a premium hydration experience.</p>
-
-                        <div class="about-cta">
-                            <a href="#" class="btn-about">Learn More</a>
-                        </div>
+                        <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
+                        <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
                     </div>
                 </div>
                 </div>
@@ -122,12 +120,12 @@
       <div class="col-md-6 col-lg-4">
         <div class="card product-card position-relative p-3">
           <span class="badge-sale">SALE</span>
-          <img src="https://images.unsplash.com/photo-1592339426490-7b0d0c8fcd23?w=600" alt="3 Bottles">
+          <img src="assets/images/bottle-1.jpg" alt="3 Bottles">
           <div class="card-body">
             <h5 class="card-title mt-3">Three bottles of mineral water</h5>
             <div class="rating">★★★★★</div>
-            <p class="price"><span class="old-price">$24.33</span> $13.25</p>
-            <button class="btn btn-outline-primary"><i class="bi bi-cart"></i> Add to cart</button>
+            <p class="price">₹13.25</p>
+            <button class="btn btn-outline-primary">Add to cart</button>
           </div>
         </div>
       </div>
@@ -135,12 +133,12 @@
       <!-- Product 2 -->
       <div class="col-md-6 col-lg-4">
         <div class="card product-card p-3">
-          <img src="https://images.unsplash.com/photo-1582719478185-2d19d5f1b6e0?w=600" alt="1 Big Bottle">
+          <img src="assets/images/bottle-1.jpg" alt="1 Big Bottle">
           <div class="card-body">
             <h5 class="card-title mt-3">One big bottle of mineral water</h5>
             <div class="rating">★★★★★</div>
-            <p class="price">$19.97 – $46.99</p>
-            <button class="btn btn-outline-primary">Select options</button>
+            <p class="price">₹10</p>
+            <button class="btn btn-outline-primary">Add to cart</button>
           </div>
         </div>
       </div>
@@ -148,25 +146,27 @@
       <!-- Product 3 -->
       <div class="col-md-6 col-lg-4">
         <div class="card product-card p-3">
-          <img src="https://images.unsplash.com/photo-1577962917302-cd874c4e31b4?w=600" alt="Small Bottles">
+          <img src="assets/images/bottle-1.jpg" alt="Small Bottles">
           <div class="card-body">
             <h5 class="card-title mt-3">Small bottles of mineral water</h5>
             <div class="rating">★★★★★</div>
-            <p class="price">$17.93</p>
+            <p class="price">₹10</p>
             <button class="btn btn-outline-primary">Add to cart</button>
           </div>
         </div>
       </div>
     </div>
 
-    <button class="btn-all-products mt-5">All Products</button>
+    <button class="btn-view-more mt-5">View More</button>
   </section>
     
     <!-- Hollow Title -->
-    <?php include 'components/hollow-title.php'; ?>
+    <?php include 'components/hollow-carousel.php'; ?>
 
     <!-- Footer -->
     <?php include 'components/footer.php'; ?>
+
+
 
 
     <script>
