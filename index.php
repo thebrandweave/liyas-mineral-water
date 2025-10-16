@@ -29,34 +29,67 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f0f8ff;
+            background:transparent;
         }
 
         .splash-layer {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            width: 100%;
-            height: 100%;
-            box-shadow: 0 12px 15px rgba(0,0,0,0.2);
-            background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
-            animation: white 2.5s ease-out forwards;
+            top: 0%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            /* box-shadow: 0 12px 15px rgba(0,0,0,0.2); */
+            /* background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%); */
+            background:rgba(14, 164, 233, 0.22);
+            will-change: width, height, transform;
+            animation: circleDropExpand 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        .logo-text {
-            position: relative;
-            z-index: 3;
-            font-size: 60px;
-            font-weight: 700;
-            color: #0078d4;
-            opacity: 0;
-            letter-spacing: 2px;
-            animation: logoFade 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s forwards;
-            pointer-events: none;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+
+/* Logo text during splash */
+.logo-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    font-weight: 700;
+    color: rgba(14, 164, 233, 0.71);
+    z-index: 10;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    pointer-events: none;
+    transition: all 1s ease; /* smooth transition */
+}
+
+/* After splash, move to top-right */
+.logo-text.move-top-right {
+    top: 20px;        /* distance from top */
+    right: 20px;      /* distance from right */
+    left: auto;       /* remove previous left */
+    transform: none;  /* remove center transform */
+    font-size: 36px;  /* optional smaller size */
+}
+
+
+
+.logo-text span {
+  display: inline-block;
+  position: relative;
+  top: 0;
+  transition: top 0.2s ease;
+}
+
+
+.logo-text.move-top {
+  top: 2.5em;
+  transform: translateX(-50%);
+  font-size: 48px;
+}
+
+
+
 
         .math-particles {
             position: absolute;
@@ -80,7 +113,7 @@
         }
 
         .math-particle:nth-child(3n) {
-            background: linear-gradient(135deg, #00a2ed, #0078d4);
+            background: linear-gradient(135deg, #00a2ed, #0ea5e9);
             width: 12px;
             height: 12px;
         }
@@ -92,7 +125,7 @@
         }
 
         .math-particle:nth-child(3n+2) {
-            background: rgba(0, 120, 212, 0.8);
+            background:rgba(14, 164, 233, 0.8);
             width: 6px;
             height: 6px;
         }
@@ -110,10 +143,12 @@
             25%,100% { width: 100%; height: 100%; border-radius: 0; top: 0; transform: translateY(0) scale(1); }
         }
 
-        @keyframes white {
-            0%,30% { border-radius: 100%; width: 0; height: 0; top: 50%; transform: translateY(-50%) scale(0); }
-            40%    { width: 300px; height: 300px; border-radius: 50%; transform: translateY(-50%) scale(1); }
-            55%,100% { width: 100%; height: 100%; border-radius: 0; top: 0; transform: translateY(0) scale(1); }
+        @keyframes white { /* legacy - unused now */ }
+
+        @keyframes circleDropExpand {
+            0%   { width: 0; height: 0; border-radius: 50%; transform: translate(-50%, -80%); opacity: .98; }
+            60%  { width: 60vmax; height: 60vmax; border-radius: 50%; transform: translate(-50%, -60%); }
+            100% { width: 160vmax; height: 160vmax; border-radius: 50%; transform: translate(-50%, -50%); }
         }
 
         @keyframes logoFade {
@@ -136,7 +171,12 @@
     <!-- Splash Screen -->
     <div id="splash-screen" aria-hidden="true">
         <div class="splash-layer" aria-hidden="true"></div>
-        <div class="logo-text">Liyas</div>
+        <div class="logo-text">
+            <div class="row">
+            <img style="width: 100px; height: 100px;" src="assets/images/logo/logo.png" alt="Liyas">
+            <!-- <span style="font-size: 24px; font-weight: 700; color: #0ea5e9;">Liyas</span> -->
+            </div>
+        </div>
         <div class="math-particles" aria-hidden="true" id="mathParticles"></div>
     </div>
 
@@ -252,12 +292,51 @@
 
     <?php include 'components/contact.php'; ?>
 
-    <?php include 'components/hollow-carousel.php'; ?>
+    <?php include 'components/hollow-text.php'; ?>
 
     <?php include 'components/footer.php'; ?>
 
     <script src="assets/js/script.js"></script>
     <script>
+
+// ====== Logo Text Scroll Float Effect (No Fade) ======
+// window.addEventListener("load", function () {
+//   const logo = document.querySelector(".logo-text");
+//   if (!logo) return;
+
+//   const txt = logo.innerText.trim();
+//   logo.innerText = "";
+
+//   // Create each span for the letters
+//   for (let i = 0; i < txt.length; i++) {
+//     const span = document.createElement("span");
+//     span.textContent = txt[i];
+//     span.style.display = "inline-block";
+//     span.style.position = "relative";
+//     span.style.transition = "top 0.2s ease";
+//     span.y = 0;
+//     logo.appendChild(span);
+//   }
+
+//   const letters = document.querySelectorAll(".logo-text span");
+//   let lastScrollY = 0;
+
+//   window.addEventListener("scroll", function () {
+//     const scrollY = window.scrollY;
+//     const scrollDirectionUp = scrollY > lastScrollY;
+
+//     letters.forEach((span, i) => {
+//       // Create a wave pattern using sine
+//       const wave = Math.sin((scrollY / 30) + i) * 5; // amplitude = 5px
+//       span.style.top = wave + "px";
+//     });
+
+//     lastScrollY = scrollY;
+//   });
+// });
+
+
+
     // Splash screen functionality
     document.addEventListener('DOMContentLoaded', function() {
         const splash = document.getElementById('splash-screen');
@@ -286,15 +365,41 @@
         const fallbackTimeout = setTimeout(finishSplash, 4000);
         layer.addEventListener('animationend', finishSplash);
         function finishSplash() {
-            clearTimeout(fallbackTimeout);
-            layer.removeEventListener('animationend', finishSplash);
-            splash.classList.add('splash-fadeout');
-            setTimeout(() => {
-                splash.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 800);
+    clearTimeout(fallbackTimeout);
+    layer.removeEventListener('animationend', finishSplash);
+    splash.classList.add('splash-fadeout');
+
+    const logo = document.querySelector('.logo-text');
+
+    // Wait until fade starts, then move logo to top and detach it
+    setTimeout(() => {
+        if (logo && splash.contains(logo)) {
+            document.body.appendChild(logo);
+            logo.classList.add('move-top');
         }
+    }, 300);
+
+    // Finally remove splash layer
+    setTimeout(() => {
+        splash.style.display = 'none';
+        document.body.style.overflow = '';
+    }, 1200);
+}
+
     });
+
+/* Logo text during splash */
+
+
+
+
+
+
+
+
+
+
+    
 
     // AOS init
     document.addEventListener("DOMContentLoaded", function() {
