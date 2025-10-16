@@ -180,20 +180,20 @@
     <!-- About Section -->
     <section class="about-section" id="about" data-aos="fade-up">
         <div class="container">
-            <div class="about-title fade-in" data-aos="fade-up">
+            <div class="about-title" data-aos="fade-up">
                 <div class="about-subtitle">PURE NATURAL WATER</div>
                 <h2 class="about-heading">BEAUTIFUL WATER WITH BEAUTIFUL CARE & UNIQUE QUALITY</h2>
             </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="about-images" data-aos="zoom-in" data-aos-delay="50">
-                        <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main fade-in">
-                        <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary fade-in">
+                        <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main">
+                        <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-content" data-aos="fade-left" data-aos-delay="100">
-                        <div class="about-text fade-in">
+                        <div class="about-text">
                             <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
                             <p>Our water is sourced from protected mountain springs, carefully filtered, and bottled in our state-of-the-art facility. We take pride in delivering not just water, but a premium hydration experience.</p>
                         </div>
@@ -252,6 +252,11 @@
 
     <?php include 'components/contact.php'; ?>
 
+    <?php include 'components/hollow-carousel.php'; ?>
+
+    <?php include 'components/footer.php'; ?>
+
+    <script src="assets/js/script.js"></script>
     <script>
     // Splash screen functionality
     document.addEventListener('DOMContentLoaded', function() {
@@ -293,7 +298,7 @@
 
     // AOS init
     document.addEventListener("DOMContentLoaded", function() {
-        AOS.init({ duration: 700, easing: 'ease-out', once: true, offset: 80 });
+        AOS.init({ duration: 1000, easing: 'ease-out', once: true, offset: 120 });
     });
 
     // Back to Top Button

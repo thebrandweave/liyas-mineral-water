@@ -9,7 +9,7 @@
     }
 
     .product-section h2 span {
-      color: #0077ff;
+      color: #0ea5e9;
     }
 
     .product-section p {
@@ -42,7 +42,7 @@
       position: absolute;
       top: 15px;
       right: 15px;
-      background: #0077ff;
+      background: #0ea5e9;
       color: #fff;
       font-size: 0.8rem;
       padding: 6px 12px;
@@ -51,7 +51,7 @@
     }
 
     .rating {
-      color: #0077ff;
+      color: #0ea5e9;
       font-size: 1rem;
       margin: 5px 0;
     }
@@ -69,28 +69,54 @@
     }
 
     .btn-outline-primary {
-      border-radius: 25px;
-      padding: 8px 20px;
-      font-weight: 500;
-      transition: 0.3s;
+      border-radius: 25px !important;
+      border-color: #0ea5e9 !important;
+      color:#0ea5e9 !important;
+      padding: 8px 20px !important;
+      font-weight: 500 !important;
+      transition: 0.3s !important;
     }
 
     .btn-outline-primary:hover {
-      background-color: #0077ff;
-      color: #fff;
+      background-color: #0ea5e9 !important;
+      color: #fff !important;
     }
 
-    .btn-all-products {
-      background: #0077ff;
-      color: #fff;
-      border: none;
-      border-radius: 30px;
-      padding: 10px 30px;
-      margin-top: 40px;
+    .btn-view-more {
+      display: inline-block;
+      padding: 18px 45px;
+      background: #0ea5e9;
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
       font-weight: 600;
-      transition: 0.3s;
-    }
+      font-size: 16px;
+      transition: all 0.4s;
+      box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+      position: relative;
+      overflow: hidden;
+      border: none !important;
+  }
 
-    .btn-all-products:hover {
-      background: #005fc1;
-    }
+  .btn-view-more::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+  }
+
+  .btn-view-more:hover::before {
+      width: 400px;
+      height: 400px;
+  }
+
+  .btn-view-more:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(14, 165, 233, 0.4);
+  }
