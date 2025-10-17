@@ -1,131 +1,104 @@
 <?php
 /**
- * Why Choose Us component
+ * Why Choose Us component (blue theme, water content, bottle image)
  */
 ?>
 <section class="why-choose-section" id="why-choose" data-aos="fade-up">
-    <div class="container">
-        <div class="why-title fade-in" data-aos="fade-up">
-            <div class="why-subtitle">WHY CHOOSE LIYAS</div>
-            <h2 class="why-heading">PURE, SAFE, AND TRUSTED HYDRATION</h2>
-            <p class="why-intro">We combine advanced purification with sustainable practices to deliver premium-quality water you can trust.</p>
-        </div>
+	<div class="container">
+		<div class="why-title" data-aos="fade-up">
+			<div class="why-subtitle">WHY CHOOSE LIYAS</div>
+			<h2 class="why-heading">PURE, SAFE, AND TRUSTED HYDRATION</h2>
+			<p class="why-intro">From advanced purification to fast doorstep delivery, we keep your family hydrated with crystal‑clear, great‑tasting water.</p>
+		</div>
 
-        <div class="row g-4 mt-2">
-            <div class="col-md-6 col-lg-4">
-                <div class="why-card product-card p-4 h-100" data-aos="fade-up" data-aos-delay="0">
-                    <div class="why-icon">
-                        <i class="fas fa-tint"></i>
-                    </div>
-                    <h5 class="mt-3">Pure RO + UV + Mineral Balance</h5>
-                    <p>Multi-stage purification combines RO and UV with essential minerals restored for great taste and health.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="why-card product-card p-4 h-100" data-aos="fade-up" data-aos-delay="100">
-                    <div class="why-icon">
-                        <i class="fas fa-shield-heart"></i>
-                    </div>
-                    <h5 class="mt-3">Hygienically Packed & Sealed</h5>
-                    <p>Automated bottling ensures zero contamination and tamper-proof freshness from plant to your door.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="why-card product-card p-4 h-100" data-aos="fade-up" data-aos-delay="200">
-                    <div class="why-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h5 class="mt-3">Eco‑friendly Bottles</h5>
-                    <p>We use recyclable materials and optimize packaging to reduce plastic and our carbon footprint.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="why-card product-card p-4 h-100" data-aos="fade-up" data-aos-delay="0">
-                    <div class="why-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h5 class="mt-3">Trusted by 1000+ Customers</h5>
-                    <p>Serving homes and businesses with on-time delivery and consistently high quality water.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="why-card product-card p-4 h-100" data-aos="fade-up" data-aos-delay="100">
-                    <div class="why-icon">
-                        <i class="fas fa-certificate"></i>
-                    </div>
-                    <h5 class="mt-3">Certified Quality</h5>
-                    <p>Meets standards set by BIS and local water authorities with frequent lab testing.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="why-card product-card p-4 h-100" data-aos="fade-up" data-aos-delay="200">
-                    <div class="why-icon">
-                        <i class="fas fa-truck-fast"></i>
-                    </div>
-                    <h5 class="mt-3">Fast Delivery Service</h5>
-                    <p>Quick, reliable doorstep delivery with flexible scheduling options for your convenience.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="features-grid">
+			<div class="features-column left">
+				<div class="feature-item" data-aos="fade-up" data-aos-delay="0">
+					<span class="icon-emoji">💧</span>
+					<h3>Multi‑Stage Purification</h3>
+					<p>RO + UV + Mineral balance for water that is pure, safe, and naturally refreshing.</p>
+				</div>
+				<div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+					<span class="icon-emoji">🚚</span>
+					<h3>On‑Time Delivery</h3>
+					<p>Reliable doorstep delivery with flexible scheduling so you never run out of water.</p>
+				</div>
+			</div>
 
-    <style>
-        .why-choose-section {
-            position: relative;
-            padding: 80px 0;
-            background: #ffffff;
-        }
+			<div class="image-column" data-aos="zoom-in" data-aos-delay="50">
+				<div class="image-wrapper">
+					<img src="assets/images/bottle.png" alt="Liyas Mineral Water Bottle">
+				</div>
+			</div>
 
-        .why-subtitle {
-            color: #00a2ed;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
+			<div class="features-column right">
+				<div class="feature-item" data-aos="fade-up" data-aos-delay="0">
+					<span class="icon-emoji">🛡️</span>
+					<h3>Hygienic & Sealed</h3>
+					<p>Contact‑less bottling and tamper‑proof seals preserve freshness from plant to your glass.</p>
+				</div>
+				<div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+					<span class="icon-emoji">🌿</span>
+					<h3>Eco‑Conscious</h3>
+					<p>Recyclable bottles and optimized routes reduce plastic waste and carbon footprint.</p>
+				</div>
+			</div>
+		</div>
 
-        .why-heading {
-            font-weight: 700;
-            color: #0b2e4e;
-        }
+		<div class="section-footer" data-aos="fade-up" data-aos-delay="150">
+			<a href="#contact" class="cta-button">Get a FREE sample</a>
+		</div>
+	</div>
 
-        .why-intro {
-            color: #5a6b7b;
-            max-width: 720px;
-        }
+	<style>
+		:root {
+			--why-text-primary: #0b2e4e;
+			--why-text-secondary: #5a6b7b;
+			--why-accent: #0ea5e9; /* Site blue */
+			--why-white: #ffffff;
+			--why-bg: #f6fbff;
+		}
 
-        .why-card {
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 16px;
-            background: #ffffff;
-            transition: transform .3s ease, box-shadow .3s ease;
-        }
+		.why-choose-section {
+			position: relative;
+			padding: 80px 0;
+			background: var(--why-white);
+			border-radius: 20px;
+		}
 
-        .why-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 30px rgba(0, 122, 212, 0.12);
-        }
+		.why-title { text-align: center; margin-bottom: 30px; }
+		.why-subtitle { color: var(--why-accent); font-weight: 600; letter-spacing: 1px; }
+		.why-heading { font-weight: 700; color: var(--why-text-primary); }
+		.why-intro { color: var(--why-text-secondary); max-width: 720px; margin: 0 auto; }
 
-        .why-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #00a2ed 0%, #0078d4 100%);
-            color: #fff;
-            font-size: 22px;
-            box-shadow: 0 10px 20px rgba(0, 120, 212, .25);
-        }
+		.features-grid { display: grid; gap: 2rem; align-items: center; grid-template-columns: 1fr; }
+		.features-column { display: flex; flex-direction: column; gap: 2rem; }
+		.features-column.left { order: 0; }
+		.image-column { order: 1; }
+		.features-column.right { order: 2; }
 
-        /* Match scroll reveal from index */
-        .why-choose-section .product-card { opacity: 0; transform: translateY(50px); }
-        .why-choose-section .product-card.visible { opacity: 1; transform: translateY(0); }
+		.feature-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .5rem; }
+		.feature-item h3 { color: var(--why-text-primary); font-weight: 700; font-size: 1.125rem; }
+		.feature-item p { color: var(--why-text-secondary); font-size: .95rem; max-width: 320px; }
+		.icon-emoji { font-size: 2.2rem; color: var(--why-accent); line-height: 1; }
 
-        @media (max-width: 767.98px) {
-            .why-choose-section { padding: 56px 0; }
-        }
-    </style>
+		.image-wrapper { position: relative; max-width: 360px; margin: 0 auto; }
+		.image-wrapper img { max-width: 100%; height: auto; display: block; position: relative; z-index: 1; box-shadow: -12px 12px 0 0 rgba(14,165,233,0.25); border-radius: 10px; }
+
+		.section-footer { text-align: center; margin-top: 2rem; }
+		.cta-button { font-size: .95rem; font-weight: 600; color: #fff; background-color: var(--why-accent); padding: 12px 24px; border-radius: 10px; text-decoration: none; display: inline-block; transition: background-color .3s ease; }
+		.cta-button:hover { background-color: #0284c7; }
+
+		@media (min-width: 1024px) {
+			.features-grid { grid-template-columns: 1fr auto 1fr; }
+			.features-column { justify-content: space-around; height: 100%; }
+			.features-column.left .feature-item { align-items: flex-end; text-align: right; }
+			.features-column.right .feature-item { align-items: flex-start; text-align: left; }
+			.features-column.left { order: 0; }
+			.image-column { order: 0; }
+			.features-column.right { order: 0; }
+		}
+	</style>
 </section>
 
 
