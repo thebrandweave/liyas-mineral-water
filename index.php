@@ -228,11 +228,13 @@
 
     <?php include 'components/contact.php'; ?>
 
-    <?php include 'components/hollow-text.php'; ?>
 
     <?php include 'components/footer.php'; ?>
 
     <script src="assets/js/script.js"></script>
+    
+    <?php include 'components/hollow-text.php'; ?>
+
     <script>
 
     // Splash screen functionality
