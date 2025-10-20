@@ -4,80 +4,105 @@
  */
 ?>
 <section class="contact-section" id="contact" data-aos="fade-up">
+    <div class="contact-bg-fixed"></div>
     <div class="container">
-        <div class="contact-title fade-in" data-aos="fade-up">
-            <div class="contact-subtitle">CONTACT US</div>
-            <h2 class="contact-heading">WE'D LOVE TO HEAR FROM YOU</h2>
-            <p class="contact-intro">Reach out for orders, queries, or feedback. We typically respond within a few hours.</p>
+        <div class="text-center" data-aos="fade-up">
+            <div class="contact-eyebrow">Get In Touch</div>
+            <h2 class="contact-title">Contact Us</h2>
+            <p class="contact-subtext">We would like to hear from you.</p>
         </div>
 
-        <div class="row g-4 mt-2">
-            <div class="col-lg-6" data-aos="fade-right" data-aos-delay="50">
-                <div class="contact-card product-card p-4 h-100">
-                    <form action="#" method="post" class="contact-form">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Name</label>
-                                <input type="text" class="form-control" name="name" placeholder="Your Name" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Phone</label>
-                                <input type="tel" class="form-control" name="phone" placeholder="Your Phone" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" placeholder="Your Email" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Message</label>
-                                <textarea class="form-control" name="message" rows="4" placeholder="How can we help?" required></textarea>
-                            </div>
-                            <div class="col-12 d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">Send Message</button>
-                                <a href="https://wa.me/1234567890" target="_blank" class="btn btn-success d-inline-flex align-items-center">
-                                    <i class="fab fa-whatsapp me-2"></i> WhatsApp Order
-                                </a>
-                            </div>
+        <form action="#" method="post" class="contact-form mt-4" data-aos="fade-up" data-aos-delay="50">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-6">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <input type="text" class="form-control contact-input" name="name" placeholder="Name" required>
                         </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
-                <div class="contact-card product-card p-4 h-100">
-                    <div class="d-flex align-items-start gap-3 flex-wrap">
-                        <div>
-                            <div class="fw-semibold text-uppercase small text-primary">Address</div>
-                            <div>123, Water Street, City, 560001</div>
+                        <div class="col-12">
+                            <input type="email" class="form-control contact-input" name="email" placeholder="Email" required>
                         </div>
-                        <div>
-                            <div class="fw-semibold text-uppercase small text-primary">Phone</div>
-                            <div><a href="tel:+911234567890" class="link-dark text-decoration-none">+91 12345 67890</a></div>
-                        </div>
-                        <div>
-                            <div class="fw-semibold text-uppercase small text-primary">Email</div>
-                            <div><a href="mailto:hello@liyaswater.com" class="link-dark text-decoration-none">hello@liyaswater.com</a></div>
+                        <div class="col-12">
+                            <input type="tel" class="form-control contact-input" name="phone" placeholder="Phone" required>
                         </div>
                     </div>
-                    <div class="ratio ratio-16x9 mt-3 rounded overflow-hidden">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019324!2d-122.4194155!3d37.7749295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDQ2JzMwLjciTiAxMjLCsDI1JzA5LjkiVw!5e0!3m2!1sen!2sus!4v1710000000000"
-                            style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <textarea class="form-control contact-textarea h-100" name="message" placeholder="Message" rows="9" required></textarea>
                 </div>
             </div>
-        </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary px-5 contact-submit">Submit</button>
+            </div>
+        </form>
     </div>
 
     <style>
-        .contact-section { padding: 80px 0; background: #ffffff; }
-        .contact-subtitle { color: #00a2ed; font-weight: 600; letter-spacing: 1px; margin-bottom: 8px; }
-        .contact-heading { font-weight: 700; color: #0b2e4e; }
-        .contact-intro { color: #5a6b7b; max-width: 720px; }
-        .contact-card { border: 1px solid rgba(0,0,0,0.05); border-radius: 16px; background: #fff; transition: transform .3s ease, box-shadow .3s ease; }
-        .contact-card:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(0, 122, 212, 0.12); }
-        .contact-form .form-control { padding: 10px 12px; border-radius: 10px; }
-        @media (max-width: 767.98px) { .contact-section { padding: 56px 0; } }
+        .contact-section { 
+            padding: 96px 0 0 0; 
+            position: relative; 
+            overflow: hidden;
+            max-height: 100vh;
+        }
+        
+        .contact-bg-fixed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1600&q=80') center/cover no-repeat;
+            transform: translateY(var(--scroll, 0px));
+            transition: transform 0.1s ease-out;
+            z-index: -1;
+        }
+        
+        .contact-bg-fixed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(240, 249, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+            z-index: 1;
+        }
+        
+        .contact-eyebrow { color: #8aa0b2; font-weight: 500; letter-spacing: .4px; text-transform: none; font-size: 22px; }
+        .contact-title { font-weight: 800; color: #0a2440; font-size: 44px; margin-top: 4px; }
+        .contact-subtext { color: #7a8a99; font-size: 18px; }
+
+        .contact-form { position: relative; z-index: 2; }
+        .contact-form .form-control { border-radius: 8px; padding: 12px 14px; border: 1px solid #e9eef3; background: #fff; box-shadow: none; }
+        .contact-input::placeholder, .contact-textarea::placeholder { color: #9fb0bf; }
+        .contact-textarea { min-height: 100%; resize: vertical; }
+        .contact-submit { background: #20b3f3; border-color: #20b3f3; }
+        .contact-submit:hover { background: #19a6e3; border-color: #19a6e3; }
+        .contact-wave { position: relative; z-index: 1; display: block; width: 100%;transform: scaleX(-1)}
+
+        @media (max-width: 991.98px) {
+            .contact-title { font-size: 36px; }
+            .contact-section { padding: 72px 0 0 0; }
+            .contact-wave { margin-top: -100px; }
+        }
+        @media (max-width: 575.98px) {
+            .contact-title { font-size: 30px; }
+        }
     </style>
+
+    <svg class="contact-wave" viewBox="0 0 1440 490"><path d="M0,400 L0,225 C130.27,247.4 260.53,269.8 419,238 C577.47,206.2 764.13,120.2 939,84 C1113.87,47.8 1276.93,61.4 1440,75 L1440,400 L0,400 Z" fill="#fff"></path></svg>
+
+    <!-- ✅ Added tiny script for scroll animation -->
+    <script>
+    document.addEventListener("scroll", function() {
+        const section = document.querySelector(".contact-section");
+        const bg = document.querySelector(".contact-bg-fixed");
+        const rect = section.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            const scrollY = rect.top * -0.3; // Adjust speed
+            bg.style.setProperty("--scroll", `${scrollY}px`);
+        }
+    });
+    </script>
 </section>
-
-

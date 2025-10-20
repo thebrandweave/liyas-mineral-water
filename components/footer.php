@@ -6,7 +6,6 @@
             <div class="footer-floating-element footer-float-2"></div>
             <div class="footer-floating-element footer-float-3"></div>
         </div> -->
-        
         <div class="footer-container">
             <div class="footer-content">
                 <div class="footer-about">

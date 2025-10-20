@@ -45,9 +45,6 @@
 			</div>
 		</div>
 
-		<div class="section-footer" data-aos="fade-up" data-aos-delay="150">
-			<a href="#contact" class="cta-button">Get a FREE sample</a>
-		</div>
 	</div>
 
 	<style>
@@ -77,17 +74,13 @@
 		.image-column { order: 1; }
 		.features-column.right { order: 2; }
 
-		.feature-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .5rem; }
+		.feature-item { background: white; display: flex; flex-direction: column; align-items: center; text-align: center; gap: .5rem; }
 		.feature-item h3 { color: var(--why-text-primary); font-weight: 700; font-size: 1.125rem; }
 		.feature-item p { color: var(--why-text-secondary); font-size: .95rem; max-width: 320px; }
 		.icon-emoji { font-size: 2.2rem; color: var(--why-accent); line-height: 1; }
 
 		.image-wrapper { position: relative; max-width: 360px; margin: 0 auto; }
-		.image-wrapper img { max-width: 100%; height: auto; display: block; position: relative; z-index: 1; box-shadow: -12px 12px 0 0 rgba(14,165,233,0.25); border-radius: 10px; }
-
-		.section-footer { text-align: center; margin-top: 2rem; }
-		.cta-button { font-size: .95rem; font-weight: 600; color: #fff; background-color: var(--why-accent); padding: 12px 24px; border-radius: 10px; text-decoration: none; display: inline-block; transition: background-color .3s ease; }
-		.cta-button:hover { background-color: #0284c7; }
+		.image-wrapper img { max-width: 100%; height: auto; display: block; position: relative; z-index: 1; }
 
 		@media (min-width: 1024px) {
 			.features-grid { grid-template-columns: 1fr auto 1fr; }
