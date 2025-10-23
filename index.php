@@ -137,11 +137,15 @@
                 <div class="col-lg-6">
                     <div class="hero-content" data-aos="fade-right" data-aos-delay="50">
                         <div class="hero-subtitle">PURE WATER</div>
-                        <h1>DELIVERY SERVICE</h1>
-                        <p>We now deliver different types of bottled water. To drink the best water please come to us and give us an order and take safe and sound water for you.</p>
+                        <h1>DRINK BETTER</h1>
+                        <p>
+                        Meet Liyas — hydration redefined for today’s lifestyle.
+Crafted for clarity, freshness, and a touch of fun.
+Because great water isn’t just a choice — it’s a vibe.
+                        </p>
                         <div class="hero-buttons">
-                            <a href="#" class="btn-primary">Order Now</a>
-                            <a href="#about" class="btn-secondary">Read More</a>
+                            <a href="#" class="btn-primary">Shop Now</a>
+                            <a href="#about" class="btn-secondary">Explore</a>
                         </div>
                     </div>
                 </div>
@@ -188,11 +192,9 @@
         <div class="row g-4 justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="card product-card position-relative p-3" data-aos="fade-up" data-aos-delay="0">
-                    <span class="badge-sale">SALE</span>
                     <img src="assets/images/bottle-1.jpg" alt="3 Bottles">
                     <div class="card-body">
                         <h5 class="card-title mt-3">Three bottles of mineral water</h5>
-                        <div class="rating">★★★★★</div>
                         <p class="price">₹13.25</p>
                         <button class="btn btn-outline-primary">Add to cart</button>
                     </div>
@@ -203,7 +205,6 @@
                     <img src="assets/images/bottle-1.jpg" alt="1 Big Bottle">
                     <div class="card-body">
                         <h5 class="card-title mt-3">One big bottle of mineral water</h5>
-                        <div class="rating">★★★★★</div>
                         <p class="price">₹10</p>
                         <button class="btn btn-outline-primary">Add to cart</button>
                     </div>
@@ -214,7 +215,6 @@
                     <img src="assets/images/bottle-1.jpg" alt="Small Bottles">
                     <div class="card-body">
                         <h5 class="card-title mt-3">Small bottles of mineral water</h5>
-                        <div class="rating">★★★★★</div>
                         <p class="price">₹10</p>
                         <button class="btn btn-outline-primary">Add to cart</button>
                     </div>
@@ -227,6 +227,9 @@
     <?php include 'components/order-delivery.php'; ?>
 
     <?php include 'components/contact.php'; ?>
+    <?php include 'components/sustainability.php'; ?>
+
+    <?php include 'components/faq.php'; ?>
 
 
     <?php include 'components/footer.php'; ?>
