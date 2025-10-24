@@ -109,6 +109,54 @@
             to { opacity: 0; visibility: hidden; transform: scale(1.05); }
         }
 
+        /* Hero Scroll Down Button */
+        .hero-scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        #heroScrollDown {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(14, 165, 233, 0.9);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        #heroScrollDown:hover {
+            background: rgba(14, 165, 233, 1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        #heroScrollDown:active {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 767px) {
+            .hero-scroll-down {
+                bottom: 20px;
+            }
+            
+            #heroScrollDown {
+                width: 45px;
+                height: 45px;
+                font-size: 16px;
+            }
+        }
+
     </style>
 
     <div id="splash-screen" aria-hidden="true">
@@ -156,7 +204,41 @@ Because great water isn’t just a choice — it’s a vibe.
                 </div>
             </div>
         </div>
-        <svg class="wave-svg" viewBox="0 0 1440 490"><path d="M0,400 L0,225 C130.27,247.4 260.53,269.8 419,238 C577.47,206.2 764.13,120.2 939,84 C1113.87,47.8 1276.93,61.4 1440,75 L1440,400 L0,400 Z" fill="#ffffff"></path></svg>
+        
+        <!-- Scroll Down Button in Hero Section -->
+        <div class="hero-scroll-down">
+            <button id="heroScrollDown" title="Scroll to next section">
+                <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+        
+        <svg class="wave-svg" width="100%" height="100%" id="svg" viewBox="0 0 1440 390" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150">
+            <style>
+                .path-0{
+                    animation:pathAnim-0 4s;
+                    animation-timing-function: linear;
+                    animation-iteration-count: infinite;
+                }
+                @keyframes pathAnim-0{
+                    0%{
+                        d: path("M 0,400 L 0,150 C 94.73076923076925,117.93589743589743 189.4615384615385,85.87179487179488 277,76 C 364.5384615384615,66.12820512820512 444.88461538461536,78.44871794871794 507,92 C 569.1153846153846,105.55128205128206 613.0000000000001,120.33333333333333 694,122 C 774.9999999999999,123.66666666666667 893.1153846153843,112.21794871794873 986,128 C 1078.8846153846157,143.78205128205127 1146.5384615384617,186.7948717948718 1218,195 C 1289.4615384615383,203.2051282051282 1364.730769230769,176.6025641025641 1440,150 L 1440,400 L 0,400 Z");
+                    }
+                    25%{
+                        d: path("M 0,400 L 0,150 C 75.4897435897436,175.26666666666665 150.9794871794872,200.53333333333333 243,182 C 335.0205128205128,163.46666666666667 443.57179487179485,101.13333333333334 521,90 C 598.4282051282051,78.86666666666666 644.7333333333333,118.93333333333334 714,139 C 783.2666666666667,159.06666666666666 875.4948717948719,159.13333333333333 955,153 C 1034.5051282051281,146.86666666666667 1101.2871794871794,134.53333333333333 1180,133 C 1258.7128205128206,131.46666666666667 1349.3564102564103,140.73333333333335 1440,150 L 1440,400 L 0,400 Z");
+                    }
+                    50%{
+                        d: path("M 0,400 L 0,150 C 62.51794871794871,169.57179487179485 125.03589743589743,189.14358974358973 204,184 C 282.9641025641026,178.85641025641027 378.374358974359,148.99743589743588 461,152 C 543.625641025641,155.00256410256412 613.4666666666667,190.8666666666667 695,172 C 776.5333333333333,153.1333333333333 869.7589743589742,79.53589743589743 947,78 C 1024.2410256410258,76.46410256410257 1085.497435897436,146.9897435897436 1165,171 C 1244.502564102564,195.0102564102564 1342.251282051282,172.5051282051282 1440,150 L 1440,400 L 0,400 Z");
+                    }
+                    75%{
+                        d: path("M 0,400 L 0,150 C 65.39743589743588,127.30000000000001 130.79487179487177,104.60000000000001 219,110 C 307.20512820512823,115.39999999999999 418.2179487179486,148.9 502,166 C 585.7820512820514,183.1 642.3333333333335,183.79999999999998 725,186 C 807.6666666666665,188.20000000000002 916.448717948718,191.9 991,199 C 1065.551282051282,206.1 1105.871794871795,216.6 1175,209 C 1244.128205128205,201.4 1342.0641025641025,175.7 1440,150 L 1440,400 L 0,400 Z");
+                    }
+                    100%{
+                        d: path("M 0,400 L 0,150 C 94.73076923076925,117.93589743589743 189.4615384615385,85.87179487179488 277,76 C 364.5384615384615,66.12820512820512 444.88461538461536,78.44871794871794 507,92 C 569.1153846153846,105.55128205128206 613.0000000000001,120.33333333333333 694,122 C 774.9999999999999,123.66666666666667 893.1153846153843,112.21794871794873 986,128 C 1078.8846153846157,143.78205128205127 1146.5384615384617,186.7948717948718 1218,195 C 1289.4615384615383,203.2051282051282 1364.730769230769,176.6025641025641 1440,150 L 1440,400 L 0,400 Z");
+                    }
+                }
+            </style>
+            <path d="M 0,400 L 0,150 C 94.73076923076925,117.93589743589743 189.4615384615385,85.87179487179488 277,76 C 364.5384615384615,66.12820512820512 444.88461538461536,78.44871794871794 507,92 C 569.1153846153846,105.55128205128206 613.0000000000001,120.33333333333333 694,122 C 774.9999999999999,123.66666666666667 893.1153846153843,112.21794871794873 986,128 C 1078.8846153846157,143.78205128205127 1146.5384615384617,186.7948717948718 1218,195 C 1289.4615384615383,203.2051282051282 1364.730769230769,176.6025641025641 1440,150 L 1440,400 L 0,400 Z" stroke="none" stroke-width="0" fill="#ffffff" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-0"></path>
+        </svg>
     </section>
 
     <section class="about-section" id="about" data-aos="fade-up">
@@ -228,6 +310,7 @@ Because great water isn’t just a choice — it’s a vibe.
 
     <?php include 'components/contact.php'; ?>
     <?php include 'components/sustainability.php'; ?>
+    <?php include 'components/cta.php'; ?>
 
     <?php include 'components/faq.php'; ?>
 
@@ -326,6 +409,13 @@ Because great water isn’t just a choice — it’s a vibe.
         backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
     });
     backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+    // Hero Scroll Down Button
+    const heroScrollDown = document.getElementById("heroScrollDown");
+    heroScrollDown.addEventListener("click", () => {
+        const aboutSection = document.getElementById("about");
+        aboutSection.scrollIntoView({ behavior: "smooth" });
+    });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
