@@ -14,12 +14,10 @@
 		<div class="features-grid">
 			<div class="features-column left">
 				<div class="feature-item" data-aos="fade-up" data-aos-delay="0">
-					<span class="icon-emoji">💧</span>
 					<h3>Multi‑Stage Purification</h3>
 					<p>RO + UV + Mineral balance for water that is pure, safe, and naturally refreshing.</p>
 				</div>
 				<div class="feature-item" data-aos="fade-up" data-aos-delay="100">
-					<span class="icon-emoji">🚚</span>
 					<h3>On‑Time Delivery</h3>
 					<p>Reliable doorstep delivery with flexible scheduling so you never run out of water.</p>
 				</div>
@@ -33,18 +31,15 @@
 
 			<div class="features-column right">
 				<div class="feature-item" data-aos="fade-up" data-aos-delay="0">
-					<span class="icon-emoji">🛡️</span>
 					<h3>Hygienic & Sealed</h3>
 					<p>Contact‑less bottling and tamper‑proof seals preserve freshness from plant to your glass.</p>
 				</div>
 				<div class="feature-item" data-aos="fade-up" data-aos-delay="100">
-					<span class="icon-emoji">🌿</span>
 					<h3>Eco‑Conscious</h3>
 					<p>Recyclable bottles and optimized routes reduce plastic waste and carbon footprint.</p>
 				</div>
 			</div>
 		</div>
-
 	</div>
 
 	<style>
