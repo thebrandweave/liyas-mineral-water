@@ -109,51 +109,216 @@
             to { opacity: 0; visibility: hidden; transform: scale(1.05); }
         }
 
-        /* Hero Scroll Down Button */
+        /* Hero Scroll Down Button - Circular Text Design */
         .hero-scroll-down {
             position: absolute;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        #heroScrollDown {
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(14, 165, 233, 0.9);
-            color: white;
-            font-size: 18px;
+            z-index: 100;
             cursor: pointer;
+            width: 150px;
+            height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-            backdrop-filter: blur(10px);
         }
 
-        #heroScrollDown:hover {
-            background: rgba(14, 165, 233, 1);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        .hero-scroll-down svg {
+            width: 150px;
+            height: 150px;
+            transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        #heroScrollDown:active {
-            transform: translateY(-1px);
+        .hero-scroll-down:hover svg .textcircle {
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .hero-scroll-down .textcircle {
+            transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
+            transform-origin: 250px 250px;
+        }
+
+        .hero-scroll-down text {
+            font-size: 28px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            fill: rgba(14, 165, 233, 1);
+            animation: rotate 25s linear infinite;
+            transform-origin: 250px 250px;
+        }
+
+        .hero-scroll-down .center-arrow {
+            transform-origin: 250px 250px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-scroll-down:hover .center-arrow {
+            transform: translateY(5px);
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .hero-scroll-down .center-arrow {
+            animation: bounce 2s infinite;
         }
 
         @media (max-width: 767px) {
             .hero-scroll-down {
                 bottom: 20px;
+                width: 120px;
+                height: 120px;
             }
             
-            #heroScrollDown {
-                width: 45px;
-                height: 45px;
-                font-size: 16px;
+            .hero-scroll-down svg {
+                width: 120px;
+                height: 120px;
+            }
+
+            .hero-scroll-down text {
+                font-size: 20px;
+            }
+        }
+
+        /* Marquee Animation Styles - Overlay Version */
+        .marquees-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .about-images {
+            position: relative;
+        }
+
+        .marquee {
+            --marquee--colour: rgba(14, 165, 233, 0.9);
+            --marquee--repeat-count: 6;
+            --marquee--base-duration: 1s;
+            --marquee--repeat-size: calc(100% / var(--marquee--repeat-count));
+            --marquee--double-size: calc(var(--marquee--repeat-size) * 2);
+            --marquee--duration: calc(
+                var(--marquee--base-duration) * var(--char-count, 20)
+            );
+            overflow: hidden;
+            width: 110%;
+            margin-left: -5%;
+            mix-blend-mode: overlay;
+            transform: rotate(-2deg);
+            background: var(--marquee--colour);
+            color: #fff;
+            margin: 10px 0;
+            backdrop-filter: blur(2px);
+        }
+
+        .marquee:nth-child(even) {
+            --marquee--direction: -1;
+            transform: rotate(2deg);
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--marquee--colour);
+        }
+
+        .marquee p {
+            transform: translateY(0.07em);
+            font-weight: bold;
+            margin: 0;
+            display: flex;
+            gap: 0.5em;
+            line-height: 1.1;
+            font-size: clamp(1.2rem, 4vw, 2.5rem);
+            font-family: "Poppins", sans-serif;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .marquee p::after {
+            content: "•";
+            transform: translateY(0.175em);
+            color: rgba(14, 165, 233, 0.6);
+        }
+
+        .marquee p::before {
+            content: "";
+        }
+
+        .marquee--inner {
+            width: max-content;
+            display: flex;
+            text-transform: uppercase;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .marquee--inner {
+                animation: marquee var(--marquee--duration) infinite linear, reduce-marquee var(--marquee--duration) infinite linear paused;
+                animation-composition: add;
+            }
+            .marquee--inner:hover {
+                animation-play-state: running;
+            }
+        }
+
+        @keyframes marquee {
+            from {
+                transform: translateX(calc(var(--marquee--double-size) * -1));
+            }
+            to {
+                transform: translateX(calc(
+                    (-1 * var(--marquee--double-size)) - 
+                    (var(--marquee--double-size) * var(--marquee--direction, 1))
+                ));
+            }
+        }
+
+        @keyframes reduce-marquee {
+            from {
+                transform: translateX(calc(var(--marquee--repeat-size) * var(--marquee--direction, 1)));
+            }
+            to {
+                transform: translateX(calc(
+                    (-1 * var(--marquee--double-size)) - 
+                    (var(--marquee--double-size) * var(--marquee--direction, 1))
+                ));
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .marquees {
+                padding: 40px 0;
+                margin: 20px 0;
+            }
+            
+            .marquee {
+                transform: rotate(-1deg);
+            }
+            
+            .marquee:nth-child(even) {
+                transform: rotate(1deg);
+            }
+            
+            .marquee p {
+                font-size: clamp(1.5rem, 6vw, 2.5rem);
             }
         }
 
@@ -206,10 +371,34 @@ Because great water isn’t just a choice — it’s a vibe.
         </div>
         
         <!-- Scroll Down Button in Hero Section -->
-        <div class="hero-scroll-down">
-            <button id="heroScrollDown" title="Scroll to next section">
-                <i class="fas fa-arrow-down"></i>
-            </button>
+        <div class="hero-scroll-down" id="heroScrollDown" title="Scroll to next section">
+            <svg xmlns="http://www.w3.org/2000/svg" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
+                <defs>
+                    <path id="textcirclenew" d="M250,400 a150,150 0 0,1 0,-300a150,150 0 0,1 0,300Z" 
+                          transform="rotate(12,250,250)"/>
+                </defs>
+                <!-- Background circle for visibility -->
+                <!-- <circle cx="250" cy="250" r="150" fill="rgba(14, 165, 233, 0.1)" stroke="rgba(14, 165, 233, 0.3)" stroke-width="2"/> -->
+                <g class="textcircle">
+                    <text style="font-size: 55px;">
+                        <textPath 
+                                  xlink:href="#textcirclenew" 
+                                  aria-label="Scroll Down" 
+                                  textLength="880">
+                            Scroll Down
+                        </textPath>
+                    </text>
+                </g>
+                <!-- Center Arrow -->
+                <g class="center-arrow">
+                    <path d="M250,200 L250,280 M250,280 L230,260 M250,280 L270,260" 
+                          fill="none" 
+                          stroke="rgba(14, 165, 233, 1)" 
+                          stroke-width="3"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </g>
+            </svg>
         </div>
         
         <svg class="wave-svg" width="100%" height="100%" id="svg" viewBox="0 0 1440 390" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150">
@@ -252,6 +441,31 @@ Because great water isn’t just a choice — it’s a vibe.
                     <div class="about-images" data-aos="zoom-in" data-aos-delay="50">
                         <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main">
                         <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary">
+                        
+                        <!-- Marquee Animation Overlapping the Image -->
+                        <div class="marquees-overlay">
+                            <section class="marquee" style="--char-count: 25">
+                                <div class="marquee--inner">
+                                    <p>Pure Water Pure Life</p>
+                                    <p aria-hidden="true">Pure Water Pure Life</p>
+                                    <p aria-hidden="true">Pure Water Pure Life</p>
+                                </div>
+                            </section>
+                            <section class="marquee" style="--char-count: 25">
+                                <div class="marquee--inner">
+                                    <p>Hydration Excellence</p>
+                                    <p aria-hidden="true">Hydration Excellence</p>
+                                    <p aria-hidden="true">Hydration Excellence</p>
+                                </div>
+                            </section>
+                            <section class="marquee" style="--char-count: 25">
+                                <div class="marquee--inner">
+                                    <p>Quality You Can Trust</p>
+                                    <p aria-hidden="true">Quality You Can Trust</p>
+                                    <p aria-hidden="true">Quality You Can Trust</p>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -309,6 +523,7 @@ Because great water isn’t just a choice — it’s a vibe.
     <?php include 'components/order-delivery.php'; ?>
 
     <?php include 'components/contact.php'; ?>
+    <?php include 'components/customer-commitment.php'; ?>
     <?php include 'components/sustainability.php'; ?>
     <?php include 'components/cta.php'; ?>
 
