@@ -408,6 +408,48 @@
             .hero-image-desktop { display: block; }
         }
 
+        /* Social Sidebar - match circular white buttons look */
+        .social-sidebar {
+            position: fixed;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            z-index: 1000;
+        }
+
+        .social-sidebar .social-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: #0f172a; /* dark icon color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 10px 24px rgba(2, 8, 23, 0.12);
+            border: 1px solid rgba(2, 8, 23, 0.06);
+            transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .social-sidebar .social-icon i { font-size: 20px; }
+
+        .social-sidebar .social-icon:hover {
+            background: var(--primary);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(14, 165, 233, 0.25);
+            border-color: rgba(14, 165, 233, 0.35);
+        }
+
+        @media (max-width: 767px) {
+            .social-sidebar { display: none; }
+        }
+
     </style>
 
     <div id="splash-screen" aria-hidden="true">
