@@ -3,16 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Liyas-mineral Water</title>
+    <title>LIYAS Mineral Water - Premium Quality Water</title>
+    <meta name="description" content="LIYAS Mineral Water - Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
+    <meta name="keywords" content="mineral water, premium water, healthy water, LIYAS, pure water">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/logo/logo.png">
+    
+    <!-- CSS Files -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/about.css">
     <link rel="stylesheet" href="assets/css/product.css">
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    
+    <!-- GSAP CDN -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-</head>
+    
+    <!-- Responsive Meta Tags -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="LIYAS Water">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="LIYAS Mineral Water - Premium Quality Water">
+    <meta property="og:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
+    <meta property="og:image" content="assets/images/logo/logo.png">
+    <meta property="og:url" content="https://liyas-water.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LIYAS Mineral Water - Premium Quality Water">
+    <meta name="twitter:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
+    <meta name="twitter:image" content="assets/images/logo/logo.png">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LIYAS Mineral Water",
+        "description": "Premium quality mineral water for a healthy lifestyle",
+        "url": "https://liyas-water.com",
+        "logo": "assets/images/logo/logo.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-234-567-8900",
+            "contactType": "customer service"
+        }
+    }
+    </script>
 <body>
     <style>
         /* Splash Screen Styles */
@@ -49,12 +101,13 @@
             top: 50%;
             left: 50%;
             /* The initial centering (translate) is managed by GSAP.set() in JS */
-            font-size: 60px;
+            font-size: clamp(2rem, 8vw, 4rem);
             font-weight: 700;
             color: rgba(14, 164, 233, 0.71);
             z-index: 10000; /* Increased z-index to ensure visibility during splash fade */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             pointer-events: none;
+            font-family: 'Poppins', sans-serif;
             /* REMOVED: transition: all 1s ease; */
         }
 
@@ -66,11 +119,13 @@
             right: 20px !important; 
            transform: none !important;  /* Ensure no residual transform affects positioning */
             /* Optional: Apply final size for responsiveness */
+            font-size: clamp(1rem, 4vw, 1.5rem);
         }
         
+        /* Responsive Logo Image */
         .logo-text img {
-            width: 100px;
-            height: 100px;
+            width: clamp(60px, 15vw, 100px);
+            height: clamp(60px, 15vw, 100px);
         }
 
         /* --- Existing Animations Below --- */
@@ -109,10 +164,20 @@
             to { opacity: 0; visibility: hidden; transform: scale(1.05); }
         }
 
+        /* Hero layout padding to avoid overlap with scroll control */
+        .hero { 
+            position: relative; 
+            padding-bottom: 120px; /* space reserved for scroll control */
+        }
+
+        @media (min-width: 768px) {
+            .hero { padding-bottom: 140px; }
+        }
+
         /* Hero Scroll Down Button - Circular Text Design */
         .hero-scroll-down {
             position: absolute;
-            bottom: 30px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
@@ -182,7 +247,7 @@
 
         @media (max-width: 767px) {
             .hero-scroll-down {
-                bottom: 20px;
+                bottom: 12px; /* a bit lower on small screens */
                 width: 120px;
                 height: 120px;
             }
@@ -322,6 +387,27 @@
             }
         }
 
+        /* Hero image placement rules */
+        .hero-image-mobile {
+            display: none;
+            margin: var(--space-md, 1.5rem) 0;
+            text-align: center;
+        }
+
+        .hero-image-desktop {
+            display: block;
+        }
+
+        @media (max-width: 767px) {
+            .hero-image-mobile { display: block; }
+            .hero-image-desktop { display: none; }
+        }
+
+        @media (min-width: 768px) {
+            .hero-image-mobile { display: none; }
+            .hero-image-desktop { display: block; }
+        }
+
     </style>
 
     <div id="splash-screen" aria-hidden="true">
@@ -351,6 +437,10 @@
                     <div class="hero-content" data-aos="fade-right" data-aos-delay="50">
                         <div class="hero-subtitle">PURE WATER</div>
                         <h1>DRINK BETTER</h1>
+                        <!-- Mobile-first hero image placed right after heading -->
+                        <div class="hero-image-mobile" aria-hidden="false">
+                            <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
+                        </div>
                         <p>
                         Meet Liyas — hydration redefined for today’s lifestyle.
 Crafted for clarity, freshness, and a touch of fun.
@@ -363,7 +453,7 @@ Because great water isn’t just a choice — it’s a vibe.
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="hero-image" data-aos="fade-left" data-aos-delay="100">
+                    <div class="hero-image hero-image-desktop" data-aos="fade-left" data-aos-delay="100">
                         <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
                     </div>
                 </div>
@@ -613,9 +703,68 @@ Because great water isn’t just a choice — it’s a vibe.
 
     });
     
-    // AOS init
+    // AOS init with responsive settings
     document.addEventListener("DOMContentLoaded", function() {
-        AOS.init({ duration: 1000, easing: 'ease-out', once: true, offset: 120 });
+        const isMobile = window.innerWidth <= 768;
+        const isTablet = window.innerWidth > 768 && window.innerWidth <= 991;
+        
+        if (isMobile) {
+            AOS.init({ 
+                duration: 800, 
+                easing: 'ease-out', 
+                once: true, 
+                offset: 50 
+            });
+        } else if (isTablet) {
+            AOS.init({ 
+                duration: 900, 
+                easing: 'ease-out', 
+                once: true, 
+                offset: 75 
+            });
+        } else {
+            AOS.init({ 
+                duration: 1000, 
+                easing: 'ease-out', 
+                once: true, 
+                offset: 120 
+            });
+        }
+        
+        // Performance optimization for mobile
+        if (isMobile) {
+            // Disable some animations on mobile for better performance
+            document.querySelectorAll('.floating-element').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Reduce particle count on mobile
+            document.querySelectorAll('.particle').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+        
+        // Touch-friendly interactions
+        if ('ontouchstart' in window) {
+            // Add touch-friendly classes
+            document.body.classList.add('touch-device');
+            
+            // Improve touch scrolling
+            document.body.style.webkitOverflowScrolling = 'touch';
+        }
+        
+        // Responsive form handling
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                // Ensure touch-friendly input sizes
+                if (input.type === 'text' || input.type === 'email' || input.type === 'tel') {
+                    input.style.minHeight = '44px';
+                    input.style.fontSize = '16px'; // Prevents zoom on iOS
+                }
+            });
+        });
     });
 
     // Back to Top Button

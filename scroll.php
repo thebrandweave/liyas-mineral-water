@@ -3,16 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Liyas-mineral Water</title>
+    <title>LIYAS Mineral Water - Premium Quality Water</title>
+    <meta name="description" content="LIYAS Mineral Water - Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
+    <meta name="keywords" content="mineral water, premium water, healthy water, LIYAS, pure water">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/logo/logo.png">
+    
+    <!-- CSS Files -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/about.css">
     <link rel="stylesheet" href="assets/css/product.css">
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    
+    <!-- GSAP CDN -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-</head>
+    
+    <!-- Responsive Meta Tags -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="LIYAS Water">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="LIYAS Mineral Water - Premium Quality Water">
+    <meta property="og:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
+    <meta property="og:image" content="assets/images/logo/logo.png">
+    <meta property="og:url" content="https://liyas-water.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LIYAS Mineral Water - Premium Quality Water">
+    <meta name="twitter:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
+    <meta name="twitter:image" content="assets/images/logo/logo.png">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LIYAS Mineral Water",
+        "description": "Premium quality mineral water for a healthy lifestyle",
+        "url": "https://liyas-water.com",
+        "logo": "assets/images/logo/logo.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-234-567-8900",
+            "contactType": "customer service"
+        }
+    }
+    </script>
 <body>
     <style>
         /* Splash Screen Styles */
@@ -49,12 +101,13 @@
             top: 50%;
             left: 50%;
             /* The initial centering (translate) is managed by GSAP.set() in JS */
-            font-size: 60px;
+            font-size: clamp(2rem, 8vw, 4rem);
             font-weight: 700;
             color: rgba(14, 164, 233, 0.71);
             z-index: 10000; /* Increased z-index to ensure visibility during splash fade */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             pointer-events: none;
+            font-family: 'Poppins', sans-serif;
             /* REMOVED: transition: all 1s ease; */
         }
 
@@ -66,11 +119,13 @@
             right: 20px !important; 
            transform: none !important;  /* Ensure no residual transform affects positioning */
             /* Optional: Apply final size for responsiveness */
+            font-size: clamp(1rem, 4vw, 1.5rem);
         }
         
+        /* Responsive Logo Image */
         .logo-text img {
-            width: 100px;
-            height: 100px;
+            width: clamp(60px, 15vw, 100px);
+            height: clamp(60px, 15vw, 100px);
         }
 
         /* --- Existing Animations Below --- */
@@ -124,6 +179,24 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding: var(--space-xl) 0;
+  }
+
+  /* Responsive Sticky Sections */
+  @media (max-width: 767px) {
+    .sticky-section {
+      height: auto;
+      min-height: 100vh;
+      padding: var(--space-lg) 0;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    .sticky-section {
+      height: auto;
+      min-height: 100vh;
+      padding: var(--space-xl) 0;
+    }
   }
 
   /* Sticky content for hero */
@@ -143,13 +216,31 @@
     background: #0ea4e9;
     color: white;
   }
+  
   .hero-section h1 {
-    font-size: 5vw;
+    font-size: clamp(2rem, 8vw, 5vw);
     font-weight: 800;
+    text-align: center;
   }
+  
   .hero-section p {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 3vw, 1.5rem);
     margin-top: 1rem;
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Responsive Hero Styles */
+  @media (max-width: 767px) {
+    .hero-section h1 {
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+    }
+    
+    .hero-section p {
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    }
   }
 
   /* About styling */
@@ -160,13 +251,141 @@
     transform: translateY(50px);
     transition: transform 0.5s ease-out, opacity 0.5s ease-out;
   }
+  
   .about-section h1 {
-    font-size: 4vw;
+    font-size: clamp(1.5rem, 6vw, 4vw);
     font-weight: 700;
+    text-align: center;
   }
+  
   .about-section p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
     margin-top: 1rem;
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Responsive About Styles */
+  @media (max-width: 767px) {
+    .about-section h1 {
+      font-size: clamp(1.2rem, 5vw, 2rem);
+    }
+    
+    .about-section p {
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+  }
+
+  /* Responsive Product Cards */
+  .product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 767px) {
+    .product-card {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .product-card .card-body {
+      padding: var(--space-md);
+    }
+    
+    .product-card .card-title {
+      font-size: var(--text-base);
+    }
+    
+    .product-card .price {
+      font-size: var(--text-lg);
+    }
+    
+    .product-card .btn {
+      width: 100%;
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* Responsive Button Styles */
+  @media (max-width: 767px) {
+    .btn-primary, .btn-secondary {
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .hero-buttons {
+      flex-direction: column;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+  }
+
+  /* Responsive Image Styles */
+  @media (max-width: 767px) {
+    .hero-image img {
+      max-height: 300px;
+      width: 100%;
+      object-fit: contain;
+    }
+    
+    .about-images {
+      margin-top: var(--space-lg);
+    }
+    
+    .about-image-main, .about-image-secondary {
+      height: 250px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    .hero-image img {
+      max-height: 400px;
+    }
+    
+    .about-image-main, .about-image-secondary {
+      height: 300px;
+    }
+  }
+
+  /* Responsive Container Padding */
+  @media (max-width: 767px) {
+    .container {
+      padding: 0 var(--space-sm);
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    .container {
+      padding: 0 var(--space-md);
+    }
+  }
+
+  /* Responsive Social Sidebar */
+  @media (max-width: 767px) {
+    .social-sidebar {
+      display: none;
+    }
+  }
+
+  /* Responsive Back to Top Button */
+  @media (max-width: 767px) {
+    #backToTop {
+      bottom: var(--space-sm);
+      right: var(--space-sm);
+      width: 40px;
+      height: 40px;
+      font-size: var(--text-sm);
+    }
   }
 
 
@@ -414,9 +633,103 @@
 
     });
     
-    // AOS init
+    // AOS init with responsive settings
     document.addEventListener("DOMContentLoaded", function() {
-        AOS.init({ duration: 1000, easing: 'ease-out', once: true, offset: 120 });
+        const isMobile = window.innerWidth <= 768;
+        const isTablet = window.innerWidth > 768 && window.innerWidth <= 991;
+        
+        if (isMobile) {
+            AOS.init({ 
+                duration: 800, 
+                easing: 'ease-out', 
+                once: true, 
+                offset: 50 
+            });
+        } else if (isTablet) {
+            AOS.init({ 
+                duration: 900, 
+                easing: 'ease-out', 
+                once: true, 
+                offset: 75 
+            });
+        } else {
+            AOS.init({ 
+                duration: 1000, 
+                easing: 'ease-out', 
+                once: true, 
+                offset: 120 
+            });
+        }
+        
+        // Performance optimization for mobile
+        if (isMobile) {
+            // Disable some animations on mobile for better performance
+            document.querySelectorAll('.floating-element').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Reduce particle count on mobile
+            document.querySelectorAll('.particle').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+        
+        // Touch-friendly interactions
+        if ('ontouchstart' in window) {
+            // Add touch-friendly classes
+            document.body.classList.add('touch-device');
+            
+            // Improve touch scrolling
+            document.body.style.webkitOverflowScrolling = 'touch';
+        }
+        
+        // Responsive form handling
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                // Ensure touch-friendly input sizes
+                if (input.type === 'text' || input.type === 'email' || input.type === 'tel') {
+                    input.style.minHeight = '44px';
+                    input.style.fontSize = '16px'; // Prevents zoom on iOS
+                }
+            });
+        });
+        
+        // Responsive scroll handling
+        function handleResponsiveScroll() {
+            const hero = document.querySelector('.hero-section');
+            const about = document.querySelector('.about-section');
+            
+            if (!hero || !about) return;
+            
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            
+            // Hero fade out
+            const heroProgress = Math.min(scrollY / windowHeight, 1);
+            hero.style.opacity = `${1 - heroProgress}`;
+            hero.style.transform = `translateY(${-50 * heroProgress}px)`;
+            
+            // About fade in
+            const aboutProgress = Math.min((scrollY - windowHeight/2) / (windowHeight/2), 1);
+            if (aboutProgress > 0) {
+                about.style.opacity = `${aboutProgress}`;
+                about.style.transform = `translateY(${50 - 50 * aboutProgress}px)`;
+            }
+        }
+        
+        // Throttle scroll events for better performance
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
+            }
+            scrollTimeout = setTimeout(handleResponsiveScroll, 10);
+        });
+        
+        // Initial call
+        handleResponsiveScroll();
     });
 
     // Back to Top Button

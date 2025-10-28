@@ -17,12 +17,14 @@
   width: 100vw;
   height: 40vh;
   height: 100%;
+  min-height: 40vh; /* Use min-height for flexibility */
   background: #ffffff; /* background for contrast */
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   margin-top: -5em;
+  /* margin-top: -5em; */ /* Removed to prevent layout issues on mobile */
   position: relative;
 }
 
@@ -64,13 +66,13 @@
   display: flex;
   justify-content: space-evenly; /* evenly space letters */
   align-items: center;
-  font-size: 21vw; /* responsive font size */
+  font-size: clamp(15vw, 21vw, 20rem); /* Responsive font size with min/max */
   font-weight: 900;
   text-transform: uppercase;
   margin: 0;
   padding: 0;
   line-height: 1;
-  letter-spacing: -0.2em;
+  letter-spacing: -0.1em; /* Adjusted for better spacing */
 }
 
 /* Masked shimmer effect on letters */
@@ -94,6 +96,14 @@
   }
   100% {
     background-position: 200% 50%;
+  }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .hollow-word-section {
+    padding-top: 2rem; /* Add some vertical padding on mobile */
+    padding-bottom: 4rem; /* Add some padding at the bottom on mobile */
   }
 }
 </style>
