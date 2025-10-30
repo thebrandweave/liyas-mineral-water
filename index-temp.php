@@ -655,7 +655,6 @@ Because great water isn’t just a choice — it’s a vibe.
     <?php include 'components/order-delivery.php'; ?>
 
     <?php include 'components/contact.php'; ?>
-    <?php include 'components/customer-commitment.php'; ?>
     <?php include 'components/sustainability.php'; ?>
     <?php include 'components/cta.php'; ?>
 
