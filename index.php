@@ -48,6 +48,19 @@
             z-index: -2;
         }
 
+        /* Fallback Background Image */
+        .fallback-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: -2;
+            display: none;
+        }
+
         /* Overlay */
         .overlay {
             position: fixed;
@@ -55,7 +68,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.47); /* --dark with opacity */
+            background: rgba(255, 255, 255, 0.47);
             z-index: -1;
         }
 
@@ -100,7 +113,7 @@
         .coming-soon-text {
             font-size: clamp(1rem, 3vw, 1.25rem);
             max-width: 600px;
-            margin: 0 auto 2.5rem auto; /* Added bottom margin */
+            margin: 0 auto 2.5rem auto;
             color: rgba(255, 255, 255, 0.85);
         }
 
@@ -160,17 +173,19 @@
             .social-icon {
                 transition: none;
             }
-            color: rgba(0, 0, 0, 0.85);
         }
     </style>
 </head>
 <body>
 
-    <!-- Please replace the src with your actual video file path -->
-    <video class="video-background" autoplay muted loop playsinline poster="assets/images/water.png">
+    <!-- Video Background with multiple format support -->
+    <video class="video-background" autoplay muted loop playsinline id="bgVideo" preload="auto">
         <source src="assets/videos/coming-soon-bg.mp4" type="video/mp4">
+        <source src="assets/videos/coming-soon-bg.webm" type="video/webm">
+        <source src="assets/videos/coming-soon-bg.ogv" type="video/ogg">
         Your browser does not support the video tag.
     </video>
+    
     <div class="overlay"></div>
 
     <main class="coming-soon-container">
@@ -187,13 +202,128 @@
             <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
             <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <!-- Add more social icons as needed -->
         </div>
 
     </main>
 
     <script>
-        // Scripts can be added here if needed in the future.
+        (function() {
+            'use strict';
+            
+            const video = document.getElementById('bgVideo');
+            let isReversing = false;
+            let reverseInterval = null;
+
+            // Check browser support
+            function checkVideoSupport() {
+                if (!video || !video.canPlayType) {
+                    return false;
+                }
+                
+                const mp4Support = video.canPlayType('video/mp4');
+                const webmSupport = video.canPlayType('video/webm');
+                const oggSupport = video.canPlayType('video/ogg');
+                
+                return mp4Support !== '' || webmSupport !== '' || oggSupport !== '';
+            }
+
+            // Fallback to image if video is not supported
+            function useFallback() {
+                console.log('Video not supported, using fallback image');
+                if (video) video.style.display = 'none';
+            }
+
+            if (!checkVideoSupport()) {
+                useFallback();
+                return;
+            }
+
+            // Handle video load errors
+            video.addEventListener('error', function(e) {
+                console.error('Video loading error:', e);
+                useFallback();
+            }, true);
+
+            // Handle autoplay
+            video.addEventListener('loadedmetadata', function() {
+                const playPromise = video.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(function(error) {
+                        console.log('Autoplay prevented, will play on click');
+                        document.body.addEventListener('click', function playOnClick() {
+                            video.play();
+                            document.body.removeEventListener('click', playOnClick);
+                        }, { once: true });
+                    });
+                }
+            });
+
+            // When video ends, start reversing
+            video.addEventListener('ended', function() {
+                console.log('Video ended, starting reverse');
+                startReverse();
+            });
+
+            function startReverse() {
+                if (isReversing) return;
+                
+                isReversing = true;
+                const fps = 60;
+                const interval = 1000 / fps;
+                const step = video.duration / (fps * (video.duration)); // Smooth step calculation
+                const intervalDuration = 1000 / fps;
+                const step = intervalDuration / 1000; // The step should be the interval duration in seconds
+                
+                video.pause();
+                if (!video.paused) video.pause();
+                
+                reverseInterval = setInterval(function() {
+                    if (video.currentTime <= 0) {
+                        clearInterval(reverseInterval);
+                        reverseInterval = null;
+                        isReversing = false;
+                        video.currentTime = 0;
+                        console.log('Reverse complete, playing forward');
+                        video.play().catch(function(e) {
+                            console.error('Play error after reverse:', e);
+                        });
+                    } else {
+                        video.currentTime = Math.max(0, video.currentTime - step);
+                    }
+                }, interval);
+                }, intervalDuration);
+            }
+
+            // Handle page visibility
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    if (reverseInterval) {
+                        clearInterval(reverseInterval);
+                        reverseInterval = null;
+                        isReversing = false;
+                    }
+                    video.pause();
+                } else {
+                    if (!isReversing) {
+                        video.play().catch(function(e) {
+                            console.error('Play error on visibility change:', e);
+                        });
+                    } else {
+                        startReverse();
+                    }
+                }
+            });
+
+            // Cleanup
+            window.addEventListener('beforeunload', function() {
+                if (reverseInterval) {
+                    clearInterval(reverseInterval);
+                }
+                video.pause();
+            });
+
+        })();
     </script>
 
 </body>
