@@ -7,49 +7,38 @@
     <meta name="description" content="LIYAS Mineral Water - Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
     <meta name="keywords" content="mineral water, premium water, healthy water, LIYAS, pure water">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/images/logo/logo.png">
     
-    <!-- CSS Files -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/about.css">
     <link rel="stylesheet" href="assets/css/product.css">
     
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- AOS Animation Library -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     
-    <!-- GSAP CDN -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     
-    <!-- Responsive Meta Tags -->
     <meta name="theme-color" content="#0ea5e9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="LIYAS Water">
     
-    <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="LIYAS Mineral Water - Premium Quality Water">
     <meta property="og:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
     <meta property="og:image" content="assets/images/logo/logo.png">
     <meta property="og:url" content="https://liyas-water.com">
     <meta property="og:type" content="website">
     
-    <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LIYAS Mineral Water - Premium Quality Water">
     <meta name="twitter:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
     <meta name="twitter:image" content="assets/images/logo/logo.png">
     
-    <!-- Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -117,7 +106,7 @@
             top: 20px !important; 
             left: auto !important; /* Important to override GSAP's final 'left' property */
             right: 20px !important; 
-           transform: none !important;  /* Ensure no residual transform affects positioning */
+            transform: none !important;  /* Ensure no residual transform affects positioning */
             /* Optional: Apply final size for responsiveness */
             font-size: clamp(1rem, 4vw, 1.5rem);
         }
@@ -479,7 +468,6 @@
                     <div class="hero-content" data-aos="fade-right" data-aos-delay="50">
                         <div class="hero-subtitle">PURE WATER</div>
                         <h1>DRINK BETTER</h1>
-                        <!-- Mobile-first hero image placed right after heading -->
                         <div class="hero-image-mobile" aria-hidden="false">
                             <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
                         </div>
@@ -502,33 +490,29 @@ Because great water isn’t just a choice — it’s a vibe.
             </div>
         </div>
         
-        <!-- Scroll Down Button in Hero Section -->
         <div class="hero-scroll-down" id="heroScrollDown" title="Scroll to next section">
             <svg xmlns="http://www.w3.org/2000/svg" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
                 <defs>
                     <path id="textcirclenew" d="M250,400 a150,150 0 0,1 0,-300a150,150 0 0,1 0,300Z" 
-                          transform="rotate(12,250,250)"/>
+                            transform="rotate(12,250,250)"/>
                 </defs>
-                <!-- Background circle for visibility -->
-                <!-- <circle cx="250" cy="250" r="150" fill="rgba(14, 165, 233, 0.1)" stroke="rgba(14, 165, 233, 0.3)" stroke-width="2"/> -->
                 <g class="textcircle">
                     <text style="font-size: 55px;">
                         <textPath 
-                                  xlink:href="#textcirclenew" 
-                                  aria-label="Scroll Down" 
-                                  textLength="880">
+                                     xlink:href="#textcirclenew" 
+                                     aria-label="Scroll Down" 
+                                     textLength="880">
                             Scroll Down
                         </textPath>
                     </text>
                 </g>
-                <!-- Center Arrow -->
                 <g class="center-arrow">
                     <path d="M250,200 L250,280 M250,280 L230,260 M250,280 L270,260" 
-                          fill="none" 
-                          stroke="rgba(14, 165, 233, 1)" 
-                          stroke-width="3"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"/>
+                            fill="none" 
+                            stroke="rgba(14, 165, 233, 1)" 
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"/>
                 </g>
             </svg>
         </div>
@@ -574,7 +558,6 @@ Because great water isn’t just a choice — it’s a vibe.
                         <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main">
                         <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary">
                         
-                        <!-- Marquee Animation Overlapping the Image -->
                         <div class="marquees-overlay">
                             <section class="marquee" style="--char-count: 25">
                                 <div class="marquee--inner">
@@ -658,7 +641,6 @@ Because great water isn’t just a choice — it’s a vibe.
     <?php include 'components/sustainability.php'; ?>
     <?php include 'components/cta.php'; ?>
 
-    <?php include 'components/faq.php'; ?>
 
 
     <?php include 'components/footer.php'; ?>
@@ -720,10 +702,10 @@ Because great water isn’t just a choice — it’s a vibe.
             gsap.to(logo, {
                 duration: 1.2,
                 delay: delayBeforeLogoMove,
-                top: 20,              // Final distance from top (pixels)
+                top: 20,              // Final distance from top (pixels)
                 left: 'calc(100% - 120px)', // Final distance from left (100% minus 100px logo width minus 20px right margin)
-                x: 0,                 // Reset X translation (must be 0 when setting fixed left/top)
-                y: 0,                 // Reset Y translation
+                x: 0,                 // Reset X translation (must be 0 when setting fixed left/top)
+                y: 0,                 // Reset Y translation
                 ease: "power2.inOut",
                 onStart: () => {
                     // Start the splash screen fadeout concurrently
@@ -744,31 +726,28 @@ Because great water isn’t just a choice — it’s a vibe.
 
     });
     
-    // AOS init with responsive settings
+    // AOS init with custom premium easing and responsive settings
     document.addEventListener("DOMContentLoaded", function() {
         const isMobile = window.innerWidth <= 768;
-        const isTablet = window.innerWidth > 768 && window.innerWidth <= 991;
-        
+
+        // Define a custom premium easing curve for smooth deceleration
+        const premiumEasing = 'cubic-bezier(0.23, 1, 0.320, 1)'; 
+
         if (isMobile) {
+            // Mobile: faster, simpler animations for performance
             AOS.init({ 
                 duration: 800, 
                 easing: 'ease-out', 
                 once: true, 
                 offset: 50 
             });
-        } else if (isTablet) {
-            AOS.init({ 
-                duration: 900, 
-                easing: 'ease-out', 
-                once: true, 
-                offset: 75 
-            });
         } else {
+            // Tablet/Desktop: longer duration and custom easing for a premium feel
             AOS.init({ 
-                duration: 1000, 
-                easing: 'ease-out', 
+                duration: 1200, 
+                easing: premiumEasing, 
                 once: true, 
-                offset: 120 
+                offset: 120, // Wait slightly longer for elements to enter view
             });
         }
         
