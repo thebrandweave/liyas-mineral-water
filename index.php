@@ -195,7 +195,7 @@
 
         <h1 class="coming-soon-title">Coming Soon</h1>
         <p class="coming-soon-text">
-            We're working hard to bring you a fresh and hydrating new experience. Stay tuned for our launch!
+            We're working hard to bring you a fresh and hydrating new experience. Stay tuned for our launch!!!
         </p>
 
         <div class="social-links">
