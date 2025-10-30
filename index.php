@@ -48,7 +48,7 @@
             z-index: -2;
         }
 
-        /* Fallback Background Image */
+        /* Fallback Background*/
         .fallback-background {
             position: fixed;
             top: 50%;
