@@ -36,6 +36,52 @@
             line-height: 1.6;
         }
 
+        /* Loader */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            transition: opacity 0.2s ease;
+        }
+
+        .loader-ring {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .loader-text {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: var(--white);
+            letter-spacing: 1px;
+            opacity: 0.8;
+            animation: fadeInText 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInText {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
         /* Video Background */
         .video-background {
             position: fixed;
@@ -48,7 +94,7 @@
             z-index: -2;
         }
 
-        /* Fallback Background*/
+        /* Fallback Background */
         .fallback-background {
             position: fixed;
             top: 50%;
@@ -148,7 +194,6 @@
             box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
         }
 
-        /* Responsive Styles for Social Icons */
         @media (max-width: 576px) {
             .social-links {
                 gap: 1rem;
@@ -161,34 +206,30 @@
                 font-size: 1.3rem;
             }
         }
-
-        /* Accessibility: Focus styles */
-        .social-icon:focus {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-
-        /* Accessibility: Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            .social-icon {
-                transition: none;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Video Background with multiple format support -->
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">Preparing freshness...</div>
+    </div>
+
+    <!-- Video Background -->
     <video class="video-background" autoplay muted loop playsinline id="bgVideo" preload="auto">
         <source src="assets/videos/coming-soon-bg.mp4" type="video/mp4">
         <source src="assets/videos/coming-soon-bg.webm" type="video/webm">
         <source src="assets/videos/coming-soon-bg.ogv" type="video/ogg">
         Your browser does not support the video tag.
     </video>
-    
+
+    <!-- Fallback -->
+    <img src="assets/images/coming-soon-fallback.jpg" alt="Background Image" class="fallback-background">
+
     <div class="overlay"></div>
 
-    <main class="coming-soon-container">
+    <main class="coming-soon-container" style="display:none;">
         <div class="logo">
             <img src="assets/images/logo/logo.png" alt="LIYAS Mineral Water Logo">
         </div>
@@ -203,126 +244,48 @@
             <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
             <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
-
     </main>
 
     <script>
         (function() {
             'use strict';
-            
+
             const video = document.getElementById('bgVideo');
-            let isReversing = false;
-            let reverseInterval = null;
+            const loader = document.getElementById('loader');
+            const main = document.querySelector('.coming-soon-container');
+            const fallback = document.querySelector('.fallback-background');
 
-            // Check browser support
             function checkVideoSupport() {
-                if (!video || !video.canPlayType) {
-                    return false;
-                }
-                
-                const mp4Support = video.canPlayType('video/mp4');
-                const webmSupport = video.canPlayType('video/webm');
-                const oggSupport = video.canPlayType('video/ogg');
-                
-                return mp4Support !== '' || webmSupport !== '' || oggSupport !== '';
+                if (!video || !video.canPlayType) return false;
+                return video.canPlayType('video/mp4') || video.canPlayType('video/webm') || video.canPlayType('video/ogg');
             }
 
-            // Fallback to image if video is not supported
             function useFallback() {
-                console.log('Video not supported, using fallback image');
                 if (video) video.style.display = 'none';
+                fallback.style.display = 'block';
+                showContent();
             }
 
+            function showContent() {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    main.style.display = 'flex';
+                }, 100); // very fast fade
+            }
+
+            // Show content as soon as video starts playing
+            video.addEventListener('canplay', showContent);
+
+            // Video error
+            video.addEventListener('error', function() {
+                useFallback();
+            });
+
+            // If browser doesn't support video
             if (!checkVideoSupport()) {
                 useFallback();
-                return;
             }
-
-            // Handle video load errors
-            video.addEventListener('error', function(e) {
-                console.error('Video loading error:', e);
-                useFallback();
-            }, true);
-
-            // Handle autoplay
-            video.addEventListener('loadedmetadata', function() {
-                const playPromise = video.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.catch(function(error) {
-                        console.log('Autoplay prevented, will play on click');
-                        document.body.addEventListener('click', function playOnClick() {
-                            video.play();
-                            document.body.removeEventListener('click', playOnClick);
-                        }, { once: true });
-                    });
-                }
-            });
-
-            // When video ends, start reversing
-            video.addEventListener('ended', function() {
-                console.log('Video ended, starting reverse');
-                startReverse();
-            });
-
-            function startReverse() {
-                if (isReversing) return;
-                
-                isReversing = true;
-                const fps = 60;
-                const interval = 1000 / fps;
-                const step = video.duration / (fps * (video.duration)); // Smooth step calculation
-                const intervalDuration = 1000 / fps;
-                const step = intervalDuration / 1000; // The step should be the interval duration in seconds
-                
-                video.pause();
-                if (!video.paused) video.pause();
-                
-                reverseInterval = setInterval(function() {
-                    if (video.currentTime <= 0) {
-                        clearInterval(reverseInterval);
-                        reverseInterval = null;
-                        isReversing = false;
-                        video.currentTime = 0;
-                        console.log('Reverse complete, playing forward');
-                        video.play().catch(function(e) {
-                            console.error('Play error after reverse:', e);
-                        });
-                    } else {
-                        video.currentTime = Math.max(0, video.currentTime - step);
-                    }
-                }, interval);
-                }, intervalDuration);
-            }
-
-            // Handle page visibility
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    if (reverseInterval) {
-                        clearInterval(reverseInterval);
-                        reverseInterval = null;
-                        isReversing = false;
-                    }
-                    video.pause();
-                } else {
-                    if (!isReversing) {
-                        video.play().catch(function(e) {
-                            console.error('Play error on visibility change:', e);
-                        });
-                    } else {
-                        startReverse();
-                    }
-                }
-            });
-
-            // Cleanup
-            window.addEventListener('beforeunload', function() {
-                if (reverseInterval) {
-                    clearInterval(reverseInterval);
-                }
-                video.pause();
-            });
-
         })();
     </script>
 
