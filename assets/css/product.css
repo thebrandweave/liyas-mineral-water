@@ -6,7 +6,7 @@
 .product-section {
     padding: var(--space-xxxl) 0;
     /* Changed background to flat light color to let cards pop more */
-    background: var(--light);
+    background: white;
     position: relative;
     overflow: hidden;
     text-align: center; /* Center the heading and subtext */
@@ -110,21 +110,21 @@
 
 /* Button Styling (Overrides Bootstrap default btn-outline-primary) */
 .btn-outline-primary {
-    display: inline-block;
-    padding: var(--space-sm) var(--space-md);
-    background: transparent;
-    color: var(--primary);
+    display: inline-block !important;
+    padding: var(--space-sm) var(--space-md) !important;
+    background: transparent !important;
+    color: var(--primary) !important;
     text-decoration: none;
     /* Thicker border for better visual weight */
-    border: 2px solid var(--primary);
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: var(--text-base);
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-    min-height: 44px;
-    min-width: 44px;
-    text-align: center;
-    margin-bottom: var(--space-md);
+    border: 2px solid var(--primary) !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    font-size: var(--text-base) !important;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1) !important;
+    min-height: 44px !important;
+    min-width: 44px !important;
+    text-align: center !important;
+    margin-bottom: var(--space-md) !important;
 }
 
 .btn-outline-primary:hover {
@@ -143,6 +143,7 @@
     color: var(--white);
     text-decoration: none;
     border-radius: 50px;
+    border: none;
     font-weight: 700;
     font-size: var(--text-lg);
     transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);

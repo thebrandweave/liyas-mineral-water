@@ -4,12 +4,11 @@
 
 /* About Section Specific Styles */
 .about-section {
-    padding: var(--space-xxxl) 0;
     background: var(--white);
     position: relative;
     overflow: hidden;
     margin-bottom: var(--space-xxxl);
-    margin-top: var(--space-xl);
+    margin-top: -2em;
 }
 
 .about-container {

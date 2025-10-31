@@ -136,7 +136,6 @@
             perspective: 1000px;
         }
         
-        /* ... (other math-particles and keyframes remain the same) ... */
 
         @keyframes circleDropExpand {
             0% { width: 0; height: 0; border-radius: 50%; transform: translate(-50%, -80%); opacity: .98; }
@@ -166,7 +165,7 @@
         /* Hero Scroll Down Button - Circular Text Design */
         .hero-scroll-down {
             position: absolute;
-            bottom: 24px;
+            bottom: 20%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
@@ -251,130 +250,12 @@
             }
         }
 
-        /* Marquee Animation Styles - Overlay Version */
-        .marquees-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 10;
-            pointer-events: none;
-        }
+
 
         .about-images {
             position: relative;
         }
 
-        .marquee {
-            --marquee--colour: rgba(14, 165, 233, 0.9);
-            --marquee--repeat-count: 6;
-            --marquee--base-duration: 1s;
-            --marquee--repeat-size: calc(100% / var(--marquee--repeat-count));
-            --marquee--double-size: calc(var(--marquee--repeat-size) * 2);
-            --marquee--duration: calc(
-                var(--marquee--base-duration) * var(--char-count, 20)
-            );
-            overflow: hidden;
-            width: 110%;
-            margin-left: -5%;
-            mix-blend-mode: overlay;
-            transform: rotate(-2deg);
-            background: var(--marquee--colour);
-            color: #fff;
-            margin: 10px 0;
-            backdrop-filter: blur(2px);
-        }
-
-        .marquee:nth-child(even) {
-            --marquee--direction: -1;
-            transform: rotate(2deg);
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--marquee--colour);
-        }
-
-        .marquee p {
-            transform: translateY(0.07em);
-            font-weight: bold;
-            margin: 0;
-            display: flex;
-            gap: 0.5em;
-            line-height: 1.1;
-            font-size: clamp(1.2rem, 4vw, 2.5rem);
-            font-family: "Poppins", sans-serif;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .marquee p::after {
-            content: "•";
-            transform: translateY(0.175em);
-            color: rgba(14, 165, 233, 0.6);
-        }
-
-        .marquee p::before {
-            content: "";
-        }
-
-        .marquee--inner {
-            width: max-content;
-            display: flex;
-            text-transform: uppercase;
-        }
-
-        @media (prefers-reduced-motion: no-preference) {
-            .marquee--inner {
-                animation: marquee var(--marquee--duration) infinite linear, reduce-marquee var(--marquee--duration) infinite linear paused;
-                animation-composition: add;
-            }
-            .marquee--inner:hover {
-                animation-play-state: running;
-            }
-        }
-
-        @keyframes marquee {
-            from {
-                transform: translateX(calc(var(--marquee--double-size) * -1));
-            }
-            to {
-                transform: translateX(calc(
-                    (-1 * var(--marquee--double-size)) - 
-                    (var(--marquee--double-size) * var(--marquee--direction, 1))
-                ));
-            }
-        }
-
-        @keyframes reduce-marquee {
-            from {
-                transform: translateX(calc(var(--marquee--repeat-size) * var(--marquee--direction, 1)));
-            }
-            to {
-                transform: translateX(calc(
-                    (-1 * var(--marquee--double-size)) - 
-                    (var(--marquee--double-size) * var(--marquee--direction, 1))
-                ));
-            }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .marquees {
-                padding: 40px 0;
-                margin: 20px 0;
-            }
-            
-            .marquee {
-                transform: rotate(-1deg);
-            }
-            
-            .marquee:nth-child(even) {
-                transform: rotate(1deg);
-            }
-            
-            .marquee p {
-                font-size: clamp(1.5rem, 6vw, 2.5rem);
-            }
-        }
 
         /* Hero image placement rules */
         .hero-image-mobile {
@@ -558,29 +439,7 @@ Because great water isn’t just a choice — it’s a vibe.
                         <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main">
                         <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary">
                         
-                        <div class="marquees-overlay">
-                            <section class="marquee" style="--char-count: 25">
-                                <div class="marquee--inner">
-                                    <p>Pure Water Pure Life</p>
-                                    <p aria-hidden="true">Pure Water Pure Life</p>
-                                    <p aria-hidden="true">Pure Water Pure Life</p>
-                                </div>
-                            </section>
-                            <section class="marquee" style="--char-count: 25">
-                                <div class="marquee--inner">
-                                    <p>Hydration Excellence</p>
-                                    <p aria-hidden="true">Hydration Excellence</p>
-                                    <p aria-hidden="true">Hydration Excellence</p>
-                                </div>
-                            </section>
-                            <section class="marquee" style="--char-count: 25">
-                                <div class="marquee--inner">
-                                    <p>Quality You Can Trust</p>
-                                    <p aria-hidden="true">Quality You Can Trust</p>
-                                    <p aria-hidden="true">Quality You Can Trust</p>
-                                </div>
-                            </section>
-                        </div>
+
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -640,6 +499,8 @@ Because great water isn’t just a choice — it’s a vibe.
     <?php include 'components/contact.php'; ?>
     <?php include 'components/sustainability.php'; ?>
     <?php include 'components/cta.php'; ?>
+
+    <?php include 'components/faq.php'; ?>
 
 
 

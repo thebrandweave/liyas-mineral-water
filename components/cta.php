@@ -5,12 +5,12 @@
 ?>
 <section class="cta-section" id="cta" data-aos="fade-up">
     <div class="cta-content">
-        <h2 class="cta-title">Ready to Hydrate?</h2>
-        <p class="cta-text">
+        <h2 class="cta-title"  data-aos="fade-right">Ready to Hydrate?</h2>
+        <p class="cta-text" data-aos="fade-left">
             Experience the purest water that nature has to offer. 
             Join thousands of satisfied customers who trust LIYAS for their daily hydration needs.
         </p>
-        <div class="cta-buttons">
+        <div class="cta-buttons" data-aos="fade-up">
             <a href="#contact" class="cta-button primary">Order Now</a>
             <a href="#about" class="cta-button secondary">Learn More</a>
         </div>
