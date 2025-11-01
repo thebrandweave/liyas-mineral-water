@@ -455,44 +455,7 @@ Because great water isn’t just a choice — it’s a vibe.
     </section>
 
     <?php include 'components/whychooseus.php'; ?>
-
-    <section class="product-section container" data-aos="fade-up">
-        <h2>CHOOSE YOUR <span>WATER</span></h2>
-        <p>BOTTLES WE DELIVER</p>
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card product-card position-relative p-3" data-aos="fade-up" data-aos-delay="0">
-                    <img src="assets/images/bottle-1.jpg" alt="3 Bottles">
-                    <div class="card-body">
-                        <h5 class="card-title mt-3">Three bottles of mineral water</h5>
-                        <p class="price">₹13.25</p>
-                        <button class="btn btn-outline-primary">Add to cart</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card product-card p-3" data-aos="fade-up" data-aos-delay="100">
-                    <img src="assets/images/bottle-1.jpg" alt="1 Big Bottle">
-                    <div class="card-body">
-                        <h5 class="card-title mt-3">One big bottle of mineral water</h5>
-                        <p class="price">₹10</p>
-                        <button class="btn btn-outline-primary">Add to cart</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card product-card p-3" data-aos="fade-up" data-aos-delay="200">
-                    <img src="assets/images/bottle-1.jpg" alt="Small Bottles">
-                    <div class="card-body">
-                        <h5 class="card-title mt-3">Small bottles of mineral water</h5>
-                        <p class="price">₹10</p>
-                        <button class="btn btn-outline-primary">Add to cart</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="btn-view-more mt-5">View More</button>
-    </section>
+    <?php include 'components/products.php'; ?>
 
     <?php include 'components/order-delivery.php'; ?>
 

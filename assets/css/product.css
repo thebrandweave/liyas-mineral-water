@@ -1,237 +1,141 @@
-/* ===========================================
-   RESPONSIVE PRODUCT SECTION STYLES (UPDATED FOR PREMIUM UI)
-   =========================================== */
-
-/* Product Section Specific Styles */
-.product-section {
-    padding: var(--space-xxxl) 0;
-    /* Changed background to flat light color to let cards pop more */
-    background: white;
-    position: relative;
-    overflow: hidden;
-    text-align: center; /* Center the heading and subtext */
+.product-showcase {
+  text-align: center;
+  padding: 5rem 8%;
+  background: linear-gradient(to bottom, #f9fcff 0%, #ffffff 100%);
 }
 
-.product-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--space-sm);
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #003366;
+  margin-bottom: 0.5rem;
 }
 
-/* Product Header Styles (Using elements already included in index.html) */
-.product-section h2 {
-    font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
-    color: var(--dark);
-    margin-bottom: var(--space-xs);
-    line-height: 1.1;
-    font-weight: 800;
-    text-transform: uppercase;
+.section-title span {
+  color: #00aaff;
 }
 
-.product-section h2 span {
-    color: var(--primary);
+.section-subtitle {
+  color: #6b7b91;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
 }
 
-.product-section p {
-    font-size: var(--text-lg);
-    color: var(--secondary);
-    margin-bottom: var(--space-xxl);
-    font-weight: 500;
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+  justify-items: center;
 }
-
-
-/* --- Product Cards Grid Styles --- */
 
 .product-card {
-    background: var(--white);
-    border-radius: 20px;
-    overflow: hidden;
-    /* Updated shadow for deeper, premium feel */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    /* Updated transition easing for smooth movement */
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-    animation: fadeInUp 0.8s ease;
-    animation-fill-mode: both;
+  background: transparent;
+  transition: all 0.4s ease;
+  text-align: left;
+  padding: 1.5rem;
+  border-radius: 20px;
+  max-width: 360px;
 }
-
-.product-card:nth-child(1) { animation-delay: 0.1s; }
-.product-card:nth-child(2) { animation-delay: 0.2s; }
-.product-card:nth-child(3) { animation-delay: 0.3s; }
 
 .product-card:hover {
-    /* Deeper lift on hover */
-    transform: translateY(-12px);
-    /* Primary color shadow tint on hover */
-    box-shadow: 0 25px 60px rgba(14, 165, 233, 0.2);
+  transform: translateY(-8px);
 }
 
-/* The p-3 inside the card provides the padding, so we don't need a separate content container */
-
 .product-card img {
-    /* Using object-fit contain might be better for water bottles */
-    width: 100%;
-    max-height: 300px; 
-    object-fit: contain;
-    transition: transform 0.5s;
-    padding: var(--space-md);
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  transition: transform 0.5s ease;
 }
 
 .product-card:hover img {
-    /* Slight scale on image hover */
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
-.product-card .card-body {
-    padding: var(--space-lg) 0 0 0;
-    text-align: center;
+.product-info {
+  margin-top: 1rem;
 }
 
-.product-card .card-title {
-    font-size: var(--text-xl);
-    color: var(--dark);
-    margin-bottom: var(--space-sm);
-    font-weight: 700;
+.category {
+  color: #7ba9cc;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-@media (min-width: 768px) {
-    .product-card .card-title {
-        font-size: var(--text-2xl);
-    }
+.product-info h4 {
+  color: #002b45;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0.3rem 0;
 }
 
-.product-card .price {
-    font-size: var(--text-3xl);
-    color: var(--primary-dark);
-    font-weight: 800;
-    margin-bottom: var(--space-md);
-    line-height: 1;
+.rating {
+  color: #f5b400;
+  font-size: 0.9rem;
 }
 
-/* Button Styling (Overrides Bootstrap default btn-outline-primary) */
-.btn-outline-primary {
-    display: inline-block !important;
-    padding: var(--space-sm) var(--space-md) !important;
-    background: transparent !important;
-    color: var(--primary) !important;
-    text-decoration: none;
-    /* Thicker border for better visual weight */
-    border: 2px solid var(--primary) !important;
-    border-radius: 50px !important;
-    font-weight: 600 !important;
-    font-size: var(--text-base) !important;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1) !important;
-    min-height: 44px !important;
-    min-width: 44px !important;
-    text-align: center !important;
-    margin-bottom: var(--space-md) !important;
+.rating span {
+  color: #6b7280;
+  margin-left: 4px;
+  font-size: 0.85rem;
 }
 
-.btn-outline-primary:hover {
-    background: var(--primary);
-    color: var(--white);
-    /* Subtle lift */
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(14, 165, 233, 0.3);
+.by {
+  font-size: 0.9rem;
+  color: #7b8ca7;
+  margin-top: 0.3rem;
+  margin-bottom: 0.7rem;
 }
 
-/* View More Button (Larger, more distinct) */
-.btn-view-more {
-    display: inline-block;
-    padding: var(--space-md) var(--space-xxl);
-    background: var(--primary); /* Primary color background */
-    color: var(--white);
-    text-decoration: none;
-    border-radius: 50px;
-    border: none;
-    font-weight: 700;
-    font-size: var(--text-lg);
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-    min-height: 52px; /* Slightly taller button */
-    min-width: 200px;
-    text-align: center;
-    /* Added shadow for depth */
-    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+.by span {
+  color: #00aaff;
+  font-weight: 600;
 }
 
-.btn-view-more:hover {
-    background: var(--primary-dark);
-    /* Deeper lift on hover */
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(14, 165, 233, 0.6);
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
 }
 
-/* --- Responsive Adjustments --- */
-
-@media (max-width: 767px) {
-    .product-section {
-        padding: var(--space-xxl) 0;
-    }
-    
-    .product-card img {
-        max-height: 200px;
-    }
-    
-    .product-card .card-body {
-        padding: var(--space-md) 0 0 0;
-    }
-
-    .product-card .card-title {
-        font-size: var(--text-lg);
-    }
-    
-    .product-card .price {
-        font-size: var(--text-2xl);
-    }
-
-    .btn-view-more {
-        width: 100%;
-        max-width: 300px;
-        padding: var(--space-sm) var(--space-xl);
-        font-size: var(--text-base);
-    }
-    
-    .btn-outline-primary {
-        width: 80%; /* Button takes up most of the card width on mobile */
-        margin: 0 auto var(--space-md) auto;
-        display: block;
-    }
+.new-price {
+  color: #0088cc;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
-/* Resetting Unused/Overlapping Classes from Original product.css */
-/* These styles are kept blank to prevent conflicts if they were used elsewhere */
-.product-header,
-.product-subtitle,
-.product-heading,
-.product-intro,
-.product-showcase,
-.product-image-container,
-.product-main-image,
-.product-badge,
-.product-details,
-.product-rating,
-.stars,
-.rating-text,
-.product-price,
-.product-description,
-.product-specs,
-.spec-row,
-.spec-label,
-.spec-value,
-.product-actions,
-.quantity-selector,
-.quantity-btn,
-.quantity-value,
-.product-cards,
-.product-card-image,
-.badge-sale,
-.product-card-content,
-.product-card h3,
-.product-card p,
-.product-card-rating,
-.product-card-stars,
-.product-card-rating-text,
-.product-card-price,
-.product-card-actions {
-    /* Ensure only the new, focused styles apply */
+.old-price {
+  color: #9ca3af;
+  text-decoration: line-through;
+  font-size: 0.95rem;
+}
+
+.add-btn {
+  background: #e6f7ff;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  color: #007acc;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.add-btn:hover {
+  background: #007acc;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-card {
+    max-width: 100%;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
 }
