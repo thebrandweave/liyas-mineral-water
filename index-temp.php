@@ -457,10 +457,10 @@ Because great water isn’t just a choice — it’s a vibe.
     <?php include 'components/whychooseus.php'; ?>
     <?php include 'components/products.php'; ?>
 
-    <?php include 'components/order-delivery.php'; ?>
 
     <?php include 'components/contact.php'; ?>
     <?php include 'components/sustainability.php'; ?>
+    <?php include 'components/newsletter.php'; ?>
     <?php include 'components/cta.php'; ?>
 
     <?php include 'components/faq.php'; ?>
@@ -471,7 +471,6 @@ Because great water isn’t just a choice — it’s a vibe.
 
     <script src="assets/js/script.js"></script>
     
-    <?php include 'components/hollow-text.php'; ?>
 
     <script>
 
