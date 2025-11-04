@@ -1,0 +1,141 @@
+
+<style>
+
+  .carousel-section{
+    position:relative;
+    width:100%;
+    height:100vh;
+  }
+
+  /* TAPE (rotated) - keep rotation here, NOT animated */
+  .tape {
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:220%;            /* wide so inner track can scroll */
+    height:88px;           /* band thickness */
+    transform-origin:center;
+    display:flex;
+    align-items:center;
+    pointer-events:auto;
+    box-sizing:border-box;
+  }
+
+  /* Inner moving wrapper (we animate translateX here) */
+  .track {
+    display:flex;
+    width:200%;            /* duplicate content width for seamless loop */
+    align-items:center;
+    white-space:nowrap;
+    box-sizing:border-box;
+    will-change:transform;
+  }
+
+  /* Single repeated block (so we can duplicate it) */
+  .block{
+    display:inline-flex;
+    align-items:center;
+    font-size:44px;
+    font-weight:900;
+    letter-spacing:4px;
+    padding: 12px 60px;
+  }
+
+  /* Styles for the two tapes */
+  .tape.black {
+    transform: translate(-50%,-50%) rotate(-5deg);
+    z-index:3;
+    top:50%;
+    background: transparent;
+  }
+  .tape.black .band {
+    background: black;
+    color: white;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    box-sizing:border-box;
+    padding-left:6%;
+    padding-right:6%;
+  }
+
+  .tape.white {
+    transform: translate(-50%,-50%) rotate(5deg);
+    z-index:2;
+    top:50%;
+    background: transparent;
+  }
+  .tape.white .band {
+    background: white;
+    color: black;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    box-sizing:border-box;
+    padding-left:6%;
+    padding-right:6%;
+  }
+
+  /* Animation: translateX from 0 to -50% (seamless because content duplicated) */
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes scroll-right {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+
+  /* apply animation to the track wrappers */
+  .black .track { animation: scroll-left 18s linear infinite; }
+  .white .track { animation: scroll-right 22s linear infinite; }
+
+  /* Pause on hover (optional) */
+  .tape:hover .track { animation-play-state: paused; }
+
+  /* Emoji spacing */
+  .emoji { margin-left:18px; margin-right:18px; font-size:0.9em; }
+
+  /* responsive */
+  @media (max-width:900px){
+    .block{ font-size:26px; padding:10px 28px; }
+    .tape{ height:64px; }
+  }
+  @media (max-width:480px){
+    .block{ font-size:18px; padding:8px 18px; }
+    .tape{ height:52px; }
+  }
+</style>
+</head>
+<body>
+  <section class="carousel-section">
+
+    <div class="tape black" aria-hidden="true">
+      <div class="band">
+        <div class="track">
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+        </div>  
+      </div>
+    </div>
+
+    <div class="tape white" aria-hidden="true">
+      <div class="band">
+        <div class="track">
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+          <div class="block">LET'S WORK TOGETHER <span class="emoji">😊</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
