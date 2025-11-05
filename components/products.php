@@ -15,12 +15,12 @@
             <p class="new-price">₹54.85</p>
             <p class="old-price">₹55.8</p>
           </div>
-          <button class="add-btn">🛒 Add</button>
+          <button class="add-btn">Add</button>
         </div>
       </div>
 
       <div class="product-card">
-        <img src="assets/images/bottle-2.jpg" alt="Ginger Ale">
+        <img src="assets/images/bottle-1.jpg" alt="Ginger Ale">
         <div class="product-info">
           <p class="category">Sparkling</p>
           <h4>Canada Dry Ginger Ale - 2 L Bottle</h4>
@@ -30,12 +30,12 @@
             <p class="new-price">₹32.85</p>
             <p class="old-price">₹33.8</p>
           </div>
-          <button class="add-btn">🛒 Add</button>
+          <button class="add-btn">Add</button>
         </div>
       </div>
 
       <div class="product-card">
-        <img src="assets/images/bottle-3.jpg" alt="Small Water Bottle">
+        <img src="assets/images/bottle-1.jpg" alt="Small Water Bottle">
         <div class="product-info">
           <p class="category">Mini Pack</p>
           <h4>PureLife Natural Spring Water - 1L</h4>
@@ -45,7 +45,7 @@
             <p class="new-price">₹29.50</p>
             <p class="old-price">₹31.00</p>
           </div>
-          <button class="add-btn">🛒 Add</button>
+          <button class="add-btn">Add</button>
         </div>
       </div>
     </div>

@@ -427,32 +427,8 @@ Because great water isn’t just a choice — it’s a vibe.
         </svg>
     </section>
 
-    <section class="about-section" id="about" data-aos="fade-up">
-        <div class="container">
-            <div class="about-title" data-aos="fade-up">
-                <div class="about-subtitle">PURE NATURAL WATER</div>
-                <h2 class="about-heading">BEAUTIFUL WATER WITH BEAUTIFUL CARE & UNIQUE QUALITY</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="about-images" data-aos="zoom-in" data-aos-delay="50">
-                        <img src="assets/images/bottle-1.jpg" alt="Premium Water" class="about-image-main">
-                        <img src="assets/images/bottle-1.jpg" alt="Natural Water" class="about-image-secondary">
-                        
 
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about-content" data-aos="fade-left" data-aos-delay="100">
-                        <div class="about-text">
-                            <p>We enjoy providing pure, natural water and helping clients stay healthy and hydrated. AquaPure has an extraordinary team of excellently trained and certified professionals who ensure the highest quality standards.</p>
-                            <p>Our water is sourced from protected mountain springs, carefully filtered, and bottled in our state-of-the-art facility. We take pride in delivering not just water, but a premium hydration experience.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <?php include 'components/about.php'; ?>
 
     <?php include 'components/whychooseus.php'; ?>
     <?php include 'components/products.php'; ?>

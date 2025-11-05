@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About | Company</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <style>
+<style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
 
     body {
@@ -38,8 +31,8 @@
 
     .about-content .tag {
       display: inline-block;
-      background-color: #e2e8f0;
-      color: #0f172a;
+      background-color: rgba(14, 165, 233, 0.12);
+      color: #0b2e4e;
       font-weight: 600;
       font-size: 0.9rem;
       border-radius: 999px;
@@ -48,21 +41,21 @@
     }
 
     .about-content h2 {
-      font-size: 2.2rem;
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
       font-weight: 700;
-      color: #0f172a;
+      color: #0b2e4e;
       margin-bottom: 1rem;
       line-height: 1.2;
     }
 
     .about-content p {
-      color: #475569;
+      color: #5a6b7b;
       margin-bottom: 1.8rem;
     }
 
     .about-content .btn {
       display: inline-block;
-      background-color: #1e3a8a;
+      background-color: #0ea5e9;
       color: #fff;
       font-weight: 600;
       text-decoration: none;
@@ -72,7 +65,7 @@
     }
 
     .about-content .btn:hover {
-      background-color: #1d4ed8;
+      background-color: #0284c7;
     }
 
     /* Badge Row */
@@ -110,33 +103,20 @@
       }
     }
   </style>
-</head>
-<body>
+
 
   <!-- About Section -->
-  <section class="about-section">
-    <div class="about-image">
-      <img src="assets/images/bottle.png" alt="Technician">
+  <section class="about-section" id="about" data-aos="fade-up">
+    <div class="about-image" data-aos="fade-right" data-aos-delay="50">
+      <img src="assets/images/bottle.png" alt="Liyas Mineral Water Bottle">
     </div>
 
-    <div class="about-content">
+    <div class="about-content" data-aos="fade-left" data-aos-delay="100">
       <span class="tag">Welcome</span>
-      <h2>Air Conditioning and Heating Specialists</h2>
+      <h2>Pure, Refreshing, and Trusted</h2>
       <p>
         Eu cupidatat sit dolore enim consequat veniam adipisicing et quis ut in eiusmod consectetur dolore qui aliqua sunt culpa ad qui mollit et irure nisi laborum commodo minim commodo occaecat ut sint dolor mollit culpa excepteur magna pariatur.
       </p>
       <a href="#" class="btn">About Company</a>
     </div>
   </section>
-
-  <!-- Badge Row -->
-  <div class="badge-row">
-    <img src="assets/images//bottle.png" alt="ISO 14001">
-    <img src="assets/images//bottle.png" alt="ISO 9001">
-    <img src="assets/images//bottle.png" alt="ISO Certified">
-    <img src="assets/images//bottle.png" alt="ISO Quality">
-    <img src="assets/images//bottle.png" alt="ISO 22000">
-  </div>
-
-</body>
-</html>
