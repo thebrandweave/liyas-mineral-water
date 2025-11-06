@@ -1,21 +1,34 @@
 <?php
-// Database configuration
-$host = "localhost";         // Database host
-$username = "root";          // MySQL username
-$password = "";              // MySQL password
-$database = "liyas_international";  // Database name
+// ✅ Manual Firebase JWT include (correct order!)
+require_once __DIR__ . '/../admin/includes/php-jwt/JWTExceptionWithPayloadInterface.php';
+require_once __DIR__ . '/../admin/includes/php-jwt/BeforeValidException.php';
+require_once __DIR__ . '/../admin/includes/php-jwt/ExpiredException.php';
+require_once __DIR__ . '/../admin/includes/php-jwt/SignatureInvalidException.php';
+require_once __DIR__ . '/../admin/includes/php-jwt/Key.php';
+require_once __DIR__ . '/../admin/includes/php-jwt/JWT.php';
 
-// Create a connection
-$conn = new mysqli($host, $username, $password, $database);
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Database + JWT config below…
+$host = "localhost";
+$dbname = "liyas_international";
+$username = "root";
+$password = "";
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("DB connection failed: " . $e->getMessage());
 }
 
-// Optional: set charset
-$conn->set_charset("utf8mb4");
+$JWT_SECRET = "super_secure_secret_987654321";
+$JWT_EXPIRE = 3600;
 
-// Uncomment this line for debugging only
-// echo "Database connected successfully!";
+define('UPLOAD_DIR', '/uploads/');
+define('UPLOAD_DIR_SERVER', __DIR__ . '/../uploads/');
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
