@@ -1,6 +1,9 @@
 <?php
 require_once dirname(__DIR__, 2) . '/config/config.php';
 
+// Import JWT classes
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 if (!isset($_SESSION['admin_id'], $_SESSION['jwt_token'])) {
     header("Location: ./login.php");
