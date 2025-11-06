@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS products (
   FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS media (
+CREATE TABLE IF NOT EXISTS products_media (
   media_id INT AUTO_INCREMENT PRIMARY KEY,
   product_id INT,
   file_path VARCHAR(255) NOT NULL,

@@ -25,8 +25,11 @@ try {
 $JWT_SECRET = "super_secure_secret_987654321";
 $JWT_EXPIRE = 3600;
 
+// Root path detection (project root)
+$ROOT_PATH = dirname(__DIR__);  // e.g. C:\xampp\htdocs\liyas-mineral-water
+
 define('UPLOAD_DIR', '/uploads/');
-define('UPLOAD_DIR_SERVER', __DIR__ . '/../uploads/');
+define('UPLOAD_DIR_SERVER', $ROOT_PATH . '/uploads/');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
