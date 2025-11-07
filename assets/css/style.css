@@ -3010,6 +3010,84 @@ footer::after {
             box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
         }
 
+        @media (max-width: 991px) {
+            .newsletter {
+                padding: 70px 40px;
+            }
+
+            .newsletter-container h3 {
+                font-size: 36px;
+            }
+
+            .newsletter-container p {
+                font-size: 17px;
+            }
+
+            .newsletter-form {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .newsletter {
+                padding: 56px 24px;
+            }
+
+            .newsletter-container {
+                text-align: center;
+            }
+
+            .newsletter-container h3 {
+                font-size: clamp(26px, 6vw, 32px);
+                margin-bottom: 12px;
+            }
+
+            .newsletter-container p {
+                font-size: 16px;
+                margin-bottom: 28px;
+                line-height: 1.6;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .newsletter-input {
+                width: 100%;
+                padding: 16px 18px;
+                border-radius: 16px;
+            }
+
+            .newsletter-btn {
+                width: 100%;
+                padding: 16px 18px;
+                border-radius: 16px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .newsletter {
+                padding: 48px 20px;
+            }
+
+            .newsletter-container h3 {
+                font-size: clamp(24px, 7vw, 28px);
+            }
+
+            .newsletter-container p {
+                font-size: 15px;
+            }
+
+            .newsletter-input,
+            .newsletter-btn {
+                padding: 14px 16px;
+            }
+        }
+
         /* Parallax Section */
         .parallax-section {
             height: 600px;

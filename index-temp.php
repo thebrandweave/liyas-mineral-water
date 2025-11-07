@@ -181,6 +181,21 @@
             .hero { padding-bottom: 140px; }
         }
 
+        .wave-svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+        }
+
+        @media (max-width: 767px) {
+            .wave-svg {
+                bottom: -1px; /* keep wave touching the next section */
+            }
+        }
+
         /* Hero Scroll Down Button - Circular Text Design */
         .hero-scroll-down {
             position: absolute;
@@ -295,6 +310,13 @@
         @media (min-width: 768px) {
             .hero-image-mobile { display: none; }
             .hero-image-desktop { display: block; }
+        }
+
+        @media (max-width: 767px) {
+            .hero-image-mobile img {
+                max-width: clamp(180px, 62vw, 260px);
+                margin-inline: auto;
+            }
         }
 
         /* Social Sidebar - match circular white buttons look */
