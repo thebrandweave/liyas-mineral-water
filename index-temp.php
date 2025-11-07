@@ -347,22 +347,26 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   text-decoration: none;
   z-index: 1100;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
   /* Better touch target */
   min-width: 52px;
   min-height: 52px;
+  /* Ensure it's always visible */
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .top-login-btn:hover {
@@ -382,6 +386,7 @@
   height: 24px;
   stroke-width: 2;
   transition: stroke 0.3s ease;
+  display: block;
 }
 
 .top-login-btn:hover .login-svg {
@@ -406,53 +411,92 @@
 }
 
 /* Responsive adjustments (mobile view) */
-@media (max-width: 767px) {
+@media screen and (max-width: 767px) {
   .top-login-btn {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
-    top: 14px;
-    right: 14px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-    z-index: 1101; /* Above navbar but below mobile menu when open */
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    top: 16px !important;
+    right: 16px !important;
+    left: auto !important;
+    bottom: auto !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    z-index: 1101 !important; /* Above navbar but below mobile menu when open */
+    background: rgba(255, 255, 255, 1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    /* Ensure visibility */
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    position: fixed !important;
+    transform: none !important;
   }
   
   .top-login-btn .login-svg {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2.2;
+    width: 22px !important;
+    height: 22px !important;
+    stroke-width: 2.2 !important;
+    display: block !important;
+    flex-shrink: 0 !important;
   }
 
   /* Adjust position when navbar is scrolled */
   .liyas-navbar.scrolled ~ .top-login-btn {
-    top: 12px;
+    top: 14px !important;
+  }
+  
+  /* Ensure button is clickable */
+  .top-login-btn:active {
+    transform: scale(0.95) !important;
   }
 }
 
 /* Extra small devices */
-@media (max-width: 375px) {
+@media screen and (max-width: 480px) {
   .top-login-btn {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    top: 12px;
-    right: 12px;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+    top: 14px !important;
+    right: 14px !important;
+    left: auto !important;
+    position: fixed !important;
   }
   
   .top-login-btn .login-svg {
-    width: 18px;
-    height: 18px;
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .top-login-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    top: 12px !important;
+    right: 12px !important;
+    left: auto !important;
+    position: fixed !important;
+  }
+  
+  .top-login-btn .login-svg {
+    width: 18px !important;
+    height: 18px !important;
   }
 }
 
 /* Hide login button when mobile menu is open to avoid overlap */
-@media (max-width: 767px) {
+@media screen and (max-width: 767px) {
   body.no-scroll .top-login-btn {
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.8);
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.8) !important;
+    visibility: hidden !important;
   }
 }
 
