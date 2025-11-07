@@ -11,7 +11,7 @@
   <h1>Beverage Admin Panel</h1>
   <div style="text-align:right">
     Logged in as: <?= htmlspecialchars($_SESSION['admin_name']) ?> |
-    <a href="../logout.php">Logout</a>
+    <a href="./logout.php">Logout</a>
   </div>
 </header>
 <main>
