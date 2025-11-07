@@ -1,343 +1,210 @@
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <img src="assets/images/logo/logo.png" alt="LIYAS Mineral Water" class="logo-img">
-                <span class="logo-text">LIYAS</span>
-            </div>
-            
-            <!-- Mobile Menu Toggle -->
-            <button class="nav-toggle" aria-label="Toggle navigation menu">
-                <span class="hamburger"></span>
-                <span class="hamburger"></span>
-                <span class="hamburger"></span>
-            </button>
-            
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#product" class="nav-link">Product</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#benefits" class="nav-link">Benefits</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#testimonials" class="nav-link">Reviews</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#gallery" class="nav-link">Gallery</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#order" class="nav-button">Order Now</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+<!-- components/navbar.php -->
+<nav class="navbar fixed-top liyas-navbar">
+  <div class="container d-flex justify-content-between align-items-center">
 
-    <style>
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(14, 165, 233, 0.1);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
+    <!-- Logo (Left Side) -->
+    <!-- <a href="#home" class="navbar-brand logo-text d-flex align-items-center">
+      <img src="assets/images/logo/logo.png" alt="Liyas Logo" class="navbar-logo">
+    </a> -->
 
-        .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
+    <!-- Center Nav Items -->
+    <ul class="navbar-nav flex-row gap-4 nav-items-placeholder d-none d-md-flex mx-auto">
+      <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+      <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+      <li class="nav-item"><a href="#products" class="nav-link">Products</a></li>
+      <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--space-md);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
+    <!-- Login Icon (Right Side) -->
+    <!-- <a href="login.php" class="login-icon" title="Login">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           stroke-width="2.2" stroke="currentColor" class="login-svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+      </svg>
+    </a> -->
 
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            font-weight: 800;
-            font-size: var(--text-xl);
-            color: var(--primary);
-        }
+    <!-- Hamburger Menu (Mobile) -->
+    <button class="navbar-toggler d-md-none" type="button" id="mobileMenuBtn" aria-label="Toggle navigation">
+      <span class="hamburger-icon"></span>
+    </button>
 
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-        }
+  </div>
 
-        .logo-text {
-            font-size: var(--text-xl);
-            font-weight: 800;
-            color: var(--primary);
-        }
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#home" class="nav-link">Home</a></li>
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#products" class="nav-link">Products</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+  </div>
+</nav>
 
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: var(--space-xs);
-        }
+<style>
+  /* ======================
+      NAVBAR BASE STYLING
+  ====================== */
+  .liyas-navbar {
+    width: 100%;
+    background: transparent;
+    padding: 2.5rem 2rem;
+    z-index: 1100;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
 
-        .hamburger {
-            width: 25px;
-            height: 3px;
-            background: var(--primary);
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
 
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            align-items: center;
-            gap: var(--space-lg);
-        }
+  /* Center Nav Links */
+  .nav-items-placeholder {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-        .nav-item {
-            position: relative;
-        }
+  .nav-items-placeholder .nav-link {
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: #000000e6;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    letter-spacing: 0.5px;
+    position: relative;
+  }
 
-        .nav-link {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            font-size: var(--text-base);
-            transition: color 0.3s ease;
-            position: relative;
-        }
+  .nav-items-placeholder .nav-link:hover {
+    color: rgba(14, 165, 233, 1);
+  }
 
-        .nav-link:hover {
-            color: var(--primary);
-        }
 
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
+  /* ======================
+      HAMBURGER MENU
+  ====================== */
+  .navbar-toggler {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    position: relative;
+  }
 
-        .nav-link:hover::after {
-            width: 100%;
-        }
+  .hamburger-icon,
+  .hamburger-icon::before,
+  .hamburger-icon::after {
+    content: "";
+    display: block;
+    width: 26px;
+    height: 2px;
+    background-color: #0f172a;
+    position: absolute;
+    left: 7px;
+    transition: all 0.3s ease-in-out;
+  }
 
-        .nav-button {
-            background: var(--primary);
-            color: var(--white);
-            padding: var(--space-xs) var(--space-md);
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: var(--text-sm);
-            transition: all 0.3s ease;
-            border: 2px solid var(--primary);
-        }
+  .hamburger-icon {
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
-        .nav-button:hover {
-            background: transparent;
-            color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3);
-        }
+  .hamburger-icon::before {
+    top: -8px;
+  }
 
-        /* Mobile Styles */
-        @media (max-width: 991px) {
-            .nav-container {
-                padding: 0 var(--space-sm);
-            }
+  .hamburger-icon::after {
+    top: 8px;
+  }
 
-            .nav-toggle {
-                display: flex;
-            }
+  .navbar-toggler.active .hamburger-icon {
+    background-color: transparent;
+  }
 
-            .nav-menu {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: rgba(255, 255, 255, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                padding-top: var(--space-xxl);
-                transition: left 0.3s ease;
-                gap: var(--space-lg);
-            }
+  .navbar-toggler.active .hamburger-icon::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
 
-            .nav-menu.active {
-                left: 0;
-            }
+  .navbar-toggler.active .hamburger-icon::after {
+    transform: rotate(-45deg);
+    top: 0;
+  }
 
-            .nav-item {
-                margin: var(--space-sm) 0;
-            }
+  /* ======================
+      MOBILE MENU OVERLAY
+  ====================== */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: right 0.4s ease-in-out;
+    z-index: 1050;
+  }
 
-            .nav-link {
-                font-size: var(--text-lg);
-                padding: var(--space-sm);
-            }
+  .mobile-menu.active {
+    right: 0;
+  }
 
-            .nav-button {
-                padding: var(--space-sm) var(--space-lg);
-                font-size: var(--text-base);
-                margin-top: var(--space-md);
-            }
+  .mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+  }
 
-            /* Hamburger Animation */
-            .nav-toggle.active .hamburger:nth-child(1) {
-                transform: rotate(45deg) translate(5px, 5px);
-            }
+  .mobile-menu ul li {
+    margin: 20px 0;
+  }
 
-            .nav-toggle.active .hamburger:nth-child(2) {
-                opacity: 0;
-            }
+  .mobile-menu ul .nav-link {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #0f172a;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
 
-            .nav-toggle.active .hamburger:nth-child(3) {
-                transform: rotate(-45deg) translate(7px, -6px);
-            }
-        }
+  .mobile-menu ul .nav-link:hover {
+    color: rgba(14, 165, 233, 1);
+  }
 
-        @media (max-width: 767px) {
-            .nav-container {
-                height: 60px;
-            }
+  /* ======================
+      RESPONSIVE
+  ====================== */
+  @media (max-width: 767px) {
+    .liyas-navbar {
+      padding: 1rem 1.2rem;
+    }
+    .nav-items-placeholder {
+      display: none !important;
+    }
+  }
+</style>
 
-            .nav-logo {
-                font-size: var(--text-lg);
-            }
+<script>
+  // Mobile menu toggle logic
+  document.addEventListener('DOMContentLoaded', function () {
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-            .logo-img {
-                width: 35px;
-                height: 35px;
-            }
+    mobileBtn.addEventListener('click', () => {
+      mobileBtn.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.classList.toggle('no-scroll');
+    });
 
-            .logo-text {
-                font-size: var(--text-lg);
-            }
-
-            .nav-menu {
-                top: 60px;
-                height: calc(100vh - 60px);
-            }
-
-            .nav-link {
-                font-size: var(--text-xl);
-            }
-
-            .nav-button {
-                padding: var(--space-md) var(--space-xl);
-                font-size: var(--text-lg);
-            }
-        }
-
-        /* Accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            .navbar,
-            .nav-link,
-            .nav-button,
-            .hamburger {
-                transition: none;
-            }
-        }
-
-        /* Focus styles */
-        .nav-link:focus,
-        .nav-button:focus,
-        .nav-toggle:focus {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-    </style>
-
-    <script>
-        // Mobile menu toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const navToggle = document.querySelector('.nav-toggle');
-            const navMenu = document.querySelector('.nav-menu');
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            // Toggle mobile menu
-            navToggle.addEventListener('click', function() {
-                navToggle.classList.toggle('active');
-                navMenu.classList.toggle('active');
-                document.body.classList.toggle('menu-open');
-            });
-
-            // Close menu when clicking on a link
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    navToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    document.body.classList.remove('menu-open');
-                });
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                    navToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    document.body.classList.remove('menu-open');
-                }
-            });
-
-            // Navbar scroll effect
-            window.addEventListener('scroll', function() {
-                const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-
-            // Smooth scrolling for anchor links
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href.startsWith('#')) {
-                        e.preventDefault();
-                        const target = document.querySelector(href);
-                        if (target) {
-                            const offsetTop = target.offsetTop - 80; // Account for fixed navbar
-                            window.scrollTo({
-                                top: offsetTop,
-                                behavior: 'smooth'
-                            });
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+    // Close when clicking any link
+    document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileBtn.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+      });
+    });
+  });
+</script>

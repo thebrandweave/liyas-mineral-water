@@ -101,15 +101,15 @@
         }
 
         /* Final state after GSAP animation completes. This ensures responsiveness. */
-        .logo-text.move-top-right {
-            /* The logo moves to 20px from top and 20px from right */
-            top: 20px !important; 
-            left: auto !important; /* Important to override GSAP's final 'left' property */
-            right: 20px !important; 
-            transform: none !important;  /* Ensure no residual transform affects positioning */
-            /* Optional: Apply final size for responsiveness */
+        /* Final locked position for top-left logo */
+        .logo-text.move-top-left {
+            top: 20px !important;
+            left: 20px !important;
+            right: auto !important;
+            transform: none !important;
             font-size: clamp(1rem, 4vw, 1.5rem);
         }
+
         
         /* Responsive Logo Image */
         .logo-text img {
@@ -320,7 +320,56 @@
             .social-sidebar { display: none; }
         }
 
+/* Top-right Login Button - aligned with Back to Top button */
+.top-login-btn {
+  position: fixed;
+  top: 42px;
+  right: 15px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  /* background: #ffffff; */
+  color: #000000ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* box-shadow: 0 3px 10px rgba(14, 165, 233, 0.25); */
+  /* border: 1px solid rgba(14, 165, 233, 0.15); */
+  text-decoration: none;
+  z-index: 10000;
+  transition: all 0.25s ease;
+}
+
+.top-login-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* SVG Icon inside the circle */
+.top-login-btn .login-svg {
+  width: 6em;
+  height: 6em;
+}
+
+/* Responsive adjustments (mobile view) */
+@media (max-width: 767px) {
+  .top-login-btn {
+    width: 44px;
+    height: 44px;
+    top: 16px;
+    right: 16px;
+    box-shadow: 0 2px 6px rgba(14, 165, 233, 0.25);
+  }
+  .top-login-btn .login-svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+
+
     </style>
+
+    <?php include 'components/navbar.php' ?>
 
     <div id="splash-screen" aria-hidden="true">
         <div class="splash-layer" aria-hidden="true"></div>
@@ -331,6 +380,17 @@
         </div>
         <div class="math-particles" aria-hidden="true" id="mathParticles"></div>
     </div>
+
+<!-- Top-right Login Icon (aligned with Back to Top button) -->
+<a href="login.php" class="top-login-btn" title="Login">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+       stroke-width="1.5" stroke="currentColor" class="login-svg">
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+  </svg>
+</a>
+
+
 
     <div class="social-sidebar">
         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -486,42 +546,44 @@ Because great water isn’t just a choice — it’s a vibe.
         const fallbackTimeout = setTimeout(finishSplash, 500); 
         layer.addEventListener('animationend', finishSplash);
 
-        function finishSplash() {
-            clearTimeout(fallbackTimeout);
-            layer.removeEventListener('animationend', finishSplash);
+function finishSplash() {
+    clearTimeout(fallbackTimeout);
+    layer.removeEventListener('animationend', finishSplash);
 
-            // Time after the circle animation ends (2.8s total duration for circleDropExpand).
-            const delayBeforeLogoMove = 0.5; // Start moving 0.5s after the main splash circle effect
+    // Time after the circle animation ends (2.8s total duration for circleDropExpand)
+    const delayBeforeLogoMove = 0.5; // Start moving 0.5s after the main splash circle effect
 
-            // 1. GSAP Logo Animation (Center to Top Right)
-            // Ensure the logo is outside the splash so it won't be hidden when splash disappears
-            if (splash.contains(logo)) {
-                document.body.appendChild(logo);
-            }
-            gsap.to(logo, {
-                duration: 1.2,
-                delay: delayBeforeLogoMove,
-                top: 20,              // Final distance from top (pixels)
-                left: 'calc(100% - 120px)', // Final distance from left (100% minus 100px logo width minus 20px right margin)
-                x: 0,                 // Reset X translation (must be 0 when setting fixed left/top)
-                y: 0,                 // Reset Y translation
-                ease: "power2.inOut",
-                onStart: () => {
-                    // Start the splash screen fadeout concurrently
-                    splash.classList.add('splash-fadeout');
-                    // Hide splash after fade-out completes (0.8s)
-                    setTimeout(() => {
-                        splash.style.display = 'none';
-                        document.body.style.overflow = '';
-                    }, 850);
-                },
-                onComplete: () => {
-                    // Apply final CSS class for responsive position locking (clean up GSAP's inline styles)
-                    logo.classList.add('move-top-right');
-                    gsap.set(logo, { clearProps: "left, top, x, y" }); 
-                }
-            });
+    // Ensure the logo is outside the splash so it won't be hidden when splash disappears
+    if (splash.contains(logo)) {
+        document.body.appendChild(logo);
+    }
+
+    // Animate logo to top-left corner
+    gsap.to(logo, {
+        duration: 1.2,
+        delay: delayBeforeLogoMove,
+        top: 20,            // Distance from top
+        left: 20,           // Distance from left
+        x: 0,               // Reset transforms
+        y: 0,
+        scale: 0.85,        // Optional: subtle shrink for a polished effect
+        ease: "power2.inOut",
+        onStart: () => {
+            // Fade out splash concurrently
+            splash.classList.add('splash-fadeout');
+            setTimeout(() => {
+                splash.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 850);
+        },
+        onComplete: () => {
+            // Lock final responsive position
+            logo.classList.add('move-top-left');
+            gsap.set(logo, { clearProps: "left, top, x, y, scale" });
         }
+    });
+}
+
 
     });
     
