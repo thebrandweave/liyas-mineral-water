@@ -51,9 +51,16 @@
     background: transparent;
     padding: 2.5rem 2rem;
     z-index: 1100;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
   }
 
+  /* Navbar with background on scroll */
+  .liyas-navbar.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    padding: 1.2rem 2rem;
+  }
 
   /* Center Nav Links */
   .nav-items-placeholder {
@@ -70,10 +77,24 @@
     transition: color 0.3s ease;
     letter-spacing: 0.5px;
     position: relative;
+    padding: 0.5rem 0;
   }
 
   .nav-items-placeholder .nav-link:hover {
     color: rgba(14, 165, 233, 1);
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 768px) and (max-width: 991px) {
+    .liyas-navbar {
+      padding: 1.8rem 1.5rem;
+    }
+    .nav-items-placeholder .nav-link {
+      font-size: 0.95rem;
+    }
+    .nav-items-placeholder {
+      gap: 1.5rem !important;
+    }
   }
 
 
@@ -84,9 +105,17 @@
     background: none;
     border: none;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* Better touch target */
+    min-width: 44px;
+    min-height: 44px;
+    z-index: 1101;
   }
 
   .hamburger-icon,
@@ -95,24 +124,28 @@
     content: "";
     display: block;
     width: 26px;
-    height: 2px;
+    height: 2.5px;
     background-color: #0f172a;
     position: absolute;
-    left: 7px;
+    left: 50%;
+    transform: translateX(-50%);
     transition: all 0.3s ease-in-out;
+    border-radius: 2px;
   }
 
   .hamburger-icon {
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
   }
 
   .hamburger-icon::before {
-    top: -8px;
+    top: -9px;
+    transform: translateX(-50%);
   }
 
   .hamburger-icon::after {
-    top: 8px;
+    top: 9px;
+    transform: translateX(-50%);
   }
 
   .navbar-toggler.active .hamburger-icon {
@@ -120,13 +153,19 @@
   }
 
   .navbar-toggler.active .hamburger-icon::before {
-    transform: rotate(45deg);
+    transform: translate(-50%, 0) rotate(45deg);
     top: 0;
   }
 
   .navbar-toggler.active .hamburger-icon::after {
-    transform: rotate(-45deg);
+    transform: translate(-50%, 0) rotate(-45deg);
     top: 0;
+  }
+
+  /* Active state color change */
+  .navbar-toggler.active .hamburger-icon::before,
+  .navbar-toggler.active .hamburger-icon::after {
+    background-color: #0f172a;
   }
 
   /* ======================
@@ -138,13 +177,15 @@
     right: -100%;
     width: 100%;
     height: 100vh;
-    background: rgba(255, 255, 255, 0.97);
-    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: right 0.4s ease-in-out;
-    z-index: 1050;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1099;
+    overflow-y: auto;
   }
 
   .mobile-menu.active {
@@ -155,18 +196,44 @@
     list-style: none;
     padding: 0;
     text-align: center;
+    width: 100%;
+    max-width: 300px;
   }
 
   .mobile-menu ul li {
-    margin: 20px 0;
+    margin: 1.5rem 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
+  .mobile-menu.active ul li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-menu.active ul li:nth-child(1) { transition-delay: 0.1s; }
+  .mobile-menu.active ul li:nth-child(2) { transition-delay: 0.15s; }
+  .mobile-menu.active ul li:nth-child(3) { transition-delay: 0.2s; }
+  .mobile-menu.active ul li:nth-child(4) { transition-delay: 0.25s; }
+
   .mobile-menu ul .nav-link {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
     font-weight: 600;
     color: #0f172a;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    min-height: 44px;
+  }
+
+  .mobile-menu ul .nav-link:active {
+    transform: scale(0.95);
+    background: rgba(14, 165, 233, 0.1);
   }
 
   .mobile-menu ul .nav-link:hover {
@@ -178,11 +245,57 @@
   ====================== */
   @media (max-width: 767px) {
     .liyas-navbar {
-      padding: 1rem 1.2rem;
+      padding: 1rem 1rem;
     }
+    
+    .liyas-navbar.scrolled {
+      padding: 0.8rem 1rem;
+    }
+
     .nav-items-placeholder {
       display: none !important;
     }
+
+    .navbar-toggler {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+    }
+
+    .hamburger-icon,
+    .hamburger-icon::before,
+    .hamburger-icon::after {
+      width: 24px;
+      height: 2.5px;
+    }
+
+    .mobile-menu ul li {
+      margin: 1.25rem 0;
+    }
+
+    .mobile-menu ul .nav-link {
+      padding: 0.625rem 1.25rem;
+      font-size: 1.35rem;
+    }
+  }
+
+  /* Extra small devices */
+  @media (max-width: 375px) {
+    .liyas-navbar {
+      padding: 0.875rem 0.875rem;
+    }
+    
+    .liyas-navbar.scrolled {
+      padding: 0.75rem 0.875rem;
+    }
+  }
+
+  /* Prevent body scroll when menu is open */
+  body.no-scroll {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
   }
 </style>
 
@@ -191,20 +304,61 @@
   document.addEventListener('DOMContentLoaded', function () {
     const mobileBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
+    const navbar = document.querySelector('.liyas-navbar');
 
-    mobileBtn.addEventListener('click', () => {
-      mobileBtn.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-      document.body.classList.toggle('no-scroll');
-    });
-
-    // Close when clicking any link
-    document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileBtn.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        document.body.classList.remove('no-scroll');
+    // Toggle mobile menu
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileBtn.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+        document.body.classList.toggle('no-scroll');
       });
-    });
+
+      // Close when clicking any link
+      document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileBtn.classList.remove('active');
+          mobileMenu.classList.remove('active');
+          document.body.classList.remove('no-scroll');
+        });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (mobileMenu.classList.contains('active') && 
+            !mobileMenu.contains(e.target) && 
+            !mobileBtn.contains(e.target)) {
+          mobileBtn.classList.remove('active');
+          mobileMenu.classList.remove('active');
+          document.body.classList.remove('no-scroll');
+        }
+      });
+
+      // Close menu on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+          mobileBtn.classList.remove('active');
+          mobileMenu.classList.remove('active');
+          document.body.classList.remove('no-scroll');
+        }
+      });
+    }
+
+    // Navbar scroll effect
+    if (navbar) {
+      let lastScroll = 0;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+        
+        lastScroll = currentScroll;
+      });
+    }
   });
 </script>

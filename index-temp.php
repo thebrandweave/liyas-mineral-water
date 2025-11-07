@@ -110,11 +110,30 @@
             font-size: clamp(1rem, 4vw, 1.5rem);
         }
 
-        
         /* Responsive Logo Image */
         .logo-text img {
             width: clamp(60px, 15vw, 100px);
             height: clamp(60px, 15vw, 100px);
+        }
+
+        /* Mobile adjustments for logo to avoid overlap */
+        @media (max-width: 767px) {
+            .logo-text.move-top-left {
+                top: 14px !important;
+                left: 14px !important;
+            }
+            
+            .logo-text img {
+                width: clamp(50px, 12vw, 80px);
+                height: clamp(50px, 12vw, 80px);
+            }
+        }
+
+        @media (max-width: 375px) {
+            .logo-text.move-top-left {
+                top: 12px !important;
+                left: 12px !important;
+            }
         }
 
         /* --- Existing Animations Below --- */
@@ -324,30 +343,66 @@
 .top-login-btn {
   position: fixed;
   top: 42px;
-  right: 15px;
+  right: 20px;
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  /* background: #ffffff; */
-  color: #000000ff;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* box-shadow: 0 3px 10px rgba(14, 165, 233, 0.25); */
-  /* border: 1px solid rgba(14, 165, 233, 0.15); */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   text-decoration: none;
-  z-index: 10000;
-  transition: all 0.25s ease;
+  z-index: 1100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  /* Better touch target */
+  min-width: 52px;
+  min-height: 52px;
 }
 
 .top-login-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.25);
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+.top-login-btn:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
 /* SVG Icon inside the circle */
 .top-login-btn .login-svg {
-  width: 6em;
-  height: 6em;
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
+  transition: stroke 0.3s ease;
+}
+
+.top-login-btn:hover .login-svg {
+  stroke: rgba(14, 165, 233, 1);
+}
+
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 991px) {
+  .top-login-btn {
+    top: 38px;
+    right: 18px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  
+  .top-login-btn .login-svg {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 /* Responsive adjustments (mobile view) */
@@ -355,13 +410,49 @@
   .top-login-btn {
     width: 44px;
     height: 44px;
-    top: 16px;
-    right: 16px;
-    box-shadow: 0 2px 6px rgba(14, 165, 233, 0.25);
+    min-width: 44px;
+    min-height: 44px;
+    top: 14px;
+    right: 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    z-index: 1101; /* Above navbar but below mobile menu when open */
   }
+  
   .top-login-btn .login-svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.2;
+  }
+
+  /* Adjust position when navbar is scrolled */
+  .liyas-navbar.scrolled ~ .top-login-btn {
+    top: 12px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+  .top-login-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    top: 12px;
+    right: 12px;
+  }
+  
+  .top-login-btn .login-svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Hide login button when mobile menu is open to avoid overlap */
+@media (max-width: 767px) {
+  body.no-scroll .top-login-btn {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
   }
 }
 
@@ -558,15 +649,21 @@ function finishSplash() {
         document.body.appendChild(logo);
     }
 
-    // Animate logo to top-left corner
+    // Animate logo to top-left corner with responsive positioning
+    const isMobile = window.innerWidth <= 767;
+    const isSmallMobile = window.innerWidth <= 375;
+    
+    const logoTop = isSmallMobile ? 12 : (isMobile ? 14 : 20);
+    const logoLeft = isSmallMobile ? 12 : (isMobile ? 14 : 20);
+    
     gsap.to(logo, {
         duration: 1.2,
         delay: delayBeforeLogoMove,
-        top: 20,            // Distance from top
-        left: 20,           // Distance from left
+        top: logoTop,       // Responsive distance from top
+        left: logoLeft,    // Responsive distance from left
         x: 0,               // Reset transforms
         y: 0,
-        scale: 0.85,        // Optional: subtle shrink for a polished effect
+        scale: isMobile ? 0.75 : 0.85,  // Smaller scale on mobile
         ease: "power2.inOut",
         onStart: () => {
             // Fade out splash concurrently
