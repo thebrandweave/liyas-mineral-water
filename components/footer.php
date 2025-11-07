@@ -1,7 +1,4 @@
 <footer>
-  <!-- background image (covers entire footer including overlay wrapper) -->
-  <div class="footer-bg" aria-hidden="true"></div>
-
   <!-- content container (white layer INSIDE here) -->
   <div class="footer-container">
     <!-- white translucent layer that covers ONLY the container area -->
@@ -40,43 +37,48 @@
   </div>
 </footer>
 
-  <!-- FOOTER OVERLAY WRAPPER — OUTSIDE .footer-container so NOT covered by white layer -->
-  <div class="footer-overlay-wrapper" aria-hidden="true">
-    <svg class="footer-overlay footer-overlay--inline" viewBox="0 0 1600 400" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <mask id="overlayCutoutInline" maskUnits="userSpaceOnUse">
-          <rect x="0" y="0" width="1600" height="400" fill="white" />
-          <g class="scroll-track" fill="black">
-            <text x="0" y="300" class="hollow-text-svg">
-              LIYAS LIYAS LIYAS LIYAS LIYAS LIYAS LIYAS LIYAS
-            </text>
-          </g>
-        </mask>
-      </defs>
+<!-- FOOTER OVERLAY WRAPPER — now has the background image -->
+<div class="footer-overlay-wrapper" aria-hidden="true">
+  <svg
+    class="footer-overlay footer-overlay--inline"
+    viewBox="0 0 1600 400"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <defs>
+      <mask id="overlayCutoutInline" maskUnits="userSpaceOnUse">
+        <rect x="0" y="0" width="1600" height="400" fill="white" />
+        <g class="scroll-track" fill="black">
+          <text x="0" y="300" class="hollow-text-svg">
+            LIYAS LIYAS LIYAS LIYAS LIYAS LIYAS LIYAS LIYAS
+          </text>
+        </g>
+      </mask>
+    </defs>
 
-      <rect x="0" y="0" width="1600" height="400" fill="#ffffff" fill-opacity="0.85" mask="url(#overlayCutoutInline)"/>
-    </svg>
-  </div>
+    <rect
+      x="0"
+      y="0"
+      width="1600"
+      height="400"
+      fill="#ffffff"
+      fill-opacity="0.85"
+      mask="url(#overlayCutoutInline)"
+    />
+  </svg>
+</div>
 
 <style>
-/* layout + stacking */
+/* ===== FOOTER STRUCTURE ===== */
 footer {
   position: relative;
   overflow: visible;
   padding: 60px 0 0;
   font-family: 'Poppins', sans-serif;
+  background: none; /* ✅ remove background from footer */
 }
 
-/* background: full footer (z-index:0) */
-.footer-bg {
-  position: absolute;
-  inset: 0;
-  background: url('assets/images/bottle-1.jpg') center/cover no-repeat fixed;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* container: limited width and sits above background but below overlay */
+/* container: holds the white layer */
 .footer-container {
   position: relative;
   z-index: 2;
@@ -86,23 +88,23 @@ footer {
   box-sizing: border-box;
 }
 
-/* white layer: absolutely positioned INSIDE container -> covers only container area */
+/* white translucent layer covers only the footer-container */
 .footer-white-layer {
   position: absolute;
   inset: 0;
-  background: rgba(255,255,255,0.92); /* adjust opacity as needed */
-  z-index: 1; /* sits under content (content uses z-index:3 below) */
+  background: rgba(255, 255, 255, 0.92);
+  z-index: 1;
   pointer-events: none;
 }
 
-/* content should be above the white layer */
+/* content sits above white layer */
 .footer-grid,
 .footer-bottom {
   position: relative;
   z-index: 3;
 }
 
-/* footer grid styling (same as previous) */
+/* ===== FOOTER CONTENT ===== */
 .footer-grid {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
@@ -110,26 +112,107 @@ footer {
   align-items: start;
   text-align: left;
 }
-.footer-about h3 { color: #00aaff; font-weight:700; margin:0 0 12px; }
-.footer-about p { margin:0 0 16px; color:#444; line-height:1.6; }
+
+.footer-about h3 {
+  color: #00aaff;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.footer-about p {
+  margin: 0 0 16px;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* social links */
+.social-links {
+  margin-top: 12px;
+}
+
+.social-links a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin: 0 6px 12px 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #00aaff;
+  font-size: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: 0.18s;
+}
+
+.social-links a:hover {
+  background: #00aaff;
+  color: #fff;
+}
 
 /* newsletter */
-.newsletter { padding: 20px 24px; background: rgba(255,255,255,0.95); border-radius:14px; z-index:3; }
-.newsletter h2 { color:#00aaff; margin:0 0 8px; }
-.newsletter-form { display:flex; gap:10px; align-items:center; }
+.newsletter {
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 14px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.06);
+}
 
-/* footer-bottom */
-.footer-bottom { margin-top:30px; text-align:center; color:#555; z-index:3; }
+.newsletter h2 {
+  font-size: 22px;
+  color: #00aaff;
+  margin: 0 0 8px;
+}
 
-/* OVERLAY WRAPPER: outside the white layer, higher z-index so not covered */
-/* full-width band — sits above background but visually above container's white layer */
+.newsletter p {
+  color: #555;
+  margin: 0 0 16px;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #00aaff;
+  border-radius: 28px;
+  outline: none;
+  font-size: 15px;
+}
+
+.newsletter-form button {
+  padding: 10px 20px;
+  border-radius: 28px;
+  border: none;
+  background: #00aaff;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* footer bottom */
+.footer-bottom {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+/* ===== FOOTER OVERLAY WRAPPER ===== */
+/* now holds the background image */
 .footer-overlay-wrapper {
   position: relative;
   width: 100%;
   height: 200px;
   margin-top: 30px;
-  z-index: 4; /* MUST be greater than .footer-container z-index so it's not covered */
+  z-index: 1; /* sits below the white layer visually */
   overflow: hidden;
+  background: url('assets/images/bottle-1.jpg') center/cover no-repeat fixed; /* ✅ background moved here */
 }
 
 /* SVG fills wrapper */
@@ -139,7 +222,7 @@ footer {
   display: block;
 }
 
-/* hollow text */
+/* hollow text style */
 .hollow-text-svg {
   font-family: 'Poppins', sans-serif;
   font-weight: 900;
@@ -148,14 +231,38 @@ footer {
 }
 
 /* scrolling animation */
-.scroll-track { animation: scrollText 12s linear infinite; transform-box: fill-box; }
-@keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-600px); } }
+.scroll-track {
+  animation: scrollText 12s linear infinite;
+  transform-box: fill-box;
+}
 
-/* responsive tweaks */
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-600px);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 991px) {
-  .footer-grid { grid-template-columns: 1fr; text-align:center; }
-  .newsletter-form { flex-direction: column; }
-  .hollow-text-svg { font-size: 90px; }
-  .footer-overlay-wrapper { height: 150px; margin-top: 16px; }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .hollow-text-svg {
+    font-size: 90px;
+  }
+
+  .footer-overlay-wrapper {
+    height: 150px;
+    margin-top: 16px;
+  }
 }
 </style>
