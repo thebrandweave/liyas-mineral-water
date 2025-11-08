@@ -62,94 +62,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Login</title>
-<link rel="stylesheet" href="../assets/css/admin.css">
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
-}
-.login-box {
-  background: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 340px;
-  text-align: center;
-}
-.login-box h2 {
-  margin-bottom: 20px;
-  color: #333;
-}
-.login-box input {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  font-size: 14px;
-}
-.login-box input:focus {
-  outline: none;
-  border-color: #007bff;
-}
-.login-box button {
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  border: none;
-  color: #fff;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 10px;
-}
-.login-box button:hover {
-  background: #0056b3;
-}
-.message {
-  margin-top: 15px;
-  font-size: 14px;
-}
-.error {
-  color: red;
-  background: #ffe6e6;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
-.message a {
-  color: #007bff;
-  text-decoration: none;
-}
-.message a:hover {
-  text-decoration: underline;
-}
-</style>
+<title>Admin Login - Liyas Mineral Water</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/login.css">
 </head>
 <body>
-<div class="login-box">
-    <h2>Admin Login</h2>
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">
+        <i class="fas fa-tint"></i>
+      </div>
+      <h1 class="login-title">Admin Login</h1>
+      <p class="login-subtitle">Sign in to access your admin panel</p>
+    </div>
+
     <?php if ($error): ?>
-      <p class="error"><?= htmlspecialchars($error) ?></p>
+      <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
-    <form method="post">
-        <input type="email" name="email" placeholder="Email" required autofocus><br>
-        <input type="password" name="password" placeholder="Password" required><br>
-        <button type="submit">Login</button>
+    <form method="post" class="login-form">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" placeholder="Enter your email" required autofocus>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" class="login-btn">Sign In</button>
     </form>
 
-    <div class="message">
-        Don't have an account? <a href="signup.php">Sign Up</a>
+    <div class="login-footer">
+      <p class="login-footer-text">
+        Don't have an account? <a href="signup.php" class="login-footer-link">Sign Up</a>
+      </p>
     </div>
+  </div>
 </div>
 </body>
 </html>

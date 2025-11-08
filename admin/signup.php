@@ -40,78 +40,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin Signup</title>
-<link rel="stylesheet" href="../assets/css/admin.css">
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-.signup-box {
-  background: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 340px;
-  text-align: center;
-}
-.signup-box h2 {
-  margin-bottom: 20px;
-  color: #333;
-}
-.signup-box input {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.signup-box button {
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  border: none;
-  color: #fff;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.signup-box button:hover {
-  background: #0056b3;
-}
-.message {
-  margin-top: 10px;
-  font-size: 14px;
-}
-.error { color: red; }
-.success { color: green; }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Signup - Liyas Mineral Water</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/signup.css">
 </head>
 <body>
-<div class="signup-box">
-    <h2>Admin Signup</h2>
+<div class="signup-wrapper">
+  <div class="signup-container">
+    <div class="signup-header">
+      <div class="signup-logo">
+        <i class="fas fa-tint"></i>
+      </div>
+      <h1 class="signup-title">Admin Signup</h1>
+      <p class="signup-subtitle">Create your admin account</p>
+    </div>
+
     <?php if ($error): ?>
-      <p class="error"><?= htmlspecialchars($error) ?></p>
+      <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
     <?php if ($success): ?>
-      <p class="success"><?= $success ?></p>
+      <div class="alert alert-success"><?= $success ?></div>
     <?php endif; ?>
 
-    <form method="post">
-        <input type="text" name="username" placeholder="Username" required><br>
-        <input type="email" name="email" placeholder="Email" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
-        <input type="password" name="confirm_password" placeholder="Confirm Password" required><br>
-        <button type="submit">Sign Up</button>
+    <form method="post" class="signup-form">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" name="confirm_password" class="form-control" placeholder="Confirm your password" required>
+      </div>
+
+      <button type="submit" class="signup-btn">Sign Up</button>
     </form>
 
-    <div class="message">
-        Already have an account? <a href="login.php">Login</a>
+    <div class="signup-footer">
+      <p class="signup-footer-text">
+        Already have an account? <a href="login.php" class="signup-footer-link">Login</a>
+      </p>
     </div>
+  </div>
 </div>
 </body>
 </html>

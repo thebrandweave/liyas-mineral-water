@@ -84,7 +84,7 @@ footer {
   z-index: 2;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 60px 20px 40px;
+  padding: 0px 20px 40px;
   box-sizing: border-box;
 }
 
@@ -92,7 +92,6 @@ footer {
 .footer-white-layer {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.92);
   z-index: 1;
   pointer-events: none;
 }
@@ -143,6 +142,7 @@ footer {
   font-size: 18px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: 0.18s;
+  text-decoration: none;
 }
 
 .social-links a:hover {
@@ -209,7 +209,6 @@ footer {
   position: relative;
   width: 100%;
   height: 200px;
-  margin-top: 30px;
   z-index: 1; /* sits below the white layer visually */
   overflow: hidden;
   background: url('assets/images/bottle-1.jpg') center/cover no-repeat fixed; /* ✅ background moved here */
