@@ -151,13 +151,13 @@ footer {
 }
 
 /* newsletter */
-.newsletter {
+/* .newsletter {
   padding: 20px 24px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 14px;
   backdrop-filter: blur(6px);
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.06);
-}
+} */
 
 .newsletter h2 {
   font-size: 22px;

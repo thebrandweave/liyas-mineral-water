@@ -2946,10 +2946,7 @@ footer::after {
         }
 
         /* Newsletter Section */
-        .newsletter {
-            padding: 80px 80px;
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-        }
+
 
         .newsletter-container {
             max-width: 800px;
