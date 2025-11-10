@@ -17,7 +17,7 @@
                     <h5 class="mb-2"><i class="fas fa-location-dot me-2"></i>Areas Covered</h5>
                     <ul class="mb-0 small">
                         <li>City Center, North & South Zones</li>
-                        <li>Suburbs within 10–15 km radius</li>
+                        <li>Suburbs within 10  15 km radius</li>
                         <li>Pin codes: 560001 – 560099</li>
                     </ul>
                 </div>
