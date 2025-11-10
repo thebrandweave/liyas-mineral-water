@@ -120,3 +120,4 @@
       <a href="#" class="btn">About Company</a>
     </div>
   </section>
+    <?php include 'components/trustedClient.php' ?>

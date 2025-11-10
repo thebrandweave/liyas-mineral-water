@@ -9,9 +9,7 @@
     
     <link rel="icon" type="image/x-icon" href="assets/images/logo/logo.png">
     
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/about.css">
-    <link rel="stylesheet" href="assets/css/product.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -30,7 +28,7 @@
     
     <meta property="og:title" content="LIYAS Mineral Water - Premium Quality Water">
     <meta property="og:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
-    <meta property="og:image" content="assets/images/logo/logo.png">
+    <meta property="og:image" content="../assets/images/logo/logo.png">
     <meta property="og:url" content="https://liyas-water.com">
     <meta property="og:type" content="website">
     
@@ -46,7 +44,7 @@
         "name": "LIYAS Mineral Water",
         "description": "Premium quality mineral water for a healthy lifestyle",
         "url": "https://liyas-water.com",
-        "logo": "assets/images/logo/logo.png",
+        "logo": "../assets/images/logo/logo.png",
         "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+1-234-567-8900",
@@ -526,13 +524,13 @@
 
     </style>
 
-    <?php include 'components/navbar.php' ?>
+    <?php include '../components/navbar.php' ?>
 
     <div id="splash-screen" aria-hidden="true">
         <div class="splash-layer" aria-hidden="true"></div>
         <div class="logo-text"> 
             <div class="row">
-            <img style="width: 100px; height: 100px;" src="assets/images/logo/logo.png" alt="Liyas">
+            <img style="width: 100px; height: 100px;" src="../assets/images/logo/logo.png" alt="Liyas">
             </div>
         </div>
         <div class="math-particles" aria-hidden="true" id="mathParticles"></div>
@@ -567,12 +565,12 @@
                         <div class="hero-subtitle">PURE WATER</div>
                         <h1>DRINK BETTER</h1>
                         <div class="hero-image-mobile" aria-hidden="false">
-                            <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
+                            <img src="../assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
                         </div>
                         <p>
                         Meet Liyas — hydration redefined for today’s lifestyle.
-Crafted for clarity, freshness, and a touch of fun.
-Because great water isn’t just a choice — it’s a vibe.
+                        Crafted for clarity, freshness, and a touch of fun.
+                        Because great water isn’t just a choice — it’s a vibe.
                         </p>
                         <div class="hero-buttons">
                             <a href="#" class="btn-primary">Shop Now</a>
@@ -582,7 +580,7 @@ Because great water isn’t just a choice — it’s a vibe.
                 </div>
                 <div class="col-lg-6">
                     <div class="hero-image hero-image-desktop" data-aos="fade-left" data-aos-delay="100">
-                        <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
+                        <img src="../assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
                     </div>
                 </div>
             </div>
@@ -645,23 +643,19 @@ Because great water isn’t just a choice — it’s a vibe.
     </section>
 
 
-    <?php include 'components/about.php'; ?>
+    <?php include '../components/about.php'; ?>
 
-    <?php include 'components/whychooseus.php'; ?>
-    <?php include 'components/products.php'; ?>
+    <?php include '../components/whychooseus.php'; ?>
 
+    <?php include '../components/cta.php'; ?>
 
-    <?php include 'components/contact.php'; ?>
-    <?php include 'components/sustainability.php'; ?>
-    <?php include 'components/cta.php'; ?>
-
-    <?php include 'components/faq.php'; ?>
+    <?php include '../components/faq.php'; ?>
 
 
 
-    <?php include 'components/footer.php'; ?>
+    <?php include '../components/footer.php'; ?>
 
-    <script src="assets/js/script.js"></script>
+    <script src="../assets/js/script.js"></script>
     
 
     <script>

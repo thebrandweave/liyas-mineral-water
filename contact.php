@@ -6,8 +6,8 @@
     }
 
     body {
-      background-color: #0b0b0b;
-      color: #fff;
+      background-color: #ffffffff;
+      color: #000000ff;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
     }
@@ -27,7 +27,7 @@
 
     p.label {
       letter-spacing: 3px;
-      color: #ccc;
+      color: #000000ff;
       margin-bottom: 1rem;
       font-size: 0.9rem;
     }
@@ -89,13 +89,13 @@
       text-transform: uppercase;
       font-size: 1.3rem;
       transform: rotate(-15deg);
-      color: #fff;
+      color: #000000ff;
       font-weight: 700;
     }
 
     .right-text {
       font-size: 1rem;
-      color: #ccc;
+      color: #000000ff;
       line-height: 1.6;
       max-width: 350px;
       opacity: 0;

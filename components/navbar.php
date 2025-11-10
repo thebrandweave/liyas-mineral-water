@@ -56,9 +56,7 @@
 
   /* Navbar with background on scroll */
   .liyas-navbar.scrolled {
-    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
     padding: 1.2rem 2rem;
   }
 
