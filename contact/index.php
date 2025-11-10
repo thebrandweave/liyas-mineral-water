@@ -282,8 +282,6 @@
             }
         }
 
-
-
         .about-images {
             position: relative;
         }
