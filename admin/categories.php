@@ -1,3 +1,4 @@
+
 <?php
 require_once '../config/config.php';
 require_once 'includes/auth_check.php';
@@ -29,6 +30,8 @@ try {
     // Handle error if the table doesn't exist, though it should based on schema
     $page_error = "Error fetching categories: " . $e->getMessage();
 }
+
+$page_title = "Categories";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,10 +50,10 @@ try {
 			<span class="text">Admin Panel</span>
 		</a>
 		<ul class="side-menu top">
-			<li><a href="index.php"><i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span></a></li>
-			<li><a href="products.php"><i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Products</span></a></li>
-			<li class="active"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
-			<li><a href="users.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : '' ?>"><a href="index.php"><i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'products.php') ? 'active' : '' ?>"><a href="products.php"><i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Products</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'categories.php') ? 'active' : '' ?>"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : '' ?>"><a href="users.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
 		</ul>
 		<ul class="side-menu">
 			<li><a href="#"><i class='bx bxs-cog bx-sm'></i><span class="text">Settings</span></a></li>
@@ -64,7 +67,7 @@ try {
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu bx-sm'></i>
-			<a href="#" class="nav-link">Categories</a>
+			<a href="#" class="nav-link"><?= $page_title ?></a>
 			<form action="#">
 				<div class="form-input">
 					<input type="search" placeholder="Search...">
@@ -231,12 +234,3 @@ try {
     .btn-edit { background-color: var(--blue); }
     .btn-delete { background-color: var(--red); }
 </style>
-```
-
-### 2. New Handler for Category Operations
-
-This file will process the form data from `categories.php`. Keeping the logic separate makes the code cleaner and more secure.
-
-**New File: `c:\xampp\htdocs\liyas-mineral-water\admin\category_handler.php`**
-
-```diff

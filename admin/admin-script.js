@@ -1,15 +1,18 @@
 // Function to set the active sidebar link based on the current URL
 function setActiveSidebarLink() {
-    const currentPath = window.location.pathname.split("/").pop();
     const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li');
+    const currentPath = window.location.pathname.split("/").pop();
 
     allSideMenu.forEach(item => {
         const link = item.querySelector('a');
-        if (link && link.getAttribute('href') === currentPath) {
+        if (link.getAttribute('href') === currentPath) {
             item.classList.add('active');
+        } else {
+            item.classList.remove('active');
         }
     });
 }
+
 
 // TOGGLE SIDEBAR
 const menuBar = document.querySelector('#content nav .bx.bx-menu');
@@ -35,23 +38,19 @@ searchButton.addEventListener('click', function (e) {
 	}
 });
 
-// Function to handle responsive adjustments on load and resize
-function handleResponsive() {
-    if (window.innerWidth < 768) {
-        sidebar.classList.add('hide');
-    } else {
-        sidebar.classList.remove('hide');
-    }
-
-    if (window.innerWidth > 576) {
-        searchButtonIcon.classList.replace('bx-x', 'bx-search');
-        searchForm.classList.remove('show');
-    }
+if(window.innerWidth < 768) {
+	sidebar.classList.add('hide');
+} else if(window.innerWidth > 576) {
+	searchButtonIcon.classList.replace('bx-x', 'bx-search');
+	searchForm.classList.remove('show');
 }
 
-// Initial call on page load
-handleResponsive();
-window.addEventListener('resize', handleResponsive);
+window.addEventListener('resize', function () {
+	if(this.innerWidth > 576) {
+		searchButtonIcon.classList.replace('bx-x', 'bx-search');
+		searchForm.classList.remove('show');
+	}
+});
 
 const switchMode = document.getElementById('switch-mode');
 

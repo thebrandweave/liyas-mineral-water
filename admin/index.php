@@ -35,6 +35,8 @@ $todos = [
 ];
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
+$current_page = basename($_SERVER['PHP_SELF']);
+$page_title = "Dashboard";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,21 +60,21 @@ $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 			<span class="text">Admin Panel</span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
+			<li class="<?= ($current_page === 'index.php') ? 'active' : '' ?>">
 				<a href="index.php">
 					<i class='bx bxs-dashboard bx-sm' ></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li>
+			<li class="<?= ($current_page === 'products.php') ? 'active' : '' ?>">
 				<a href="products.php">
 					<i class='bx bxs-shopping-bag-alt bx-sm' ></i>
 					<span class="text">Products</span>
 				</a>
 			</li>
-			<li><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
+			<li class="<?= ($current_page === 'categories.php') ? 'active' : '' ?>"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
 			<li><a href="#"><i class='bx bxs-doughnut-chart bx-sm'></i><span class="text">Orders</span></a></li>
-			<li>
+			<li class="<?= ($current_page === 'users.php') ? 'active' : '' ?>">
 				<a href="users.php">
 					<i class='bx bxs-group bx-sm' ></i>
 					<span class="text">Users</span>
@@ -101,7 +103,7 @@ $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu bx-sm' ></i>
-			<a href="#" class="nav-link">Categories</a>
+			<a href="#" class="nav-link"><?= $page_title ?></a>
 			<form action="#">
 				<div class="form-input">
 					<input type="search" placeholder="Search...">
@@ -225,12 +227,6 @@ $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 	<script src="assets/js/admin-script.js"></script>
 </body>
 </html>
-```
 
-### 2. New CSS for the Admin Panel
 
-This file contains all the styles required for the new admin panel layout, including dark mode.
 
-**New File: `c:\xampp\htdocs\liyas-mineral-water\admin\assets\css\admin-style.css`**
-
-```diff

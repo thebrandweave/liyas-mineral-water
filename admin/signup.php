@@ -26,17 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($password !== $confirm_password) {
         $error = "Passwords do not match.";
     } else {
-        // Check if username already exists
-        $stmt = $pdo->prepare("SELECT admin_id FROM admins WHERE username = ?");
-        $stmt->execute([$username]);
-        if ($stmt->fetch()) {
-            $error = "An account with this username already exists.";
-        } // Check if email already exists
-        else {
-            $stmt = $pdo->prepare("SELECT admin_id FROM admins WHERE email = ?");
-        $stmt->execute([$email]);
-        if ($stmt->fetch()) {
-                $error = "An account with this email already exists.";
+        // Check for existing username or email
+        $stmt = $pdo->prepare("SELECT admin_id FROM admins WHERE username = ? OR email = ?");
+        $stmt->execute([$username, $email]);
+        $existingUser = $stmt->fetch();
+
+        if ($existingUser) {
+            $error = "An account with this username or email already exists.";
         } else {
             // Hash password and insert new admin
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -46,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = "Failed to create account. Please try again.";
             }
-        }
         }
     }
 }

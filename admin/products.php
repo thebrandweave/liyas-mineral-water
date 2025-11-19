@@ -29,6 +29,8 @@ try {
 } catch (PDOException $e) {
     $page_error = "Error fetching products: " . $e->getMessage();
 }
+
+$page_title = "Products";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,10 +46,10 @@ try {
 	<section id="sidebar">
 		<a href="index.php" class="brand"><i class='bx bxs-smile bx-lg'></i><span class="text">Admin Panel</span></a>
 		<ul class="side-menu top">
-			<li><a href="index.php"><i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span></a></li>
-			<li class="active"><a href="products.php"><i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Products</span></a></li>
-			<li><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
-			<li><a href="users.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : '' ?>"><a href="index.php"><i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'products.php') ? 'active' : '' ?>"><a href="products.php"><i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Products</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'categories.php') ? 'active' : '' ?>"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : '' ?>"><a href="users.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
 		</ul>
 		<ul class="side-menu">
 			<li><a href="#"><i class='bx bxs-cog bx-sm'></i><span class="text">Settings</span></a></li>
@@ -61,7 +63,7 @@ try {
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu bx-sm'></i>
-			<a href="#" class="nav-link">Products</a>
+			<a href="#" class="nav-link"><?= $page_title ?></a>
 			<form action="#"><div class="form-input"><input type="search" placeholder="Search..."><button type="submit" class="search-btn"><i class='bx bx-search'></i></button></div></form>
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
