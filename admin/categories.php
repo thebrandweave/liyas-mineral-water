@@ -53,7 +53,7 @@ $page_title = "Categories";
 			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : '' ?>"><a href="index.php"><i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span></a></li>
 			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'products.php') ? 'active' : '' ?>"><a href="products.php"><i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Products</span></a></li>
 			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'categories.php') ? 'active' : '' ?>"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
-			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : '' ?>"><a href="users.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
+			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : '' ?>"><a href="users/index.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
 		</ul>
 		<ul class="side-menu">
 			<li><a href="#"><i class='bx bxs-cog bx-sm'></i><span class="text">Settings</span></a></li>
@@ -208,7 +208,7 @@ $page_title = "Categories";
         border: none;
         cursor: pointer;
     }
-    
+
     .btn-secondary {
         background-color: var(--dark-grey);
         color: var(--light);

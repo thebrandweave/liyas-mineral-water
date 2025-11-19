@@ -75,7 +75,7 @@ $page_title = "Dashboard";
 			<li class="<?= ($current_page === 'categories.php') ? 'active' : '' ?>"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
 			<li><a href="#"><i class='bx bxs-doughnut-chart bx-sm'></i><span class="text">Orders</span></a></li>
 			<li class="<?= ($current_page === 'users.php') ? 'active' : '' ?>">
-				<a href="users.php">
+				<a href="users/index.php">
 					<i class='bx bxs-group bx-sm' ></i>
 					<span class="text">Users</span>
 				</a>
@@ -227,6 +227,3 @@ $page_title = "Dashboard";
 	<script src="assets/js/admin-script.js"></script>
 </body>
 </html>
-
-
-
