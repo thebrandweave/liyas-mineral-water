@@ -64,43 +64,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Login - Liyas Mineral Water</title>
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="assets/css/login.css">
+<link rel="stylesheet" href="assets/css/new-login.css">
 </head>
 <body>
-<div class="login-wrapper">
-  <div class="login-container">
-    <div class="login-header">
-      <div class="login-logo">
-        <i class="fas fa-tint"></i>
-      </div>
-      <h1 class="login-title">Admin Login</h1>
-      <p class="login-subtitle">Sign in to access your admin panel</p>
-    </div>
+<main class="main">
+	<div class="container">
+		<section class="wrapper">
+			<div class="heading">
+				<h1 class="text text-large">Sign In</h1>
+				<p class="text text-normal">New user? <span><a href="signup.php" class="text text-links">Create an account</a></span>
+				</p>
+			</div>
 
-    <?php if ($error): ?>
-      <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
+      <?php if ($error): ?>
+        <div class="alert alert-error" style="margin-top: 1rem;"><?= htmlspecialchars($error) ?></div>
+      <?php endif; ?>
 
-    <form method="post" class="login-form">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" name="email" class="form-control" placeholder="Enter your email" required autofocus>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
-      </div>
-
-      <button type="submit" class="login-btn">Sign In</button>
-    </form>
-
-    <div class="login-footer">
-      <p class="login-footer-text">
-        Don't have an account? <a href="signup.php" class="login-footer-link">Sign Up</a>
-      </p>
-    </div>
-  </div>
-</div>
+			<form name="signin" class="form" method="post">
+				<div class="input-control">
+					<input type="email" name="email" id="email" class="input-field" placeholder="Email Address" required autofocus>
+				</div>
+				<div class="input-control">
+					<input type="password" name="password" id="password" class="input-field" placeholder="Password" required>
+				</div>
+				<div class="input-control">
+					<input type="submit" name="submit" class="input-submit" value="Sign In">
+				</div>
+			</form>
+		</section>
+	</div>
+</main>
 </body>
 </html>
