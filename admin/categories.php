@@ -208,6 +208,7 @@ $page_title = "Categories";
         border: none;
         cursor: pointer;
     }
+    
     .btn-secondary {
         background-color: var(--dark-grey);
         color: var(--light);
