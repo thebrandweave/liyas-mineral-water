@@ -31,7 +31,7 @@ try {
     $page_error = "Error fetching categories: " . $e->getMessage();
 }
 
-$page_title = "Categories";
+$current_page = "categories";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,24 +43,7 @@ $page_title = "Categories";
 	<title>Manage Categories - Admin Panel</title>
 </head>
 <body>
-	<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="index.php" class="brand">
-			<i class='bx bxs-smile bx-lg'></i>
-			<span class="text">Admin Panel</span>
-		</a>
-		<ul class="side-menu top">
-			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : '' ?>"><a href="index.php"><i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span></a></li>
-			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'products.php') ? 'active' : '' ?>"><a href="products.php"><i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Products</span></a></li>
-			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'categories.php') ? 'active' : '' ?>"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
-			<li class="<?= (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : '' ?>"><a href="users/index.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
-		</ul>
-		<ul class="side-menu">
-			<li><a href="#"><i class='bx bxs-cog bx-sm'></i><span class="text">Settings</span></a></li>
-			<li><a href="logout.php" class="logout"><i class='bx bxs-log-out-circle bx-sm'></i><span class="text">Logout</span></a></li>
-		</ul>
-	</section>
-	<!-- SIDEBAR -->
+	<?php require_once __DIR__ . '/includes/sidebar.php'; ?>
 
 	<!-- CONTENT -->
 	<section id="content">
@@ -106,9 +89,6 @@ $page_title = "Categories";
                 <div class="order">
                     <div class="head">
                         <h3><?= ($action === 'edit') ? 'Edit Category' : 'Add New Category' ?></h3>
-                        <?php if ($action === 'edit'): ?>
-                            <a href="categories.php" class="btn-secondary" style="margin-left: auto;">Cancel Edit</a>
-                        <?php endif; ?>
                     </div>
                     <form action="category_handler.php" method="POST" class="form-modern">
                         <input type="hidden" name="action" value="<?= ($action === 'edit') ? 'update' : 'create' ?>">
@@ -124,8 +104,15 @@ $page_title = "Categories";
                             <label for="description">Description</label>
                             <textarea name="description" id="description" rows="3"><?= htmlspecialchars($category['description'] ?? '') ?></textarea>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn-primary"><?= ($action === 'edit') ? 'Update Category' : 'Add Category' ?></button>
+                        <div class="form-group form-group-buttons">
+                            <button type="submit" class="button action-btn <?= ($action === 'edit') ? 'edit' : 'add' ?>" title="<?= ($action === 'edit') ? 'Update Category' : 'Add Category' ?>">
+                                <svg class="svgIcon" viewBox="0 0 448 512"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg>
+                            </button>
+                            <?php if ($action === 'edit'): ?>
+                                <a href="categories.php" class="button cancel-btn" title="Cancel">
+                                    <svg class="svgIcon" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </form>
                 </div>
@@ -183,7 +170,7 @@ $page_title = "Categories";
 <style>
     /* Modern Form Styles */
     .form-modern { display: flex; flex-direction: column; gap: 1rem; }
-    .form-modern .form-group { display: flex; flex-direction: column; }
+    .form-modern .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
     .form-modern label { margin-bottom: 0.5rem; font-weight: 600; font-size: 14px; color: var(--dark-grey); }
     .form-modern input, .form-modern textarea {
         padding: 0.75rem 1rem;
@@ -194,29 +181,7 @@ $page_title = "Categories";
         color: var(--dark);
         transition: all 0.3s ease;
     }
-    .form-modern input:focus, .form-modern textarea:focus {
-        outline: none;
-        border-color: var(--blue);
-        background-color: var(--light);
-        box-shadow: 0 0 0 3px var(--light-blue);
-    }
-    .form-modern .btn-primary {
-        align-self: flex-start;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        border: none;
-        cursor: pointer;
-    }
-
-    .btn-secondary {
-        background-color: var(--dark-grey);
-        color: var(--light);
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 14px;
-    }
+    .form-group-buttons { flex-direction: row !important; gap: 1rem; margin-top: 1rem; }
 
     /* Actions column styles */
     .actions { display: flex; gap: 0.5rem; align-items: center; }
@@ -234,4 +199,57 @@ $page_title = "Categories";
     }
     .btn-edit { background-color: var(--blue); }
     .btn-delete { background-color: var(--red); }
+
+    /* Animated Button Styles */
+    .button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgb(20, 20, 20);
+        border: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+        cursor: pointer;
+        transition-duration: .3s;
+        overflow: hidden;
+        position: relative;
+        text-decoration: none !important;
+    }
+    .svgIcon { width: 17px; transition-duration: .3s; }
+    .svgIcon path { fill: white; }
+    .button:hover {
+        width: 160px; /* Adjusted for longer text */
+        border-radius: 50px;
+        transition-duration: .3s;
+        align-items: center;
+    }
+    .button:hover .svgIcon {
+        width: 20px;
+        transition-duration: .3s;
+        transform: translateY(60%);
+    }
+    .button::before {
+        position: absolute;
+        top: -20px;
+        color: white;
+        transition-duration: .3s;
+        font-size: 2px;
+    }
+    .button:hover::before {
+        font-size: 13px;
+        opacity: 1;
+        transform: translateY(30px);
+        transition-duration: .3s;
+    }
+
+    /* Button Variations */
+    .action-btn:hover { background-color: var(--green); }
+    .action-btn.edit::before { content: "Update Category"; }
+    .action-btn.add::before { content: "Add Category"; }
+
+    .cancel-btn:hover { background-color: var(--orange); }
+    .cancel-btn::before { content: "Cancel"; }
 </style>

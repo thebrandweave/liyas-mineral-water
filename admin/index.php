@@ -35,7 +35,7 @@ $todos = [
 ];
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
-$current_page = basename($_SERVER['PHP_SELF']);
+$current_page = "dashboard";
 $page_title = "Dashboard";
 ?>
 <!DOCTYPE html>
@@ -43,60 +43,12 @@ $page_title = "Dashboard";
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-	<!-- My CSS -->
 	<link rel="stylesheet" href="assets/css/admin-style.css">
-
 	<title>Admin Panel - Liyas Mineral Water</title>
 </head>
 <body>
-	<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="index.php" class="brand">
-			<i class='bx bxs-smile bx-lg'></i>
-			<span class="text">Admin Panel</span>
-		</a>
-		<ul class="side-menu top">
-			<li class="<?= ($current_page === 'index.php') ? 'active' : '' ?>">
-				<a href="index.php">
-					<i class='bx bxs-dashboard bx-sm' ></i>
-					<span class="text">Dashboard</span>
-				</a>
-			</li>
-			<li class="<?= ($current_page === 'products.php') ? 'active' : '' ?>">
-				<a href="products.php">
-					<i class='bx bxs-shopping-bag-alt bx-sm' ></i>
-					<span class="text">Products</span>
-				</a>
-			</li>
-			<li class="<?= ($current_page === 'categories.php') ? 'active' : '' ?>"><a href="categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
-			<li><a href="#"><i class='bx bxs-doughnut-chart bx-sm'></i><span class="text">Orders</span></a></li>
-			<li class="<?= ($current_page === 'users.php') ? 'active' : '' ?>">
-				<a href="users/index.php">
-					<i class='bx bxs-group bx-sm' ></i>
-					<span class="text">Users</span>
-				</a>
-			</li>
-		</ul>
-		<ul class="side-menu">
-			<li>
-				<a href="#">
-					<i class='bx bxs-cog bx-sm'></i>
-					<span class="text">Settings</span>
-				</a>
-			</li>
-			<li>
-				<a href="logout.php" class="logout">
-					<i class='bx bxs-log-out-circle bx-sm'></i>
-					<span class="text">Logout</span>
-				</a>
-			</li>
-		</ul>
-	</section>
-	<!-- SIDEBAR -->
+	<?php require_once __DIR__ . '/includes/sidebar.php'; ?>
 
 	<!-- CONTENT -->
 	<section id="content">

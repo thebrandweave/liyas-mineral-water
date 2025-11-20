@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../includes/auth_check.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
+$current_page = "users";
 $page_title = "Manage Users";
 
 // Fetch all users from the database
@@ -126,22 +127,7 @@ try {
     </style>
 </head>
 <body>
-    <section id="sidebar">
-        <a href="../index.php" class="brand">
-            <i class='bx bxs-smile bx-lg'></i>
-            <span class="text">Admin Panel</span>
-        </a>
-        <ul class="side-menu top">
-            <li><a href="../index.php"><i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span></a></li>
-            <li><a href="../products.php"><i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Products</span></a></li>
-            <li><a href="../categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
-            <li class="active"><a href="index.php"><i class='bx bxs-group bx-sm'></i><span class="text">Users</span></a></li>
-        </ul>
-        <ul class="side-menu">
-            <li><a href="#"><i class='bx bxs-cog bx-sm'></i><span class="text">Settings</span></a></li>
-            <li><a href="../logout.php" class="logout"><i class='bx bxs-log-out-circle bx-sm'></i><span class="text">Logout</span></a></li>
-        </ul>
-    </section>
+    <?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
     <section id="content">
         <nav>
             <i class='bx bx-menu bx-sm'></i>
