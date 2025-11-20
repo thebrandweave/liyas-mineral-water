@@ -1,11 +1,11 @@
 <?php
-// Determine the base path for links depending on the directory level
-$base_path = (basename(dirname($_SERVER['SCRIPT_FILENAME'])) === 'users') ? '../' : './';
+// Determine base path: Check if we are in a subfolder (users or orders)
+$current_dir = basename(dirname($_SERVER['SCRIPT_FILENAME']));
+$base_path = (in_array($current_dir, ['users', 'orders'])) ? '../' : './';
 
 // Define the current page, defaulting to an empty string if not set
 $current_page = $current_page ?? '';
 ?>
-<!-- SIDEBAR -->
 <section id="sidebar">
     <a href="<?= $base_path ?>index.php" class="brand">
         <i class='bx bxs-smile bx-lg'></i>
@@ -24,7 +24,18 @@ $current_page = $current_page ?? '';
                 <span class="text">Products</span>
             </a>
         </li>
-        <li class="<?= ($current_page === 'categories') ? 'active' : '' ?>"><a href="<?= $base_path ?>categories.php"><i class='bx bxs-category bx-sm'></i><span class="text">Categories</span></a></li>
+        <li class="<?= ($current_page === 'categories') ? 'active' : '' ?>">
+            <a href="<?= $base_path ?>categories.php">
+                <i class='bx bxs-category bx-sm'></i>
+                <span class="text">Categories</span>
+            </a>
+        </li>
+        <li class="<?= ($current_page === 'orders') ? 'active' : '' ?>">
+            <a href="<?= $base_path ?>orders/index.php">
+                <i class='bx bxs-cart-alt bx-sm'></i>
+                <span class="text">Orders</span>
+            </a>
+        </li>
         <li class="<?= ($current_page === 'users') ? 'active' : '' ?>">
             <a href="<?= $base_path ?>users/index.php">
                 <i class='bx bxs-group bx-sm'></i>
@@ -37,4 +48,3 @@ $current_page = $current_page ?? '';
         <li><a href="<?= $base_path ?>logout.php" class="logout"><i class='bx bxs-log-out-circle bx-sm'></i><span class="text">Logout</span></a></li>
     </ul>
 </section>
-<!-- SIDEBAR -->
