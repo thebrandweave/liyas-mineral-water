@@ -1,9 +1,11 @@
-
 <?php
 require_once '../config/config.php';
 require_once 'includes/auth_check.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
+
+// --- PAGE TITLE DEFINITION ---
+$page_title = "Manage Categories";
 
 // Determine current action (view, add, edit)
 $action = $_GET['action'] ?? 'view';
@@ -27,7 +29,6 @@ try {
     $stmt = $pdo->query("SELECT * FROM categories ORDER BY name ASC");
     $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    // Handle error if the table doesn't exist, though it should based on schema
     $page_error = "Error fetching categories: " . $e->getMessage();
 }
 
@@ -36,46 +37,152 @@ $current_page = "categories";
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="assets/css/admin-style.css">
-	<title>Manage Categories - Admin Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="assets/css/admin-style.css">
+    <title>Manage Categories - Admin Panel</title>
+    <style>
+        /* --- MODERN FORM STYLES --- */
+        .form-modern { display: flex; flex-direction: column; gap: 1rem; }
+        .form-modern .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-modern label { margin-bottom: 0.5rem; font-weight: 600; font-size: 14px; color: var(--dark-grey); }
+        .form-modern input, .form-modern textarea {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--grey);
+            background-color: var(--grey);
+            font-size: 1rem;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .form-modern input:focus, .form-modern textarea:focus {
+            outline: none;
+            border-color: #3C91E6;
+            background-color: var(--light);
+            box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.1);
+        }
+        .form-group-buttons { flex-direction: row !important; gap: 1rem; margin-top: 1rem; }
+
+        /* --- ANIMATED BUTTON STYLES (STABLE) --- */
+        .button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgb(20, 20, 20);
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+            cursor: pointer;
+            transition-duration: .3s;
+            overflow: hidden;
+            position: relative;
+            text-decoration: none !important;
+        }
+
+        /* CRITICAL FIX: Prevent mouse events on children to stop flickering */
+        .button .svgIcon, 
+        .button::before {
+            pointer-events: none; 
+        }
+
+        .svgIcon { width: 17px; transition-duration: .3s; }
+        .svgIcon path { fill: white; }
+
+        .button:hover {
+            width: 140px; /* Width when expanded */
+            border-radius: 50px;
+            transition-duration: .3s;
+            align-items: center;
+        }
+
+        .button:hover .svgIcon {
+            width: 20px;
+            transition-duration: .3s;
+            transform: translateY(60%);
+        }
+
+        .button::before {
+            position: absolute;
+            top: -20px;
+            color: white;
+            transition-duration: .3s;
+            font-size: 2px;
+        }
+
+        .button:hover::before {
+            font-size: 13px;
+            opacity: 1;
+            transform: translateY(30px);
+            transition-duration: .3s;
+        }
+
+        /* --- BUTTON COLOR VARIATIONS --- */
+        
+        /* Form Actions */
+        .action-btn:hover { background-color: #22c55e; } /* Green */
+        .action-btn.edit::before { content: "Update"; }
+        .action-btn.add::before { content: "Add New"; }
+        
+        .cancel-btn:hover { background-color: #f97316; } /* Orange */
+        .cancel-btn::before { content: "Cancel"; }
+
+        /* Table Actions */
+        .table-edit-btn:hover { background-color: #3b82f6; } /* Blue */
+        .table-edit-btn::before { content: "Edit"; }
+        
+        .table-delete-btn:hover { background-color: #ef4444; } /* Red */
+        .table-delete-btn::before { content: "Delete"; }
+        .table-delete-btn .svgIcon { width: 12px; }
+
+        /* --- TABLE LAYOUT STABILITY --- */
+        .actions { display: flex; gap: 0.5rem; align-items: center; }
+
+        /* CRITICAL FIX: Fixed width for Action column prevents table jumping */
+        .action-column {
+            min-width: 180px; 
+            width: 180px;
+        }
+
+        /* Alert Styles */
+        .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
+        .alert-success { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .alert-danger { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    </style>
 </head>
 <body>
-	<?php require_once __DIR__ . '/includes/sidebar.php'; ?>
+    <?php require_once __DIR__ . '/includes/sidebar.php'; ?>
 
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<a href="#" class="nav-link"><?= $page_title ?></a>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification"><i class='bx bxs-bell bx-tada-hover'></i><span class="num">8</span></a>
-			<a href="#" class="profile"><img src="https://i.pravatar.cc/36?u=<?= urlencode($admin_name) ?>"></a>
-		</nav>
-		<!-- NAVBAR -->
-
-		<!-- MAIN -->
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Manage Categories</h1>
-					<ul class="breadcrumb">
-						<li><a href="index.php">Dashboard</a></li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li><a class="active" href="categories.php">Categories</a></li>
-					</ul>
-				</div>
-			</div>
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu bx-sm'></i>
+            <a href="#" class="nav-link"><?= $page_title ?></a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification"><i class='bx bxs-bell bx-tada-hover'></i><span class="num">8</span></a>
+            <a href="#" class="profile"><img src="https://i.pravatar.cc/36?u=<?= urlencode($admin_name) ?>"></a>
+        </nav>
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Manage Categories</h1>
+                    <ul class="breadcrumb">
+                        <li><a href="index.php">Dashboard</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a class="active" href="categories.php">Categories</a></li>
+                    </ul>
+                </div>
+            </div>
 
             <?php if (isset($_SESSION['success_message'])): ?>
                 <div class="alert alert-success" style="margin-bottom: 1rem;"><?= $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
@@ -84,7 +191,6 @@ $current_page = "categories";
                 <div class="alert alert-danger" style="margin-bottom: 1rem;"><?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
             <?php endif; ?>
 
-            <!-- Form for Adding/Editing -->
             <div class="table-data">
                 <div class="order">
                     <div class="head">
@@ -118,23 +224,22 @@ $current_page = "categories";
                 </div>
             </div>
 
-			<!-- Category List -->
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>All Categories</h3>
-						<i class='bx bx-search'></i>
-						<i class='bx bx-filter'></i>
-					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>All Categories</h3>
+                        <i class='bx bx-search'></i>
+                        <i class='bx bx-filter'></i>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th class="action-column">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <?php if (empty($categories)): ?>
                                 <tr>
                                     <td colspan="3" style="text-align: center; padding: 20px;">No categories found.</td>
@@ -144,112 +249,28 @@ $current_page = "categories";
                                     <tr>
                                         <td><?= htmlspecialchars($cat['name']) ?></td>
                                         <td><?= htmlspecialchars(substr($cat['description'], 0, 50)) . (strlen($cat['description']) > 50 ? '...' : '') ?></td>
-                                        <td class="actions">
-                                            <a href="categories.php?action=edit&id=<?= $cat['category_id'] ?>" class="btn-action btn-edit"><i class='bx bxs-edit'></i> Edit</a>
-                                            <form action="category_handler.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');" style="display: inline;">
+                                        <td class="actions action-column">
+                                            <a href="categories.php?action=edit&id=<?= $cat['category_id'] ?>" class="button table-edit-btn" title="Edit">
+                                                <svg class="svgIcon" viewBox="0 0 512 512"><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.8-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"></path></svg>
+                                            </a>
+                                            
+                                            <form action="category_handler.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');" style="display: contents;">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="category_id" value="<?= $cat['category_id'] ?>">
-                                                <button type="submit" class="btn-action btn-delete"><i class='bx bxs-trash'></i> Delete</button>
+                                                <button type="submit" class="button table-delete-btn" title="Delete">
+                                                    <svg class="svgIcon" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
-
-	<script src="assets/js/admin-script.js"></script>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        </section>
+    <script src="assets/js/admin-script.js"></script>
 </body>
 </html>
-<style>
-    /* Modern Form Styles */
-    .form-modern { display: flex; flex-direction: column; gap: 1rem; }
-    .form-modern .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-    .form-modern label { margin-bottom: 0.5rem; font-weight: 600; font-size: 14px; color: var(--dark-grey); }
-    .form-modern input, .form-modern textarea {
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        border: 1px solid var(--grey);
-        background-color: var(--grey);
-        font-size: 1rem;
-        color: var(--dark);
-        transition: all 0.3s ease;
-    }
-    .form-group-buttons { flex-direction: row !important; gap: 1rem; margin-top: 1rem; }
-
-    /* Actions column styles */
-    .actions { display: flex; gap: 0.5rem; align-items: center; }
-    .btn-action {
-        padding: 0.4rem 0.8rem;
-        border-radius: 6px;
-        color: white;
-        border: none;
-        cursor: pointer;
-        font-size: 14px;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        text-decoration: none;
-    }
-    .btn-edit { background-color: var(--blue); }
-    .btn-delete { background-color: var(--red); }
-
-    /* Animated Button Styles */
-    .button {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: rgb(20, 20, 20);
-        border: none;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
-        cursor: pointer;
-        transition-duration: .3s;
-        overflow: hidden;
-        position: relative;
-        text-decoration: none !important;
-    }
-    .svgIcon { width: 17px; transition-duration: .3s; }
-    .svgIcon path { fill: white; }
-    .button:hover {
-        width: 160px; /* Adjusted for longer text */
-        border-radius: 50px;
-        transition-duration: .3s;
-        align-items: center;
-    }
-    .button:hover .svgIcon {
-        width: 20px;
-        transition-duration: .3s;
-        transform: translateY(60%);
-    }
-    .button::before {
-        position: absolute;
-        top: -20px;
-        color: white;
-        transition-duration: .3s;
-        font-size: 2px;
-    }
-    .button:hover::before {
-        font-size: 13px;
-        opacity: 1;
-        transform: translateY(30px);
-        transition-duration: .3s;
-    }
-
-    /* Button Variations */
-    .action-btn:hover { background-color: var(--green); }
-    .action-btn.edit::before { content: "Update Category"; }
-    .action-btn.add::before { content: "Add Category"; }
-
-    .cancel-btn:hover { background-color: var(--orange); }
-    .cancel-btn::before { content: "Cancel"; }
-</style>
