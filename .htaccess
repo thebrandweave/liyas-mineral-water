@@ -1,0 +1,23 @@
+# Root .htaccess - Security and Redirects
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect root to public directory
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent access to sensitive directories
+<IfModule mod_rewrite.c>
+    RewriteRule ^(config|scripts|sql|vendor)/ - [F,L]
+</IfModule>
+

@@ -2,7 +2,7 @@
 // Calculate base path relative to admin directory
 // Check if we're in a subdirectory (like products/)
 $script_path = dirname($_SERVER['SCRIPT_NAME']);
-$is_subdir = (strpos($script_path, '/products') !== false || strpos($script_path, '/categories') !== false || strpos($script_path, '/users') !== false);
+$is_subdir = (strpos($script_path, '/products') !== false || strpos($script_path, '/categories') !== false || strpos($script_path, '/users') !== false || strpos($script_path, '/qr-rewards') !== false);
 $base_path = $is_subdir ? '../' : '';
 ?>
 <!DOCTYPE html>
@@ -16,6 +16,7 @@ $base_path = $is_subdir ? '../' : '';
 <?php if (strpos($_SERVER['PHP_SELF'], 'products') !== false): ?>
 <link rel="stylesheet" href="<?= $base_path ?>assets/css/products.css">
 <?php endif; ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
 <div class="admin-wrapper">
@@ -40,6 +41,12 @@ $base_path = $is_subdir ? '../' : '';
           <a href="<?= $base_path ?>products/index.php" class="nav-link <?= strpos($_SERVER['PHP_SELF'], 'products') !== false ? 'active' : '' ?>">
             <i class="fas fa-box"></i>
             <span class="nav-label">Products</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?= $base_path ?>qr-rewards/index.php" class="nav-link <?= strpos($_SERVER['PHP_SELF'], 'qr-rewards') !== false ? 'active' : '' ?>">
+            <i class="fas fa-qrcode"></i>
+            <span class="nav-label">QR Rewards</span>
           </a>
         </li>
         <li class="nav-item">

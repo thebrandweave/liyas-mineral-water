@@ -42,6 +42,12 @@ $current_page = $current_page ?? '';
                 <span class="text">Users</span>
             </a>
         </li>
+        <li class="<?= ($current_page === 'qr-rewards') ? 'active' : '' ?>">
+            <a href="<?= $base_path ?>qr-rewards/index.php">
+                <i class='bx bxs-qr-scan bx-sm'></i>
+                <span class="text">QR Rewards</span>
+            </a>
+        </li>
     </ul>
     <ul class="side-menu">
         <li><a href="#"><i class='bx bxs-cog bx-sm'></i><span class="text">Settings</span></a></li>
