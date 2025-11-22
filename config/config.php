@@ -128,4 +128,4 @@ function getEnvironment() {
 }
 
 // Uncomment to test database connection
-testDatabaseConnection();
+// testDatabaseConnection();
