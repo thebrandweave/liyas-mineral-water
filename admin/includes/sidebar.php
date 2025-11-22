@@ -1,7 +1,8 @@
 <?php
-// Determine base path: Check if we are in a subfolder (users or orders)
+// Determine base path: Check if we are in a subfolder
 $current_dir = basename(dirname($_SERVER['SCRIPT_FILENAME']));
-$base_path = (in_array($current_dir, ['users', 'orders'])) ? '../' : './';
+// Handle all admin subdirectories: users, orders, products, qr-rewards
+$base_path = (in_array($current_dir, ['users', 'orders', 'products', 'qr-rewards'])) ? '../' : './';
 
 // Define the current page, defaulting to an empty string if not set
 $current_page = $current_page ?? '';

@@ -1,8 +1,7 @@
 <?php
 /**
- * QR Code Validation API
- * Checks if QR code is valid and available for redemption
- * Note: Actual redemption happens in index.php after customer data is collected
+ * Reward Code Validation API
+ * Validates reward codes via API
  */
 
 require_once __DIR__ . '/../config/config.php';
@@ -21,54 +20,45 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// Get and sanitize code
-$code = isset($_GET['code']) ? trim($_GET['code']) : '';
+// Get and sanitize reward code
+$reward_code = isset($_GET['code']) ? trim($_GET['code']) : '';
 
 // Validate code format
-if (empty($code)) {
+if (empty($reward_code)) {
     http_response_code(400);
     echo json_encode([
         'success' => false,
-        'message' => 'QR code is required',
-        'status' => 'error'
-    ]);
-    exit;
-}
-
-if (!preg_match('/^[a-zA-Z0-9]{8,64}$/', $code)) {
-    http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid QR code format',
+        'message' => 'Reward code is required',
         'status' => 'error'
     ]);
     exit;
 }
 
 try {
-    // Check if code exists and get current status
-    $stmt = $pdo->prepare("SELECT id, code, is_used, scanned_at FROM qr_codes WHERE code = ?");
-    $stmt->execute([$code]);
-    $qr = $stmt->fetch();
+    // Check if reward code exists and get current status
+    $stmt = $pdo->prepare("SELECT id, reward_code, is_used, used_at FROM codes WHERE reward_code = ?");
+    $stmt->execute([$reward_code]);
+    $code_data = $stmt->fetch();
     
-    if (!$qr) {
+    if (!$code_data) {
+        // Code doesn't exist
         http_response_code(404);
         echo json_encode([
             'success' => false,
-            'message' => 'QR code not found',
+            'message' => 'Invalid code',
             'status' => 'error'
         ]);
         exit;
     }
     
     // Check if already used
-    if ($qr['is_used'] == 1) {
+    if ($code_data['is_used'] == 1) {
         http_response_code(200);
         echo json_encode([
             'success' => false,
-            'message' => 'This QR code has already been redeemed',
+            'message' => 'Already redeemed',
             'status' => 'warning',
-            'scanned_at' => $qr['scanned_at']
+            'used_at' => $code_data['used_at']
         ]);
         exit;
     }
@@ -77,13 +67,13 @@ try {
     http_response_code(200);
     echo json_encode([
         'success' => true,
-        'message' => 'QR code is valid. Please fill in your details to claim the reward.',
+        'message' => 'Success',
         'status' => 'valid',
-        'code' => $qr['code']
+        'code' => $code_data['reward_code']
     ]);
     
 } catch (PDOException $e) {
-    error_log("QR validation error: " . $e->getMessage());
+    error_log("Reward code validation error: " . $e->getMessage());
     
     http_response_code(500);
     echo json_encode([

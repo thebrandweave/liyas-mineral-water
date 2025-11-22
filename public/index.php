@@ -1,94 +1,62 @@
 <?php
 /**
- * QR Code Redeem Page
- * Collects customer data and processes redemption
+ * Reward Code Redeem Page
+ * Users manually enter the unique reward code from their bottle sticker
  */
 
 require_once __DIR__ . '/../config/config.php';
 
-// Get code from URL parameter
-$code = isset($_GET['code']) ? trim($_GET['code']) : '';
-$qr_status = null;
-$qr_data = null;
-
-// Check QR code status if code is provided
-if (!empty($code)) {
-    try {
-        $stmt = $pdo->prepare("SELECT id, code, is_used, scanned_at FROM qr_codes WHERE code = ?");
-        $stmt->execute([$code]);
-        $qr_data = $stmt->fetch();
-        
-        if ($qr_data) {
-            if ($qr_data['is_used'] == 1) {
-                $qr_status = 'already_used';
-            } else {
-                $qr_status = 'valid';
-            }
-        } else {
-            $qr_status = 'not_found';
-        }
-    } catch (PDOException $e) {
-        $qr_status = 'error';
-    }
-}
+$message = '';
+$message_type = '';
+$reward_code = '';
 
 // Handle form submission
-$submitted = false;
-$success = false;
-$error_message = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
-    $submitted = true;
-    $code = trim($_POST['code']);
-    $name = trim($_POST['name'] ?? '');
-    $phone = trim($_POST['phone'] ?? '');
-    $address = trim($_POST['address'] ?? '');
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reward_code'])) {
+    $reward_code = trim($_POST['reward_code']);
     
-    // Validate inputs
-    if (empty($name) || empty($phone) || empty($address)) {
-        $error_message = 'Please fill in all fields (Name, Phone, and Address)';
+    if (empty($reward_code)) {
+        $message = 'Please enter a reward code';
+        $message_type = 'error';
     } else {
         try {
             $pdo->beginTransaction();
             
-            // Check and lock QR code
-            $stmt = $pdo->prepare("SELECT id, code, is_used FROM qr_codes WHERE code = ? FOR UPDATE");
-            $stmt->execute([$code]);
-            $qr = $stmt->fetch();
+            // Check if reward code exists and lock it
+            $stmt = $pdo->prepare("SELECT id, reward_code, is_used, used_at FROM codes WHERE reward_code = ? FOR UPDATE");
+            $stmt->execute([$reward_code]);
+            $code_data = $stmt->fetch();
             
-            if (!$qr) {
-                $error_message = 'QR code not found';
+            if (!$code_data) {
+                // Code doesn't exist
+                $message = 'Invalid code';
+                $message_type = 'error';
                 $pdo->rollBack();
-            } elseif ($qr['is_used'] == 1) {
-                $error_message = 'This QR code has already been redeemed';
+            } elseif ($code_data['is_used'] == 1) {
+                // Code already used
+                $message = 'Already redeemed';
+                $message_type = 'warning';
                 $pdo->rollBack();
             } else {
-                // Mark QR as used
-                $updateStmt = $pdo->prepare("UPDATE qr_codes SET is_used = 1, scanned_at = NOW() WHERE id = ? AND is_used = 0");
-                $updateStmt->execute([$qr['id']]);
+                // Code is valid and unused - mark as used
+                $updateStmt = $pdo->prepare("UPDATE codes SET is_used = 1, used_at = NOW() WHERE id = ? AND is_used = 0");
+                $updateStmt->execute([$code_data['id']]);
                 
                 if ($updateStmt->rowCount() > 0) {
-                    // Save customer data
-                    $ip_address = $_SERVER['REMOTE_ADDR'] ?? null;
-                    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-                    
-                    $logStmt = $pdo->prepare("
-                        INSERT INTO reward_logs (qr_code_id, customer_name, customer_phone, customer_address, ip_address, user_agent) 
-                        VALUES (?, ?, ?, ?, ?, ?)
-                    ");
-                    $logStmt->execute([$qr['id'], $name, $phone, $address, $ip_address, $user_agent]);
-                    
                     $pdo->commit();
-                    $success = true;
+                    $message = 'Success';
+                    $message_type = 'success';
                 } else {
-                    $error_message = 'This QR code has already been redeemed';
+                    // Race condition - code was used between check and update
+                    $message = 'Already redeemed';
+                    $message_type = 'warning';
                     $pdo->rollBack();
                 }
             }
         } catch (PDOException $e) {
             $pdo->rollBack();
-            $error_message = 'An error occurred. Please try again.';
-            error_log("QR redemption error: " . $e->getMessage());
+            $message = 'An error occurred. Please try again.';
+            $message_type = 'error';
+            error_log("Reward code redemption error: " . $e->getMessage());
         }
     }
 }
@@ -98,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redeem QR Code - LIYAS Mineral Water</title>
+    <title>Redeem Reward Code - LIYAS Mineral Water</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
         * {
@@ -164,9 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
             font-size: 14px;
         }
 
-        input[type="text"],
-        input[type="tel"],
-        textarea {
+        input[type="text"] {
             width: 100%;
             padding: 15px;
             border: 2px solid #e0e0e0;
@@ -174,16 +140,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
             font-size: 16px;
             font-family: inherit;
             transition: border-color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        input:focus, textarea:focus {
+        input:focus {
             outline: none;
             border-color: #667eea;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
         }
 
         .btn {
@@ -216,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
             padding: 15px;
             border-radius: 10px;
             font-size: 14px;
-            text-align: left;
+            text-align: center;
         }
 
         .message.success {
@@ -237,46 +200,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
             border: 1px solid #ffeaa7;
         }
 
-        .instagram-box {
-            margin-top: 25px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            border-radius: 15px;
-            color: white;
-        }
-
-        .instagram-box h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        .instagram-box a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .instagram-box a:hover {
-            text-decoration: underline;
-        }
-
-        .code-display {
-            background: #f8f9fa;
+        .info-text {
+            margin-top: 20px;
             padding: 15px;
+            background: #f8f9fa;
             border-radius: 10px;
-            margin-bottom: 20px;
-            font-family: monospace;
-            font-size: 14px;
-            color: #667eea;
-            font-weight: 600;
+            font-size: 13px;
+            color: #666;
+            text-align: left;
         }
 
-        .hidden {
-            display: none;
+        .info-text strong {
+            color: #333;
         }
     </style>
 </head>
@@ -284,114 +219,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
     <div class="container">
         <div class="logo">💧</div>
         <h1>🎁 Redeem Your Reward</h1>
-        <p class="subtitle">LIYAS Mineral Water - Thank you for choosing us!</p>
+        <p class="subtitle">LIYAS Mineral Water - Enter your unique reward code</p>
 
-        <?php if ($success): ?>
-            <!-- Success Message -->
-            <div class="message success">
-                <h3 style="margin-bottom: 10px;">✅ Reward Claimed Successfully!</h3>
-                <p>Thank you, <strong><?= htmlspecialchars($_POST['name']) ?></strong>! Your reward has been registered.</p>
+        <?php if ($message): ?>
+            <div class="message <?= $message_type ?>">
+                <?php if ($message_type === 'success'): ?>
+                    <h3 style="margin-bottom: 10px;">✅ Reward Redeemed Successfully!</h3>
+                    <p>Thank you for choosing LIYAS Mineral Water!</p>
+                <?php elseif ($message_type === 'warning'): ?>
+                    <h3 style="margin-bottom: 10px;">⚠️ Already Redeemed</h3>
+                    <p>This reward code has already been used. Each code can only be redeemed once.</p>
+                <?php else: ?>
+                    <h3 style="margin-bottom: 10px;">❌ Invalid Code</h3>
+                    <p><?= htmlspecialchars($message) ?></p>
+                <?php endif; ?>
             </div>
+        <?php endif; ?>
 
-            <div class="instagram-box">
-                <h3><i class="fab fa-instagram"></i> Follow Us on Instagram</h3>
-                <p>Stay updated with our latest offers, promotions, and rewards!</p>
-                <a href="https://instagram.com/liyasmineralwater" target="_blank">
-                    <i class="fab fa-instagram"></i> Follow @liyasmineralwater
-                </a>
-            </div>
-
-        <?php elseif ($qr_status === 'already_used'): ?>
-            <!-- Already Used -->
-            <div class="message warning">
-                <h3 style="margin-bottom: 10px;">⚠️ Already Redeemed</h3>
-                <p>This QR code has already been used. Each code can only be redeemed once.</p>
-                <p style="margin-top: 10px; font-size: 12px;">Redeemed on: <?= date('M d, Y H:i', strtotime($qr_data['scanned_at'])) ?></p>
-            </div>
-
-        <?php elseif ($qr_status === 'not_found'): ?>
-            <!-- Not Found -->
-            <div class="message error">
-                <h3 style="margin-bottom: 10px;">❌ Invalid QR Code</h3>
-                <p>This QR code was not found in our system. Please check the code and try again.</p>
-            </div>
-
-        <?php elseif ($qr_status === 'valid' || !empty($code)): ?>
-            <!-- Customer Data Form -->
-            <?php if ($error_message): ?>
-                <div class="message error">
-                    <?= htmlspecialchars($error_message) ?>
-                </div>
-            <?php endif; ?>
-
-            <div class="code-display">
-                Code: <?= htmlspecialchars($code) ?>
-            </div>
-
+        <?php if ($message_type !== 'success'): ?>
             <form method="POST" action="" id="redeemForm">
-                <input type="hidden" name="code" value="<?= htmlspecialchars($code) ?>">
-                
                 <div class="form-group">
-                    <label for="name"><i class="fas fa-user"></i> Full Name *</label>
+                    <label for="reward_code">
+                        <i class="fas fa-ticket-alt"></i> Enter Reward Code
+                    </label>
                     <input 
                         type="text" 
-                        name="name" 
-                        id="name" 
-                        placeholder="Enter your full name"
-                        required
-                        autofocus
-                        value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="phone"><i class="fas fa-phone"></i> Phone Number *</label>
-                    <input 
-                        type="tel" 
-                        name="phone" 
-                        id="phone" 
-                        placeholder="Enter your phone number"
-                        required
-                        value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="address"><i class="fas fa-map-marker-alt"></i> Address *</label>
-                    <textarea 
-                        name="address" 
-                        id="address" 
-                        placeholder="Enter your complete address"
-                        required
-                    ><?= htmlspecialchars($_POST['address'] ?? '') ?></textarea>
-                </div>
-
-                <button type="submit" class="btn" id="submitBtn">
-                    <i class="fas fa-gift"></i> Claim Reward
-                </button>
-            </form>
-
-        <?php else: ?>
-            <!-- Initial QR Code Input -->
-            <div class="code-display" style="display: none;" id="codeDisplay"></div>
-
-            <form method="GET" action="" id="codeForm">
-                <div class="form-group">
-                    <label for="codeInput">Enter or Scan QR Code</label>
-                    <input 
-                        type="text" 
-                        name="code" 
-                        id="codeInput" 
-                        placeholder="Enter QR code here"
+                        name="reward_code" 
+                        id="reward_code" 
+                        placeholder="e.g., Liyas-SFA123Fcg"
                         autocomplete="off"
                         required
                         autofocus
+                        value="<?= htmlspecialchars($reward_code) ?>"
+                        maxlength="50"
                     >
                 </div>
-                <button type="submit" class="btn">
-                    <i class="fas fa-qrcode"></i> Check Code
+
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fas fa-gift"></i> Redeem Code
                 </button>
             </form>
+
+            <div class="info-text">
+                <strong>How to redeem:</strong><br>
+                1. Scan the QR code on your bottle (or visit this page)<br>
+                2. Find the unique reward code on the back of the sticker<br>
+                3. Enter the code above and click "Redeem Code"
+            </div>
         <?php endif; ?>
 
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #999; font-size: 12px;">
@@ -400,11 +274,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code'])) {
     </div>
 
     <script>
+        // Auto-uppercase input
+        document.getElementById('reward_code')?.addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
         // Handle form submission
         document.getElementById('redeemForm')?.addEventListener('submit', function(e) {
             const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            }
         });
     </script>
 </body>

@@ -68,41 +68,22 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE SET NULL
 );
--- QR Reward System Database Schema
--- These tables are added to the existing liyas_international database
+-- Reward Code System Database Schema
+-- All bottles use ONE common QR code that redirects to /redeem
+-- Each bottle has a UNIQUE reward code printed on the sticker
 
--- QR Codes Table
-CREATE TABLE IF NOT EXISTS qr_codes (
+-- Reward Codes Table
+CREATE TABLE IF NOT EXISTS codes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(64) UNIQUE NOT NULL,
+    reward_code VARCHAR(50) UNIQUE NOT NULL,
     is_used TINYINT(1) DEFAULT 0,
-    scanned_at DATETIME NULL,
+    used_at DATETIME NULL,
+    customer_name VARCHAR(150) NULL,
+    customer_phone VARCHAR(20) NULL,
+    customer_email VARCHAR(150) NULL,
+    customer_address TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_code (code),
+    INDEX idx_reward_code (reward_code),
     INDEX idx_is_used (is_used)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Optional: Rewards log table for tracking
-CREATE TABLE IF NOT EXISTS reward_logs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    qr_code_id INT NOT NULL,
-    ip_address VARCHAR(45),
-    user_agent TEXT,
-    redeemed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (qr_code_id) REFERENCES qr_codes(id) ON DELETE CASCADE,
-    INDEX idx_qr_code_id (qr_code_id),
-    INDEX idx_redeemed_at (redeemed_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Update reward_logs table to store customer information
--- Run this to add customer data fields
-
-ALTER TABLE reward_logs 
-ADD COLUMN IF NOT EXISTS customer_name VARCHAR(150) NULL AFTER qr_code_id,
-ADD COLUMN IF NOT EXISTS customer_phone VARCHAR(20) NULL AFTER customer_name,
-ADD COLUMN IF NOT EXISTS customer_address TEXT NULL AFTER customer_phone;
-
--- Add index for better queries
-CREATE INDEX IF NOT EXISTS idx_customer_phone ON reward_logs(customer_phone);
-CREATE INDEX IF NOT EXISTS idx_customer_name ON reward_logs(customer_name);
 
