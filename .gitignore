@@ -1,0 +1,25 @@
+# Database Configuration (contains passwords)
+config/db_config.php
+
+# Environment files
+.env
+.env.local
+
+# Logs
+*.log
+error_log
+
+# Uploads (optional - uncomment if you don't want to track uploads)
+# uploads/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
