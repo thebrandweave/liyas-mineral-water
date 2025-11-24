@@ -410,7 +410,6 @@ $message_classes = [
                             type="tel"
                             name="phone"
                             id="phone"
-                            placeholder="1 1234567890 or 1234567890"
                             required
                             maxlength="20"
                             value="<?= htmlspecialchars($customer['phone'] ?? '') ?>"
