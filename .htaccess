@@ -8,8 +8,6 @@
     
     # Handle /redeem and /redeem/ (with or without trailing slash) - internal rewrite
     RewriteCond %{REQUEST_URI} ^/redeem/?$ [NC]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^redeem/?$ redeem/index.php [L]
     
     # Redirect other old .php URLs to clean URLs (301 permanent redirect)

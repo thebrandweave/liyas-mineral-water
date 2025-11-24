@@ -46,7 +46,7 @@ The code now has a fallback that will use live settings if `db_config.php` doesn
 3. ✅ Add live database password
 4. ✅ Verify database connection works
 5. ✅ Test admin login: `https://liyasinternational.com/admin/login.php`
-6. ✅ Test redeem page: `https://liyasinternational.com/redeem.php`
+6. ✅ Test redeem page: `https://liyasinternational.com/redeem`
 
 ## Database Setup on Live
 
