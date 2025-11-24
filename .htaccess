@@ -2,8 +2,26 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Redirect /redeem to /redeem.php
-    RewriteRule ^redeem$ redeem.php [L,R=301]
+    # Special redirect for /redeem.php to /redeem (301 permanent)
+    RewriteCond %{THE_REQUEST} /redeem\.php[\s?] [NC]
+    RewriteRule ^redeem\.php$ /redeem? [NC,L,R=301]
+    
+    # Handle /redeem and /redeem/ (with or without trailing slash) - internal rewrite
+    RewriteCond %{REQUEST_URI} ^/redeem/?$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^redeem/?$ redeem/index.php [L]
+    
+    # Redirect other old .php URLs to clean URLs (301 permanent redirect)
+    RewriteCond %{THE_REQUEST} /([^.]+)\.php[\s?] [NC]
+    RewriteCond %{REQUEST_URI} !^/redeem\.php$ [NC]
+    RewriteRule ^ /%1? [NC,L,R=301]
+    
+    # Remove .php extension from URLs (internal rewrite for other files)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}\.php -f
+    RewriteCond %{REQUEST_URI} !^/redeem [NC]
+    RewriteRule ^(.*)$ $1.php [L]
     
     # Redirect root to public directory
     RewriteCond %{REQUEST_URI} !^/public/

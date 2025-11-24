@@ -81,7 +81,7 @@ try {
 // Get base URL for redeem page
 $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
 $project_root = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
-$redeem_url = $base_url . $project_root . '/redeem.php';
+$redeem_url = $base_url . $project_root . '/redeem';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_page = "qr-rewards";

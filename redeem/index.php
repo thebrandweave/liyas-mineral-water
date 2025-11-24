@@ -1,7 +1,7 @@
 <?php
 /**
  * Reward Code Redeem Page
- * QR code redirects to: liyasinternational.com/redeem.php
+ * QR code redirects to: liyasinternational.com/redeem
  * Flow: Customer Info → Reward Code → Success Message
  *
  * 🎨 Color Palette:
@@ -18,7 +18,7 @@
  * - sweep-glow: subtle animated gradient glow behind success content
  */
 
-require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/../config/config.php';
 
 $step = isset($_GET['step']) ? $_GET['step'] : 'info';
 $message = '';
@@ -310,7 +310,7 @@ $message_classes = [
             <!-- Logo + Heading -->
             <div class="relative flex flex-col items-center gap-3 mb-6">
                 <div class="flex h-16 w-16 items-center justify-center rounded-full shadow-lg ring-4 ring-white/90 bg-white p-2">
-                    <img src="assets/images/logo/logo.png" alt="LIYAS Logo" class="w-full h-full object-contain">
+                    <img src="../assets/images/logo/logo.png" alt="LIYAS Logo" class="w-full h-full object-contain">
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900 flex items-center gap-2">
                     <span class="text-lg">🎁</span> Redeem Your Reward
@@ -784,3 +784,4 @@ $message_classes = [
     </script>
 </body>
 </html>
+
