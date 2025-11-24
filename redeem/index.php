@@ -313,7 +313,7 @@ $message_classes = [
                     <img src="../assets/images/logo/logo.png" alt="LIYAS Logo" class="w-full h-full object-contain">
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900 flex items-center gap-2">
-                    <span class="text-lg">🎁</span> Redeem Your Reward
+                    <span class="text-lg"></span> Redeem Your Reward
                 </h1>
                 <p class="text-sm text-slate-500">
                     LIYAS International &mdash; Thank you for choosing us!
