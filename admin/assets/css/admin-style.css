@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+/* Open Sans Font - Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 * {
 	margin: 0;
@@ -15,8 +16,7 @@ li {
 }
 
 :root {
-	--poppins: 'Poppins', sans-serif;
-	--lato: 'Lato', sans-serif;
+	--opensans: 'Open Sans', sans-serif;
 
 	--light: #F9F9F9;
 	--blue: #3C91E6;
@@ -46,6 +46,10 @@ body.dark {
 body {
 	background: var(--grey);
 	overflow-x: hidden;
+	font-family: var(--opensans);
+	font-optical-sizing: auto;
+	font-style: normal;
+	font-variation-settings: "wdth" 100;
 }
 
 /* SIDEBAR */
@@ -57,7 +61,7 @@ body {
 	height: 100%;
 	background: var(--light);
 	z-index: 2000;
-	font-family: var(--lato);
+	font-family: var(--opensans);
 	transition: .3s ease;
 	overflow-x: hidden;
 	scrollbar-width: none;
@@ -177,7 +181,7 @@ body {
 	display: flex;
 	align-items: center;
 	grid-gap: 24px;
-	font-family: var(--lato);
+	font-family: var(--opensans);
 	position: sticky;
 	top: 0;
 	left: 0;
@@ -297,7 +301,7 @@ body {
 #content main {
 	width: 100%;
 	padding: 36px 24px;
-	font-family: var(--poppins);
+	font-family: var(--opensans);
 	max-height: calc(100vh - 56px);
 	overflow-y: auto;
 }

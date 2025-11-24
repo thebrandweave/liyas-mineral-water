@@ -103,6 +103,9 @@ function generateUniqueRewardCode($pdo, $prefix, $length) {
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="../assets/css/admin-style.css">
 	<title>Generate Reward Codes - Admin Panel</title>
@@ -123,7 +126,7 @@ function generateUniqueRewardCode($pdo, $prefix, $length) {
 			border-radius: 8px;
 			background: var(--light);
 			font-size: 1rem;
-			font-family: var(--lato);
+			font-family: var(--opensans);
 		}
 		.form-group input:focus {
 			outline: none;

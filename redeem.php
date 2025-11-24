@@ -3,6 +3,19 @@
  * Reward Code Redeem Page
  * QR code redirects to: liyasinternational.com/redeem.php
  * Flow: Customer Info → Reward Code → Success Message
+ *
+ * 🎨 Color Palette:
+ * - Background: #FFFFFF (page), soft card border #F3F4F6
+ * - Primary: #6366F1 (indigo) → #8B5CF6 (gradient accent)
+ * - Success: #10B981 (emerald)
+ * - Text: #111827 (heading), #6B7280 (muted)
+ * - Borders: #E5E7EB
+ *
+ * 🎞️ Animation Techniques:
+ * - card-enter: fade + slight upward motion on load (all steps)
+ * - card-success: smooth scale + fade-in when success screen is shown
+ * - pop-in: "pop" effect on success icon
+ * - sweep-glow: subtle animated gradient glow behind success content
  */
 
 require_once __DIR__ . '/config/config.php';
@@ -115,6 +128,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['step']) && $_POST['st
 
 // Get customer data from session if exists
 $customer = $_SESSION['redeem_customer'] ?? [];
+
+// Message style map for Tailwind
+$message_classes = [
+    'success' => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    'error'   => 'bg-red-50 text-red-700 border border-red-200',
+    'warning' => 'bg-amber-50 text-amber-700 border border-amber-200',
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -122,382 +142,410 @@ $customer = $_SESSION['redeem_customer'] ?? [];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redeem Your Reward - LIYAS International</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Open Sans', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            purple: '#6366F1',
+                            deep: '#8B5CF6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 550px;
-            width: 100%;
-            padding: 40px;
-            text-align: center;
+        /* Card entry animation (all states) */
+        .card-enter {
+            animation: cardEnter 0.45s ease-out;
         }
 
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
+        @keyframes cardEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
+        /* Success state card animation */
+        .card-success-anim {
+            animation: cardSuccess 0.55s ease-out;
         }
 
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 14px;
+        @keyframes cardSuccess {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
+        /* Pop-in for success icon */
+        .pop-in {
+            animation: popIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
         }
 
-        .step {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.4);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
-        .step.active {
-            background: #667eea;
-            color: white;
+        /* Animated glow behind success content */
+        .sweep-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15), transparent 55%),
+                        radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.15), transparent 55%);
+            filter: blur(2px);
+            opacity: 0.9;
+            pointer-events: none;
+            animation: sweepGlow 6s ease-in-out infinite alternate;
+            z-index: -1;
         }
 
-        .step.completed {
-            background: #22c55e;
-            color: white;
-        }
-
-        .step.inactive {
-            background: #e0e0e0;
-            color: #999;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        label .required {
-            color: #ef4444;
-        }
-
-        input[type="text"],
-        input[type="tel"],
-        input[type="email"],
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: #6b7280;
-            margin-top: 10px;
-        }
-
-        .message {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .message.warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-
-        .instagram-box {
-            margin-top: 25px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            border-radius: 15px;
-            color: white;
-        }
-
-        .instagram-box h3 {
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .instagram-box p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .instagram-box a {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            background: white;
-            color: #bc1888;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-
-        .instagram-box a:hover {
-            transform: scale(1.05);
-        }
-
-        .info-text {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 13px;
-            color: #666;
-            text-align: left;
+        @keyframes sweepGlow {
+            0% {
+                transform: translateX(-10px) translateY(4px);
+            }
+            50% {
+                transform: translateX(10px) translateY(-4px);
+            }
+            100% {
+                transform: translateX(-4px) translateY(0);
+            }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="logo">💧</div>
-        <h1>🎁 Redeem Your Reward</h1>
-        <p class="subtitle">LIYAS International - Thank you for choosing us!</p>
+<body class="min-h-screen bg-white flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-xl">
+        <?php
+            $cardBaseClasses = 'relative bg-white border border-slate-100 shadow-[0_18px_45px_rgba(15,23,42,0.12)] rounded-3xl px-6 py-7 sm:px-10 sm:py-10 card-enter';
+            $cardClasses = $cardBaseClasses . ($step === 'success' ? ' card-success-anim' : '');
+        ?>
+        <div class="<?= $cardClasses ?>">
+            <!-- Extra subtle background decor (white theme safe) -->
+            <div class="pointer-events-none absolute -top-8 -right-6 h-20 w-20 rounded-full bg-brand-purple/5 blur-2xl"></div>
+            <div class="pointer-events-none absolute -bottom-10 -left-10 h-24 w-24 rounded-full bg-brand-deep/5 blur-3xl"></div>
 
-        <!-- Step Indicator -->
-        <div class="step-indicator">
-            <div class="step <?= $step === 'info' ? 'active' : ($step === 'code' || $step === 'success' ? 'completed' : 'inactive') ?>">1</div>
-            <div class="step <?= $step === 'code' ? 'active' : ($step === 'success' ? 'completed' : 'inactive') ?>">2</div>
-            <div class="step <?= $step === 'success' ? 'active' : 'inactive' ?>">3</div>
-        </div>
-
-        <?php if ($message): ?>
-            <div class="message <?= $message_type ?>">
-                <?= htmlspecialchars($message) ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($step === 'info'): ?>
-            <!-- Step 1: Customer Information -->
-            <form method="POST" action="" id="infoForm">
-                <input type="hidden" name="step" value="info">
-                
-                <div class="form-group">
-                    <label for="name">
-                        <i class="fas fa-user"></i> Full Name <span class="required">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        id="name" 
-                        placeholder="Enter your full name"
-                        required
-                        autofocus
-                        value="<?= htmlspecialchars($customer['name'] ?? '') ?>"
-                    >
+            <!-- Logo + Heading -->
+            <div class="relative flex flex-col items-center gap-3 mb-6">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full shadow-lg ring-4 ring-white/90 bg-white p-2">
+                    <img src="assets/images/logo/logo.png" alt="LIYAS Logo" class="w-full h-full object-contain">
                 </div>
-
-                <div class="form-group">
-                    <label for="phone">
-                        <i class="fas fa-phone"></i> Phone Number <span class="required">*</span>
-                    </label>
-                    <input 
-                        type="tel" 
-                        name="phone" 
-                        id="phone" 
-                        placeholder="Enter your phone number"
-                        required
-                        value="<?= htmlspecialchars($customer['phone'] ?? '') ?>"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="email">
-                        <i class="fas fa-envelope"></i> Email Address <span style="color: #666; font-weight: normal;">(Optional)</span>
-                    </label>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        id="email" 
-                        placeholder="Enter your email address"
-                        value="<?= htmlspecialchars($customer['email'] ?? '') ?>"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="address">
-                        <i class="fas fa-map-marker-alt"></i> Address <span class="required">*</span>
-                    </label>
-                    <textarea 
-                        name="address" 
-                        id="address" 
-                        placeholder="Enter your complete address"
-                        required
-                    ><?= htmlspecialchars($customer['address'] ?? '') ?></textarea>
-                </div>
-
-                <button type="submit" class="btn" id="submitBtn">
-                    Continue to Next Step <i class="fas fa-arrow-right"></i>
-                </button>
-            </form>
-
-        <?php elseif ($step === 'code'): ?>
-            <!-- Step 2: Reward Code -->
-            <form method="POST" action="" id="codeForm">
-                <input type="hidden" name="step" value="code">
-                
-                <div class="info-text" style="margin-bottom: 20px;">
-                    <strong>Your Information:</strong><br>
-                    Name: <?= htmlspecialchars($customer['name']) ?><br>
-                    Phone: <?= htmlspecialchars($customer['phone']) ?><br>
-                    <?php if (!empty($customer['email'])): ?>
-                        Email: <?= htmlspecialchars($customer['email']) ?><br>
-                    <?php endif; ?>
-                </div>
-
-                <div class="form-group">
-                    <label for="reward_code">
-                        <i class="fas fa-ticket-alt"></i> Enter Reward Code <span class="required">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        name="reward_code" 
-                        id="reward_code" 
-                        placeholder="e.g., Liyas-SFA123Fcg"
-                        autocomplete="off"
-                        required
-                        autofocus
-                        style="text-transform: uppercase; letter-spacing: 1px;"
-                        maxlength="50"
-                    >
-                </div>
-
-                <button type="submit" class="btn" id="submitBtn">
-                    <i class="fas fa-gift"></i> Redeem Code
-                </button>
-                <a href="?step=info" class="btn btn-secondary" style="text-decoration: none; display: block;">
-                    <i class="fas fa-arrow-left"></i> Back to Edit Information
-                </a>
-            </form>
-
-        <?php elseif ($step === 'success'): ?>
-            <!-- Step 3: Success Message -->
-            <div class="message success">
-                <h3 style="margin-bottom: 10px; font-size: 24px;">✅ Reward Redeemed Successfully!</h3>
-                <p style="font-size: 16px;">Thank you for choosing LIYAS International!</p>
-            </div>
-
-            <div class="instagram-box">
-                <h3><i class="fab fa-instagram"></i> Follow Us on Instagram</h3>
-                <p style="font-size: 15px; line-height: 1.8;">
-                    Please follow our Instagram page for updates.<br>
-                    <strong>Only followers are eligible for the rewards draw!</strong>
+                <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900 flex items-center gap-2">
+                    <span class="text-lg">🎁</span> Redeem Your Reward
+                </h1>
+                <p class="text-sm text-slate-500">
+                    LIYAS International &mdash; Thank you for choosing us!
                 </p>
-                <a href="https://instagram.com/liyasinternational" target="_blank">
-                    <i class="fab fa-instagram"></i> Follow @liyasinternational
-                </a>
             </div>
 
-            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 13px; color: #666;">
-                <p><strong>What's next?</strong></p>
-                <p style="margin-top: 10px;">Stay tuned to our Instagram page for exclusive updates, promotions, and reward draws. Make sure you're following us to be eligible!</p>
-            </div>
-        <?php endif; ?>
+            <!-- Step Indicator -->
+            <div class="relative mb-6">
+                <div class="flex items-center justify-center gap-3">
+                    <?php
+                        $circleBase = 'flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold';
+                    ?>
+                    <div class="<?=
+                        $circleBase . ' ' .
+                        ($step === 'info'
+                            ? 'bg-brand-purple text-white shadow-md'
+                            : (($step === 'code' || $step === 'success')
+                                ? 'bg-emerald-500 text-white shadow-md'
+                                : 'bg-slate-200 text-slate-500'))
+                    ?>">1</div>
 
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #999; font-size: 12px;">
-            <p>One-time use only • Each code can be redeemed once</p>
+                    <div class="h-0.5 w-8 bg-slate-200/80"></div>
+
+                    <div class="<?=
+                        $circleBase . ' ' .
+                        ($step === 'code'
+                            ? 'bg-brand-purple text-white shadow-md'
+                            : ($step === 'success'
+                                ? 'bg-emerald-500 text-white shadow-md'
+                                : 'bg-slate-200 text-slate-500'))
+                    ?>">2</div>
+
+                    <div class="h-0.5 w-8 bg-slate-200/80"></div>
+
+                    <div class="<?=
+                        $circleBase . ' ' .
+                        ($step === 'success'
+                            ? 'bg-brand-purple text-white shadow-md'
+                            : 'bg-slate-200 text-slate-500')
+                    ?>">3</div>
+                </div>
+                <p class="mt-3 text-center text-xs uppercase tracking-[0.2em] text-slate-400">
+                    Step <?= $step === 'info' ? '1: Your Details' : ($step === 'code' ? '2: Enter Code' : '3: Completed') ?>
+                </p>
+            </div>
+
+            <!-- Message -->
+            <?php if ($message): ?>
+                <?php $cls = $message_classes[$message_type] ?? 'bg-slate-50 text-slate-700 border border-slate-200'; ?>
+                <div class="mb-5 rounded-2xl px-4 py-3 text-sm flex items-start gap-2 <?= $cls ?>">
+                    <?php if ($message_type === 'success'): ?>
+                        <i class="fa-solid fa-circle-check mt-0.5"></i>
+                    <?php elseif ($message_type === 'warning'): ?>
+                        <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+                    <?php else: ?>
+                        <i class="fa-solid fa-circle-info mt-0.5"></i>
+                    <?php endif; ?>
+                    <span><?= htmlspecialchars($message) ?></span>
+                </div>
+            <?php endif; ?>
+
+            <!-- STEP 1: INFO -->
+            <?php if ($step === 'info'): ?>
+                <form method="POST" action="" id="infoForm" class="space-y-4">
+                    <input type="hidden" name="step" value="info">
+
+                    <!-- Name -->
+                    <div class="space-y-1.5">
+                        <label for="name" class="flex items-center gap-1.5 text-sm font-medium text-slate-800">
+                            <i class="fas fa-user text-xs text-brand-purple"></i>
+                            Full Name
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Enter your full name"
+                            required
+                            autofocus
+                            value="<?= htmlspecialchars($customer['name'] ?? '') ?>"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none ring-0 transition focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/40"
+                        />
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="space-y-1.5">
+                        <label for="phone" class="flex items-center gap-1.5 text-sm font-medium text-slate-800">
+                            <i class="fas fa-phone text-xs text-brand-purple"></i>
+                            Phone Number
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="phone"
+                            placeholder="Enter your phone number"
+                            required
+                            value="<?= htmlspecialchars($customer['phone'] ?? '') ?>"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none ring-0 transition focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/40"
+                        />
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-1.5">
+                        <label for="email" class="flex items-center gap-1.5 text-sm font-medium text-slate-800">
+                            <i class="fas fa-envelope text-xs text-brand-purple"></i>
+                            Email Address
+                            <span class="text-xs font-normal text-slate-400">(Optional)</span>
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Enter your email address"
+                            value="<?= htmlspecialchars($customer['email'] ?? '') ?>"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none ring-0 transition focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/40"
+                        />
+                    </div>
+
+                    <!-- Address -->
+                    <div class="space-y-1.5">
+                        <label for="address" class="flex items-center gap-1.5 text-sm font-medium text-slate-800">
+                            <i class="fas fa-map-marker-alt text-xs text-brand-purple"></i>
+                            Address
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <textarea
+                            name="address"
+                            id="address"
+                            placeholder="Enter your complete address"
+                            required
+                            class="w-full min-h-[90px] rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none ring-0 transition focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/40"
+                        ><?= htmlspecialchars($customer['address'] ?? '') ?></textarea>
+                    </div>
+
+                    <!-- Info note -->
+                    <div class="rounded-2xl bg-slate-50 px-4 py-3 text-xs text-slate-500 flex gap-2">
+                        <i class="fa-solid fa-shield-halved mt-0.5 text-slate-400"></i>
+                        <p>
+                            Your details will only be used to verify your reward and for contacting you regarding delivery or prize updates.
+                        </p>
+                    </div>
+
+                    <!-- Submit -->
+                    <button
+                        type="submit"
+                        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-purple to-brand-deep px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-purple/30 transition hover:translate-y-[1px] hover:shadow-xl active:translate-y-[2px]"
+                        id="submitBtn"
+                    >
+                        Continue to Next Step
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </button>
+                </form>
+
+            <!-- STEP 2: CODE -->
+            <?php elseif ($step === 'code'): ?>
+                <form method="POST" action="" id="codeForm" class="space-y-5">
+                    <input type="hidden" name="step" value="code">
+
+                    <!-- Summary -->
+                    <div class="rounded-2xl bg-slate-50 px-4 py-3 text-xs text-slate-600 space-y-1.5">
+                        <p class="font-semibold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-user-check text-brand-purple"></i>
+                            Your Information
+                        </p>
+                        <p><span class="font-medium">Name:</span> <?= htmlspecialchars($customer['name']) ?></p>
+                        <p><span class="font-medium">Phone:</span> <?= htmlspecialchars($customer['phone']) ?></p>
+                        <?php if (!empty($customer['email'])): ?>
+                            <p><span class="font-medium">Email:</span> <?= htmlspecialchars($customer['email']) ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Reward code -->
+                    <div class="space-y-1.5">
+                        <label for="reward_code" class="flex items-center gap-1.5 text-sm font-medium text-slate-800">
+                            <i class="fas fa-ticket-alt text-xs text-brand-purple"></i>
+                            Enter Reward Code
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="reward_code"
+                            id="reward_code"
+                            placeholder="e.g., LIYAS-SFA123FCG"
+                            autocomplete="off"
+                            required
+                            autofocus
+                            maxlength="50"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm tracking-[0.15em] uppercase text-slate-900 shadow-sm outline-none ring-0 transition focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/40"
+                        />
+                        <p class="text-[11px] text-slate-400">
+                            You can find this code printed on the sticker. Please enter it exactly as shown.
+                        </p>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="space-y-2">
+                        <button
+                            type="submit"
+                            class="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:translate-y-[1px] hover:shadow-xl active:translate-y-[2px]"
+                            id="submitBtn"
+                        >
+                            <i class="fas fa-gift text-xs"></i>
+                            Redeem Code
+                        </button>
+
+                        <a
+                            href="?step=info"
+                            class="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
+                        >
+                            <i class="fas fa-arrow-left text-xs"></i>
+                            Back to Edit Information
+                        </a>
+                    </div>
+                </form>
+
+            <!-- STEP 3: SUCCESS -->
+            <?php elseif ($step === 'success'): ?>
+                <div class="relative space-y-5">
+                    <!-- Animated glow background -->
+                    <div class="sweep-glow rounded-3xl"></div>
+
+                    <div class="relative rounded-3xl bg-emerald-50 px-5 py-4 border border-emerald-100 text-center">
+                        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white shadow-md pop-in">
+                            <i class="fa-solid fa-check text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-emerald-800 mb-1">
+                            Reward Redeemed Successfully!
+                        </h3>
+                        <p class="text-sm text-emerald-700">
+                            Thank you for choosing LIYAS International. Your entry has been recorded.
+                        </p>
+                    </div>
+
+                    <div class="relative rounded-3xl bg-gradient-to-br from-[#f09433] via-[#dc2743] to-[#bc1888] px-5 py-5 text-white shadow-lg overflow-hidden">
+                        <div class="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-xl"></div>
+                        <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold">
+                            <i class="fab fa-instagram"></i>
+                            Follow Us on Instagram
+                        </h3>
+                        <p class="mb-4 text-sm leading-relaxed">
+                            Follow our Instagram page to stay updated with offers and reward draws.
+                            <span class="font-semibold">Only followers are eligible for the rewards draw!</span>
+                        </p>
+                        <a
+                            href="https://instagram.com/liyasinternational"
+                            target="_blank"
+                            class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#bc1888] shadow-md transition hover:translate-y-[1px] hover:shadow-lg"
+                        >
+                            <i class="fab fa-instagram"></i>
+                            Follow @liyasinternational
+                        </a>
+                    </div>
+
+                    <div class="relative rounded-2xl bg-slate-50 px-4 py-3 text-xs text-slate-600 space-y-1.5">
+                        <p class="font-semibold text-slate-800">What's next?</p>
+                        <p>
+                            Keep an eye on our Instagram page for announcements about winners, exclusive updates,
+                            and upcoming promotions. Make sure you're following us so you don't miss anything!
+                        </p>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Footer note -->
+            <div class="mt-7 border-t border-slate-200/70 pt-4">
+                <p class="text-center text-[11px] text-slate-400">
+                    One-time use only &bull; Each code can be redeemed once
+                </p>
+            </div>
         </div>
     </div>
 
@@ -507,23 +555,22 @@ $customer = $_SESSION['redeem_customer'] ?? [];
             e.target.value = e.target.value.toUpperCase();
         });
 
-        // Handle form submission
-        document.getElementById('infoForm')?.addEventListener('submit', function(e) {
+        // Handle form submission loading state
+        document.getElementById('infoForm')?.addEventListener('submit', function() {
             const btn = document.getElementById('submitBtn');
             if (btn) {
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i> Processing...';
             }
         });
 
-        document.getElementById('codeForm')?.addEventListener('submit', function(e) {
+        document.getElementById('codeForm')?.addEventListener('submit', function() {
             const btn = document.getElementById('submitBtn');
             if (btn) {
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i> Processing...';
             }
         });
     </script>
 </body>
 </html>
-

@@ -92,6 +92,9 @@ $page_title = "Reward Codes";
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="../assets/css/admin-style.css">
 	<title>Reward Codes - Admin Panel</title>
@@ -186,12 +189,12 @@ $page_title = "Reward Codes";
 					<div style="padding: 1rem;">
 						<form method="GET" action="" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
 							<input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
-							<select name="filter" style="padding: 0.5rem 1rem; border: 1px solid var(--grey); border-radius: 8px; background: var(--light); font-family: var(--lato);">
+							<select name="filter" style="padding: 0.5rem 1rem; border: 1px solid var(--grey); border-radius: 8px; background: var(--light); font-family: var(--opensans);">
 								<option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All Codes</option>
 								<option value="used" <?= $filter === 'used' ? 'selected' : '' ?>>Redeemed Only</option>
 								<option value="unused" <?= $filter === 'unused' ? 'selected' : '' ?>>Available Only</option>
 							</select>
-							<button type="submit" style="padding: 0.5rem 1.5rem; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--lato);">
+							<button type="submit" style="padding: 0.5rem 1.5rem; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--opensans);">
 								<i class='bx bx-filter' ></i> Apply Filter
 							</button>
 							<?php if ($filter !== 'all' || !empty($search)): ?>
@@ -307,17 +310,17 @@ $page_title = "Reward Codes";
 						<?php if ($total_pages > 1): ?>
 						<div style="padding: 1.5rem; border-top: 1px solid var(--grey); display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
 							<?php if ($page > 1): ?>
-								<a href="?page=<?= $page - 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--lato);">
+								<a href="?page=<?= $page - 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--opensans);">
 									<i class='bx bx-chevron-left' ></i> Previous
 								</a>
 							<?php endif; ?>
 							
-							<span style="padding: 0.5rem 1rem; color: var(--dark); font-family: var(--lato);">
+							<span style="padding: 0.5rem 1rem; color: var(--dark); font-family: var(--opensans);">
 								Page <?= $page ?> of <?= $total_pages ?>
 							</span>
 							
 							<?php if ($page < $total_pages): ?>
-								<a href="?page=<?= $page + 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--lato);">
+								<a href="?page=<?= $page + 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--opensans);">
 									Next <i class='bx bx-chevron-right' ></i>
 								</a>
 							<?php endif; ?>
