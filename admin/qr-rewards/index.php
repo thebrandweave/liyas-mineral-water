@@ -197,6 +197,11 @@ $page_title = "Reward Codes";
 							<button type="submit" style="padding: 0.5rem 1.5rem; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--opensans);">
 								<i class='bx bx-filter' ></i> Apply Filter
 							</button>
+							<a href="export.php?filter=<?= urlencode($filter) ?>&search=<?= urlencode($search) ?>" 
+							   style="padding: 0.5rem 1.5rem; background: var(--green); color: white; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--opensans);"
+							   title="Export filtered results to Excel">
+								<i class='bx bx-download' ></i> Export Excel
+							</a>
 							<?php if ($filter !== 'all' || !empty($search)): ?>
 							<a href="index.php" style="padding: 0.5rem 1.5rem; background: var(--dark-grey); color: white; text-decoration: none; border-radius: 8px; display: inline-block;">
 								<i class='bx bx-x' ></i> Clear
@@ -212,8 +217,17 @@ $page_title = "Reward Codes";
 				<div class="order">
 					<div class="head">
 						<h3>Reward Codes (<?= number_format($total_records) ?> total)</h3>
-						<i class='bx bx-search' ></i>
-						<i class='bx bx-filter' ></i>
+						<div style="display: flex; gap: 0.5rem; align-items: center;">
+							<a href="export.php?filter=<?= urlencode($filter) ?>&search=<?= urlencode($search) ?>" 
+							   class="btn-download" 
+							   style="padding: 0.5rem 1rem; background: var(--green); color: white; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;"
+							   title="Export to Excel">
+								<i class='bx bx-download' ></i>
+								<span>Export Excel</span>
+							</a>
+							<i class='bx bx-search' ></i>
+							<i class='bx bx-filter' ></i>
+						</div>
 					</div>
 					<?php if (empty($reward_codes)): ?>
 						<div style="padding: 3rem; text-align: center;">
