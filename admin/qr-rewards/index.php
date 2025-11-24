@@ -200,6 +200,67 @@ $page_title = "Reward Codes";
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="../assets/css/admin-style.css">
 	<title>Reward Codes - Admin Panel</title>
+	<style>
+		/* --- ANIMATED BUTTON STYLES (STABLE) --- */
+		.button {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			background-color: rgb(20, 20, 20);
+			border: none;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+			cursor: pointer;
+			transition-duration: .3s;
+			overflow: hidden;
+			position: relative;
+			text-decoration: none !important;
+		}
+
+		/* CRITICAL FIX: Prevent mouse events on children to stop flickering */
+		.button .svgIcon, 
+		.button::before {
+			pointer-events: none; 
+		}
+
+		.svgIcon { width: 17px; transition-duration: .3s; }
+		.svgIcon path { fill: white; }
+
+		.button:hover {
+			width: 140px; /* Width when expanded */
+			border-radius: 50px;
+			transition-duration: .3s;
+			align-items: center;
+		}
+
+		.button:hover .svgIcon {
+			width: 20px;
+			transition-duration: .3s;
+			transform: translateY(60%);
+		}
+
+		.button::before {
+			position: absolute;
+			top: -20px;
+			color: white;
+			transition-duration: .3s;
+			font-size: 2px;
+		}
+
+		.button:hover::before {
+			font-size: 13px;
+			opacity: 1;
+			transform: translateY(30px);
+			transition-duration: .3s;
+		}
+
+		/* Form Actions */
+		.action-btn:hover { background-color: #22c55e; } /* Green */
+		.action-btn.add::before { content: "Generate Codes"; }
+	</style>
 </head>
 <body>
 	<?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
@@ -243,9 +304,8 @@ $page_title = "Reward Codes";
 						</li>
 					</ul>
 				</div>
-				<a href="generate.php" class="btn-download" title="Generate new reward codes">
-					<i class='bx bxs-plus-circle'></i>
-					<span class="text">Generate Codes</span>
+				<a href="generate.php" class="button action-btn add" title="Generate new reward codes">
+					<svg class="svgIcon" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"></path></svg>
 				</a>
 			</div>
 
