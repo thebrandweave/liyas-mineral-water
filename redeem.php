@@ -37,14 +37,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['step']) && $_POST['st
         $message_type = 'error';
         $step = 'info';
     } else {
-        // Store in session to use in next step
-        $_SESSION['redeem_customer'] = [
-            'name' => $name,
-            'phone' => $phone,
-            'email' => $email,
-            'address' => $address
-        ];
-        $step = 'code';
+        // Validate phone number: allow any country code prefix (with or without +), then exactly 10 digits
+        // Extract all digits first
+        $phone_cleaned = preg_replace('/[^0-9]/', '', $phone);
+        
+        // Determine if there's a country code
+        $has_country_code = false;
+        $phone_digits = $phone_cleaned;
+        
+        // If starts with +, definitely has country code
+        if (preg_match('/^\+/', $phone)) {
+            // Remove country code (1-4 digits after +)
+            $phone_normalized = preg_replace('/^\+\d{1,4}\s*/', '', $phone);
+            $phone_digits = preg_replace('/[^0-9]/', '', $phone_normalized);
+            $has_country_code = true;
+        } elseif (strlen($phone_cleaned) > 10) {
+            // More than 10 digits, assume first 1-4 are country code
+            // Try to match country code pattern (1-4 digits) followed by 10 digits
+            if (preg_match('/^(\d{1,4})(\d{10})$/', $phone_cleaned, $matches)) {
+                $phone_digits = $matches[2]; // Use the 10-digit phone number part
+                $has_country_code = true;
+            } else {
+                // Fallback: take last 10 digits as phone number
+                $phone_digits = substr($phone_cleaned, -10);
+                $has_country_code = true;
+            }
+        }
+        // If exactly 10 digits, treat as phone number only (no country code)
+        
+        if (strlen($phone_digits) !== 10) {
+            $message = 'Phone number must be exactly 10 digits (with or without country code)';
+            $message_type = 'error';
+            $step = 'info';
+        } elseif (!empty($email) && (strpos($email, '@') === false || !filter_var($email, FILTER_VALIDATE_EMAIL))) {
+            // Validate email: must contain @ symbol and be valid email format (if provided)
+            $message = 'Please enter a valid email address with @ symbol';
+            $message_type = 'error';
+            $step = 'info';
+        } else {
+            // Store in session to use in next step (use cleaned phone - 10 digits only)
+            $_SESSION['redeem_customer'] = [
+                'name' => $name,
+                'phone' => $phone_digits,
+                'email' => $email,
+                'address' => $address
+            ];
+            $step = 'code';
+        }
     }
 }
 
@@ -371,8 +410,9 @@ $message_classes = [
                             type="tel"
                             name="phone"
                             id="phone"
-                            placeholder="Enter your phone number"
+                            placeholder="1 1234567890 or 1234567890"
                             required
+                            maxlength="20"
                             value="<?= htmlspecialchars($customer['phone'] ?? '') ?>"
                             class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none ring-0 transition focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/40"
                         />
@@ -459,7 +499,6 @@ $message_classes = [
                             type="text"
                             name="reward_code"
                             id="reward_code"
-                            placeholder="e.g., LIYAS-SFA123FCG"
                             autocomplete="off"
                             required
                             autofocus
@@ -550,13 +589,179 @@ $message_classes = [
     </div>
 
     <script>
-        // Auto-uppercase reward code input
-        document.getElementById('reward_code')?.addEventListener('input', function(e) {
-            e.target.value = e.target.value.toUpperCase();
-        });
+        // Phone number validation: allow any country code prefix (with or without +), then exactly 10 digits
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value;
+                
+                // Check if starts with + (country code with +)
+                if (value.trim().startsWith('+')) {
+                    // Extract country code part (+, followed by 1-4 digits)
+                    const countryCodeMatch = value.match(/^(\+\d{1,4})/);
+                    if (countryCodeMatch) {
+                        const countryCode = countryCodeMatch[1];
+                        // Extract everything after country code
+                        let afterPrefix = value.substring(countryCode.length).replace(/[^0-9\s]/g, '');
+                        // Remove spaces
+                        afterPrefix = afterPrefix.replace(/\s/g, '');
+                        // Limit to 10 digits after country code
+                        if (afterPrefix.length > 10) {
+                            afterPrefix = afterPrefix.substring(0, 10);
+                        }
+                        // Format: country code followed by 10 digits (with optional space)
+                        value = countryCode + (afterPrefix.length > 0 ? ' ' + afterPrefix : '');
+                    } else {
+                        // Just + or + with invalid format, allow user to type
+                        if (value.match(/^\+\d*$/)) {
+                            // Valid format, allow it
+                        } else {
+                            // Remove invalid characters, keep + and digits
+                            value = value.replace(/[^+\d]/g, '');
+                            // Limit country code to max 4 digits after +
+                            const match = value.match(/^(\+\d{0,4})/);
+                            if (match) {
+                                value = match[1];
+                            }
+                        }
+                    }
+                } else {
+                    // No +, check if starts with country code (1-4 digits) or just phone number
+                    const allDigits = value.replace(/[^0-9]/g, '');
+                    
+                    // Check if first 1-4 digits could be a country code
+                    // If total digits > 10, assume first 1-4 are country code
+                    if (allDigits.length > 10) {
+                        // Has country code without +
+                        // Extract country code (1-4 digits) and phone (10 digits)
+                        const countryCodeMatch = allDigits.match(/^(\d{1,4})(\d{10})/);
+                        if (countryCodeMatch) {
+                            const countryCode = countryCodeMatch[1];
+                            const phoneDigits = countryCodeMatch[2];
+                            value = countryCode + ' ' + phoneDigits;
+                        } else {
+                            // More than 14 digits, limit to first 4 as country code + 10 as phone
+                            const countryCode = allDigits.substring(0, 4);
+                            const phoneDigits = allDigits.substring(4, 14);
+                            value = countryCode + ' ' + phoneDigits;
+                        }
+                    } else if (allDigits.length === 10) {
+                        // Exactly 10 digits, treat as phone number only
+                        value = allDigits;
+                    } else {
+                        // Less than 10 digits, allow user to continue typing
+                        value = allDigits;
+                    }
+                }
+                
+                e.target.value = value;
+                
+                // Validate: extract all digits and check for exactly 10 phone digits
+                let digitsOnly = value.replace(/[^0-9]/g, '');
+                
+                // Determine if there's a country code
+                if (value.trim().startsWith('+')) {
+                    // Country code with +, remove it (1-4 digits after +)
+                    const countryCodeDigits = value.match(/^\+(\d{1,4})/);
+                    if (countryCodeDigits) {
+                        const ccDigits = countryCodeDigits[1].length;
+                        digitsOnly = digitsOnly.substring(ccDigits);
+                    }
+                } else if (digitsOnly.length > 10) {
+                    // Country code without +, remove first 1-4 digits
+                    // Try to match country code pattern
+                    const match = digitsOnly.match(/^(\d{1,4})(\d{10})/);
+                    if (match) {
+                        digitsOnly = match[2]; // Phone number part
+                    } else {
+                        // Fallback: remove first 4 digits
+                        digitsOnly = digitsOnly.substring(4);
+                    }
+                }
+                
+                const isValid = digitsOnly.length === 10;
+                
+                // Visual feedback
+                if (isValid) {
+                    e.target.classList.remove('border-red-300');
+                    e.target.classList.add('border-emerald-300');
+                } else {
+                    e.target.classList.remove('border-emerald-300');
+                    if (digitsOnly.length > 0) {
+                        e.target.classList.add('border-red-300');
+                    } else {
+                        e.target.classList.remove('border-red-300');
+                    }
+                }
+            });
+        }
 
-        // Handle form submission loading state
-        document.getElementById('infoForm')?.addEventListener('submit', function() {
+        // Email validation: must contain @ symbol if provided
+        const emailInput = document.getElementById('email');
+        if (emailInput) {
+            emailInput.addEventListener('blur', function(e) {
+                const value = e.target.value.trim();
+                if (value && (value.indexOf('@') === -1 || !value.includes('@'))) {
+                    e.target.classList.add('border-red-300');
+                    e.target.classList.remove('border-emerald-300');
+                } else if (value && value.includes('@')) {
+                    e.target.classList.remove('border-red-300');
+                    e.target.classList.add('border-emerald-300');
+                } else {
+                    e.target.classList.remove('border-red-300', 'border-emerald-300');
+                }
+            });
+        }
+
+        // Form validation before submission
+        document.getElementById('infoForm')?.addEventListener('submit', function(e) {
+            let phone = phoneInput?.value.trim() || '';
+            let phoneDigits = phone.replace(/[^0-9]/g, '');
+            
+            // Determine if there's a country code
+            if (phone.trim().startsWith('+')) {
+                // Has +, remove country code (1-4 digits after +)
+                const match = phone.match(/^\+\d{1,4}\s*(.+)$/);
+                if (match) {
+                    phoneDigits = match[1].replace(/[^0-9]/g, '');
+                } else {
+                    // Just +, extract all digits and remove first 1-4
+                    if (phoneDigits.length > 10) {
+                        phoneDigits = phoneDigits.substring(phoneDigits.length - 10);
+                    }
+                }
+            } else if (phoneDigits.length > 10) {
+                // More than 10 digits without +, assume first 1-4 are country code
+                // Try to match: 1-4 digits (country code) + 10 digits (phone)
+                const match = phoneDigits.match(/^(\d{1,4})(\d{10})$/);
+                if (match) {
+                    phoneDigits = match[2]; // Use the 10-digit phone number part
+                } else {
+                    // Fallback: take last 10 digits
+                    phoneDigits = phoneDigits.substring(phoneDigits.length - 10);
+                }
+            }
+            // If exactly 10 digits, use as is (no country code)
+            
+            const email = emailInput?.value.trim();
+            
+            // Validate phone number: must have exactly 10 digits
+            if (phoneDigits.length !== 10) {
+                e.preventDefault();
+                alert('Phone number must be exactly 10 digits (with or without country code)');
+                phoneInput?.focus();
+                return false;
+            }
+            
+            // Validate email if provided
+            if (email && (email.indexOf('@') === -1 || !email.includes('@') || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))) {
+                e.preventDefault();
+                alert('Please enter a valid email address with @ symbol');
+                emailInput?.focus();
+                return false;
+            }
+            
+            // If validation passes, show loading state
             const btn = document.getElementById('submitBtn');
             if (btn) {
                 btn.disabled = true;
@@ -564,6 +769,12 @@ $message_classes = [
             }
         });
 
+        // Auto-uppercase reward code input
+        document.getElementById('reward_code')?.addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Handle code form submission loading state
         document.getElementById('codeForm')?.addEventListener('submit', function() {
             const btn = document.getElementById('submitBtn');
             if (btn) {
