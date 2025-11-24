@@ -2,6 +2,108 @@
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
 
+// Check if export is requested
+if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+    // Get filter parameters for export
+    $filter = $_GET['filter'] ?? 'all';
+    $search = $_GET['search'] ?? '';
+    
+    // Build query based on filters
+    $where_conditions = [];
+    $params = [];
+    
+    if ($filter === 'used') {
+        $where_conditions[] = "c.is_used = 1";
+    } elseif ($filter === 'unused') {
+        $where_conditions[] = "c.is_used = 0";
+    }
+    
+    if (!empty($search)) {
+        $where_conditions[] = "c.reward_code LIKE :search";
+        $params[':search'] = "%$search%";
+    }
+    
+    $where_clause = !empty($where_conditions) ? "WHERE " . implode(" AND ", $where_conditions) : "";
+    
+    // Fetch all matching codes (no pagination for export)
+    try {
+        $query = "SELECT c.id, c.reward_code, c.is_used, c.used_at, c.created_at,
+                         c.customer_name, c.customer_phone, c.customer_email, c.customer_address
+                  FROM codes c 
+                  $where_clause 
+                  ORDER BY c.created_at DESC";
+        
+        $stmt = $pdo->prepare($query);
+        
+        // Bind parameters
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+        }
+        
+        $stmt->execute();
+        $codes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error fetching codes: " . $e->getMessage());
+    }
+    
+    // Check if there are codes to export
+    if (empty($codes)) {
+        die("No codes found to export with the current filters.");
+    }
+    
+    // Generate filename based on filter
+    $filter_name = $filter === 'used' ? 'Redeemed' : ($filter === 'unused' ? 'Available' : 'All');
+    $filename = "Reward_Codes_{$filter_name}_" . date('Y-m-d_His') . ".csv";
+    
+    // Set headers for CSV download
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+    
+    // Create output stream
+    $output = fopen('php://output', 'w');
+    
+    // Add BOM for UTF-8 Excel compatibility
+    fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+    
+    // Write CSV headers
+    $headers = [
+        'ID',
+        'Reward Code',
+        'Status',
+        'Customer Name',
+        'Phone Number',
+        'Email',
+        'Address',
+        'Redeemed At',
+        'Created At'
+    ];
+    fputcsv($output, $headers);
+    
+    // Write data rows
+    foreach ($codes as $code) {
+        $row = [
+            $code['id'],
+            $code['reward_code'],
+            $code['is_used'] ? 'Redeemed' : 'Available',
+            $code['customer_name'] ?? '',
+            $code['customer_phone'] ?? '',
+            $code['customer_email'] ?? '',
+            $code['customer_address'] ?? '',
+            $code['used_at'] ? date('d-m-Y H:i:s', strtotime($code['used_at'])) : '',
+            date('d-m-Y H:i:s', strtotime($code['created_at']))
+        ];
+        fputcsv($output, $row);
+    }
+    
+    // Close output stream
+    fclose($output);
+    exit;
+}
+
 // Get filter parameters
 $filter = $_GET['filter'] ?? 'all'; // all, used, unused
 $search = $_GET['search'] ?? '';
@@ -187,9 +289,9 @@ $page_title = "Reward Codes";
 						<i class='bx bx-filter' ></i>
 					</div>
 					<div style="padding: 1rem;">
-						<form method="GET" action="" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-							<input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
-							<select name="filter" style="padding: 0.5rem 1rem; border: 1px solid var(--grey); border-radius: 8px; background: var(--light); font-family: var(--opensans);">
+						<form method="GET" action="" id="filterForm" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+							<input type="hidden" name="search" id="searchInput" value="<?= htmlspecialchars($search) ?>">
+							<select name="filter" id="filterSelect" style="padding: 0.5rem 1rem; border: 1px solid var(--grey); border-radius: 8px; background: var(--light); font-family: var(--opensans);">
 								<option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All Codes</option>
 								<option value="used" <?= $filter === 'used' ? 'selected' : '' ?>>Redeemed Only</option>
 								<option value="unused" <?= $filter === 'unused' ? 'selected' : '' ?>>Available Only</option>
@@ -197,11 +299,11 @@ $page_title = "Reward Codes";
 							<button type="submit" style="padding: 0.5rem 1.5rem; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--opensans);">
 								<i class='bx bx-filter' ></i> Apply Filter
 							</button>
-							<a href="export.php?filter=<?= urlencode($filter) ?>&search=<?= urlencode($search) ?>" 
-							   style="padding: 0.5rem 1.5rem; background: var(--green); color: white; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--opensans);"
+							<button type="button" id="exportBtn"
+							   style="padding: 0.5rem 1.5rem; background: var(--green); color: white; border: none; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--opensans);"
 							   title="Export filtered results to Excel">
 								<i class='bx bx-download' ></i> Export Excel
-							</a>
+							</button>
 							<?php if ($filter !== 'all' || !empty($search)): ?>
 							<a href="index.php" style="padding: 0.5rem 1.5rem; background: var(--dark-grey); color: white; text-decoration: none; border-radius: 8px; display: inline-block;">
 								<i class='bx bx-x' ></i> Clear
@@ -217,17 +319,8 @@ $page_title = "Reward Codes";
 				<div class="order">
 					<div class="head">
 						<h3>Reward Codes (<?= number_format($total_records) ?> total)</h3>
-						<div style="display: flex; gap: 0.5rem; align-items: center;">
-							<a href="export.php?filter=<?= urlencode($filter) ?>&search=<?= urlencode($search) ?>" 
-							   class="btn-download" 
-							   style="padding: 0.5rem 1rem; background: var(--green); color: white; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;"
-							   title="Export to Excel">
-								<i class='bx bx-download' ></i>
-								<span>Export Excel</span>
-							</a>
-							<i class='bx bx-search' ></i>
-							<i class='bx bx-filter' ></i>
-						</div>
+						<i class='bx bx-search' ></i>
+						<i class='bx bx-filter' ></i>
 					</div>
 					<?php if (empty($reward_codes)): ?>
 						<div style="padding: 3rem; text-align: center;">
@@ -348,7 +441,7 @@ $page_title = "Reward Codes";
 	</section>
 	<!-- CONTENT -->
 	
-	<script src="../assets/js/admin-script.js"></script>
+	<script src="../admin-script.js"></script>
 	<script>
 	function copyToClipboard(text) {
 		navigator.clipboard.writeText(text).then(function() {
@@ -382,6 +475,29 @@ $page_title = "Reward Codes";
 		}
 		alert(details);
 	}
+
+	// Export button functionality
+	document.getElementById('exportBtn').addEventListener('click', function(e) {
+		e.preventDefault();
+		
+		// Get current filter and search values from the form
+		const filterSelect = document.getElementById('filterSelect');
+		const searchInput = document.getElementById('searchInput');
+		
+		let filter = filterSelect ? filterSelect.value : 'all';
+		let search = searchInput ? searchInput.value : '';
+		
+		// Build export URL with export parameter
+		let exportUrl = '?export=csv&filter=' + encodeURIComponent(filter);
+		if (search) {
+			exportUrl += '&search=' + encodeURIComponent(search);
+		}
+		
+		console.log('Exporting with URL:', exportUrl);
+		
+		// Trigger download
+		window.location.href = exportUrl;
+	});
 	</script>
 </body>
 </html>
