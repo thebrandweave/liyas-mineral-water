@@ -5,7 +5,7 @@
     # Redirect to index.php if no file exists
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^redeem$ index.php [L,QSA]
+    # Removed redeem rewrite rule - use redeem.php directly
 </IfModule>
 
 # Security Headers
