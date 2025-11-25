@@ -144,7 +144,7 @@ $page_title = "Dashboard";
 					</a>
 				</li>
 				<li>
-					<a href="categories.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+					<a href="categories/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
 						<i class='bx bxs-category' ></i>
 						<span class="text">
 							<h3><?= $total_categories ?></h3>
@@ -242,7 +242,7 @@ $page_title = "Dashboard";
 							</a>
 						</li>
 						<li style="padding: 15px; border-bottom: 1px solid #eee;">
-							<a href="categories.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between;">
+							<a href="categories/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between;">
 								<span style="display: flex; align-items: center; gap: 10px;">
 									<i class='bx bxs-category' style="color: #2196F3;"></i>
 									<p style="margin: 0;">Manage Categories</p>

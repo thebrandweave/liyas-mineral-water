@@ -26,7 +26,7 @@ $current_page = $current_page ?? '';
             </a>
         </li>
         <li class="<?= ($current_page === 'categories') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>categories.php">
+            <a href="<?= $base_path ?>categories/index.php">
                 <i class='bx bxs-category bx-sm'></i>
                 <span class="text">Categories</span>
             </a>
