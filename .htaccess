@@ -11,15 +11,19 @@
     RewriteRule ^redeem/?$ redeem/index.php [L]
     
     # Redirect other old .php URLs to clean URLs (301 permanent redirect)
+    # BUT preserve query strings - exclude admin directory from this rule
     RewriteCond %{THE_REQUEST} /([^.]+)\.php[\s?] [NC]
     RewriteCond %{REQUEST_URI} !^/redeem\.php$ [NC]
-    RewriteRule ^ /%1? [NC,L,R=301]
+    RewriteCond %{REQUEST_URI} !^/admin/ [NC]
+    RewriteRule ^ /%1 [NC,L,R=301,QSA]
     
     # Remove .php extension from URLs (internal rewrite for other files)
+    # Preserve query strings - exclude admin directory from this rule
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}\.php -f
     RewriteCond %{REQUEST_URI} !^/redeem [NC]
-    RewriteRule ^(.*)$ $1.php [L]
+    RewriteCond %{REQUEST_URI} !^/admin/ [NC]
+    RewriteRule ^(.*)$ $1.php [L,QSA]
     
     # Redirect root to public directory
     RewriteCond %{REQUEST_URI} !^/public/

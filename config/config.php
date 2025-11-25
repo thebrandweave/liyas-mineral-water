@@ -16,18 +16,18 @@ use Firebase\JWT\Key;
 // Switch between LOCAL and LIVE by commenting/uncommenting
 
 // LIVE PRODUCTION
-define('DB_HOST', 'localhost');
-define('DB_PORT', 3306);
-define('DB_NAME', 'u232955123_liyas_inter');
-define('DB_USER', 'u232955123_liyas');
-define('DB_PASS', 'Brandweave@24');
-
-// LOCAL DEVELOPMENT (XAMPP)
 // define('DB_HOST', 'localhost');
 // define('DB_PORT', 3306);
-// define('DB_NAME', 'liyas_international');
-// define('DB_USER', 'root');
-// define('DB_PASS', '');
+// define('DB_NAME', 'u232955123_liyas_inter');
+// define('DB_USER', 'u232955123_liyas');
+// define('DB_PASS', 'Brandweave@24');
+
+// LOCAL DEVELOPMENT (XAMPP)
+define('DB_HOST', 'localhost');
+define('DB_PORT', 3306);
+define('DB_NAME', 'liyas_international');
+define('DB_USER', 'root');
+define('DB_PASS', '');
 
 // ============================================
 // PDO CONNECTION (for existing codebase)
@@ -42,9 +42,25 @@ $options = [
 try {
     $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
     $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+    
+    // Verify connection by running a simple query
+    $pdo->query("SELECT 1");
 } catch (PDOException $e) {
     error_log("PDO Database connection failed: " . $e->getMessage());
-    die("Database connection failed. Please try again later.");
+    
+    // More detailed error message for debugging
+    $error_msg = "Database connection failed. ";
+    if (strpos($e->getMessage(), 'Unknown database') !== false) {
+        $error_msg .= "Database '" . DB_NAME . "' does not exist. Please create it first.";
+    } elseif (strpos($e->getMessage(), 'Access denied') !== false) {
+        $error_msg .= "Access denied. Please check your database username and password.";
+    } elseif (strpos($e->getMessage(), 'Connection refused') !== false) {
+        $error_msg .= "Cannot connect to database server. Please make sure MySQL is running.";
+    } else {
+        $error_msg .= "Error: " . $e->getMessage();
+    }
+    
+    die($error_msg);
 }
 
 // ============================================
@@ -125,6 +141,19 @@ function getEnvironment() {
         }
     }
     return 'unknown';
+}
+
+// ============================================
+// VERIFY DATABASE CONNECTION
+// ============================================
+function verifyDatabaseConnection() {
+    global $pdo;
+    try {
+        $stmt = $pdo->query("SELECT 1");
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
 // Uncomment to test database connection

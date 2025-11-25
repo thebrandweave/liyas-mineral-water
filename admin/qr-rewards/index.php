@@ -501,7 +501,7 @@ $page_title = "Reward Codes";
 	</section>
 	<!-- CONTENT -->
 	
-	<script src="../admin-script.js"></script>
+	<script src="../assets/js/admin-script.js"></script>
 	<script>
 	function copyToClipboard(text) {
 		navigator.clipboard.writeText(text).then(function() {

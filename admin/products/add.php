@@ -2,79 +2,73 @@
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
 
-// Fetch categories
-$categories = $pdo->query("SELECT * FROM categories ORDER BY name ASC")->fetchAll();
-
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_page = "products";
 $page_title = "Add Product";
 
-$message = '';
-$message_type = '';
+$error = '';
+$success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $category_id = $_POST['category_id'] ?: null;
-    $name = trim($_POST['name']);
-    $desc = trim($_POST['description']);
-    $price = $_POST['price'];
-    $stock = $_POST['stock'] ?? 0;
-    $is_active = isset($_POST['is_active']) ? 1 : 0;
-    $featured = isset($_POST['featured']) ? 1 : 0;
-
-    try {
-        $stmt = $pdo->prepare("
-            INSERT INTO products (category_id, name, description, price, stock, is_active, featured)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([$category_id, $name, $desc, $price, $stock, $is_active, $featured]);
-        $product_id = $pdo->lastInsertId();
-
-        // Upload directory
-        $uploadDir = $ROOT_PATH . '/uploads/';
-        if (!is_dir($uploadDir)) {
-            if (!mkdir($uploadDir, 0777, true)) {
-                throw new Exception("Failed to create upload directory: " . $uploadDir);
+    $name = trim($_POST['name'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $price = trim($_POST['price'] ?? '');
+    
+    // Validation
+    if (empty($name)) {
+        $error = "Product name is required.";
+    } elseif (empty($price) || !is_numeric($price) || $price <= 0) {
+        $error = "Valid price is required.";
+    } else {
+        $image_path = null;
+        
+        // Handle image upload
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $upload_dir = __DIR__ . '/../uploads/products/';
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0755, true);
             }
-        }
-
-        // Handle media uploads
-        if (!empty($_FILES['media']['name'][0])) {
-            foreach ($_FILES['media']['tmp_name'] as $i => $tmp) {
-                if (!is_uploaded_file($tmp)) continue;
+            
+            $file = $_FILES['image'];
+            $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            $max_size = 5 * 1024 * 1024; // 5MB
+            
+            if (!in_array($file['type'], $allowed_types)) {
+                $error = "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed.";
+            } elseif ($file['size'] > $max_size) {
+                $error = "File size too large. Maximum size is 5MB.";
+            } else {
+                $file_ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $file_name = 'product_' . time() . '_' . uniqid() . '.' . $file_ext;
+                $target_path = $upload_dir . $file_name;
                 
-                // Check for upload errors
-                if ($_FILES['media']['error'][$i] !== UPLOAD_ERR_OK) {
-                    error_log("Upload error code: " . $_FILES['media']['error'][$i]);
-                    continue;
-                }
-                
-                $original = basename($_FILES['media']['name'][$i]);
-                $ext = strtolower(pathinfo($original, PATHINFO_EXTENSION));
-                $filename = uniqid('media_') . '.' . $ext;
-                $dest = $uploadDir . $filename;
-                $type = in_array($ext, ['mp4', 'mov', 'webm']) ? 'video' : 'image';
-                
-                if (move_uploaded_file($tmp, $dest)) {
-                    // Verify file was actually moved
-                    if (file_exists($dest)) {
-                        $pdo->prepare("
-                            INSERT INTO products_media (product_id, file_path, file_type, alt_text, is_primary)
-                            VALUES (?, ?, ?, ?, ?)
-                        ")->execute([$product_id, $filename, $type, $original, $i === 0]);
-                    } else {
-                        error_log("File move failed: " . $dest);
-                    }
+                if (move_uploaded_file($file['tmp_name'], $target_path)) {
+                    $image_path = 'admin/uploads/products/' . $file_name;
                 } else {
-                    error_log("move_uploaded_file failed. Source: " . $tmp . " Dest: " . $dest);
+                    $error = "Failed to upload image. Please try again.";
                 }
             }
         }
-
-        header("Location: index.php?success=1");
-        exit;
-    } catch (Exception $e) {
-        $message = 'Error: ' . $e->getMessage();
-        $message_type = 'error';
+        
+        if (empty($error)) {
+            try {
+                $stmt = $pdo->prepare("INSERT INTO products (name, description, price, image) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$name, $description ?: null, $price, $image_path]);
+                
+                $product_id = $pdo->lastInsertId();
+                $success = "Product added successfully!";
+                
+                // Redirect to products list
+                header("Location: index.php?added=1");
+                exit;
+            } catch (PDOException $e) {
+                // Delete uploaded file if database insert fails
+                if ($image_path && file_exists(__DIR__ . '/../' . $image_path)) {
+                    unlink(__DIR__ . '/../' . $image_path);
+                }
+                $error = "Error adding product: " . $e->getMessage();
+            }
+        }
     }
 }
 ?>
@@ -90,97 +84,112 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<link rel="stylesheet" href="../assets/css/admin-style.css">
 	<title>Add Product - Admin Panel</title>
 	<style>
+		.form-container {
+			background: var(--light);
+			padding: 2rem;
+			border-radius: 12px;
+			margin-top: 1rem;
+		}
+
 		.form-group {
 			margin-bottom: 1.5rem;
 		}
+
 		.form-group label {
 			display: block;
 			margin-bottom: 0.5rem;
-			color: var(--dark-grey);
+			color: var(--dark);
 			font-weight: 600;
-			font-family: var(--opensans);
+			font-size: 0.9rem;
 		}
-		.form-group input,
-		.form-group select,
+
+		.form-group input[type="text"],
+		.form-group input[type="number"],
 		.form-group textarea {
 			width: 100%;
 			padding: 0.75rem 1rem;
 			border: 1px solid var(--grey);
 			border-radius: 8px;
-			background: var(--light);
+			background: white;
 			font-size: 1rem;
 			font-family: var(--opensans);
+			transition: border-color 0.2s;
 		}
+
 		.form-group input:focus,
-		.form-group select:focus,
 		.form-group textarea:focus {
 			outline: none;
 			border-color: var(--blue);
 		}
+
 		.form-group textarea {
 			resize: vertical;
-			min-height: 100px;
+			min-height: 120px;
 		}
-		.form-group-inline {
-			display: flex;
-			gap: 2rem;
-			align-items: center;
-			margin-bottom: 1.5rem;
+
+		.form-group small {
+			display: block;
+			margin-top: 0.25rem;
+			color: var(--dark-grey);
+			font-size: 0.85rem;
 		}
-		.form-group-inline label {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
-			cursor: pointer;
-			font-weight: 500;
-		}
-		.form-group-inline input[type="checkbox"] {
-			width: auto;
-			cursor: pointer;
-		}
+
 		.alert {
 			padding: 1rem;
 			border-radius: 8px;
 			margin-bottom: 1.5rem;
 		}
+
 		.alert-success {
 			background: #d4edda;
 			color: #155724;
 			border: 1px solid #c3e6cb;
 		}
+
 		.alert-error {
 			background: #f8d7da;
 			color: #721c24;
 			border: 1px solid #f5c6cb;
 		}
-		.btn-submit {
-			width: 100%;
-			padding: 1rem;
-			background: var(--blue);
-			color: white;
+
+		.btn-group {
+			display: flex;
+			gap: 1rem;
+			margin-top: 2rem;
+		}
+
+		.btn {
+			padding: 0.75rem 2rem;
 			border: none;
 			border-radius: 8px;
 			font-size: 1rem;
 			font-weight: 600;
 			cursor: pointer;
-			font-family: var(--opensans);
-			display: flex;
+			text-decoration: none;
+			display: inline-flex;
 			align-items: center;
-			justify-content: center;
 			gap: 0.5rem;
+			transition: all 0.2s;
 		}
-		.btn-submit:hover {
-			background: var(--blue-dark);
+
+		.btn-primary {
+			background: var(--blue);
+			color: white;
 		}
-		.form-grid {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 1.5rem;
+
+		.btn-primary:hover {
+			background: #2563eb;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 		}
-		@media (max-width: 768px) {
-			.form-grid {
-				grid-template-columns: 1fr;
-			}
+
+		.btn-secondary {
+			background: var(--grey);
+			color: var(--dark);
+		}
+
+		.btn-secondary:hover {
+			background: #d1d5db;
 		}
 	</style>
 </head>
@@ -211,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Add New Product</h1>
+					<h1>Add Product</h1>
 					<ul class="breadcrumb">
 						<li>
 							<a href="../index.php">Dashboard</a>
@@ -239,74 +248,104 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						<i class='bx bxs-shopping-bag-alt' ></i>
 					</div>
 
-					<?php if ($message): ?>
-						<div class="alert <?= $message_type === 'success' ? 'alert-success' : 'alert-error' ?>">
-							<?= htmlspecialchars($message) ?>
-						</div>
-					<?php endif; ?>
+					<div class="form-container">
+						<?php if ($error): ?>
+							<div class="alert alert-error">
+								<i class='bx bx-error-circle' ></i> <?= htmlspecialchars($error) ?>
+							</div>
+						<?php endif; ?>
 
-					<form method="post" enctype="multipart/form-data" style="padding: 1.5rem;">
-						<div class="form-group">
-							<label for="name">Product Name *</label>
-							<input type="text" name="name" id="name" required>
-						</div>
+						<?php if ($success): ?>
+							<div class="alert alert-success">
+								<i class='bx bx-check-circle' ></i> <?= htmlspecialchars($success) ?>
+							</div>
+						<?php endif; ?>
 
-						<div class="form-group">
-							<label for="category_id">Category</label>
-							<select name="category_id" id="category_id">
-								<option value="">-- None --</option>
-								<?php foreach ($categories as $c): ?>
-									<option value="<?= $c['category_id'] ?>"><?= htmlspecialchars($c['name']) ?></option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-
-						<div class="form-group">
-							<label for="description">Description</label>
-							<textarea name="description" id="description" rows="4"></textarea>
-						</div>
-
-						<div class="form-grid">
+						<form method="POST" action="" enctype="multipart/form-data">
 							<div class="form-group">
-								<label for="price">Price (₹) *</label>
-								<input type="number" step="0.01" name="price" id="price" required>
+								<label for="name">Product Name <span style="color: #dc2626;">*</span></label>
+								<input 
+									type="text" 
+									name="name" 
+									id="name" 
+									value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" 
+									required
+									placeholder="e.g., Liyas Mineral Water 500ml"
+								>
+								<small>Enter a descriptive name for your product</small>
 							</div>
 
 							<div class="form-group">
-								<label for="stock">Stock Quantity</label>
-								<input type="number" name="stock" id="stock" value="0" min="0">
+								<label for="description">Description</label>
+								<textarea 
+									name="description" 
+									id="description" 
+									placeholder="Describe your product..."
+								><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+								<small>Provide details about the product (optional)</small>
 							</div>
-						</div>
 
-						<div class="form-group-inline">
-							<label for="is_active">
-								<input type="checkbox" name="is_active" id="is_active" checked>
-								Active
-							</label>
-							<label for="featured">
-								<input type="checkbox" name="featured" id="featured">
-								Featured
-							</label>
-						</div>
+							<div class="form-group">
+								<label for="price">Price <span style="color: #dc2626;">*</span></label>
+								<input 
+									type="number" 
+									name="price" 
+									id="price" 
+									value="<?= htmlspecialchars($_POST['price'] ?? '') ?>" 
+									step="0.01" 
+									min="0.01"
+									required
+									placeholder="0.00"
+								>
+								<small>Enter the price in USD</small>
+							</div>
 
-						<div class="form-group">
-							<label for="media">Upload Media</label>
-							<input type="file" name="media[]" id="media" multiple accept="image/*,video/*">
-							<small style="color: var(--dark-grey); font-size: 0.85rem; display: block; margin-top: 0.5rem;">
-								You can upload multiple images or videos. First file will be set as primary.
-							</small>
-						</div>
+							<div class="form-group">
+								<label for="image">Product Image</label>
+								<input 
+									type="file" 
+									name="image" 
+									id="image" 
+									accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+								>
+								<small>Upload a product image (JPEG, PNG, GIF, or WebP - Max 5MB)</small>
+								<div id="image-preview" style="margin-top: 1rem; display: none;">
+									<img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--grey);">
+								</div>
+							</div>
 
-						<button type="submit" class="btn-submit">
-							<i class='bx bxs-save' ></i>
-							Save Product
-						</button>
-					</form>
+							<div class="btn-group">
+								<button type="submit" class="btn btn-primary">
+									<i class='bx bx-save' ></i> Add Product
+								</button>
+								<a href="index.php" class="btn btn-secondary">
+									<i class='bx bx-x' ></i> Cancel
+								</a>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</main>
 	</section>
 	
-	<script src="../admin-script.js"></script>
+	<script src="../assets/js/admin-script.js"></script>
+	<script>
+		// Image preview
+		document.getElementById('image').addEventListener('change', function(e) {
+			const file = e.target.files[0];
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					document.getElementById('preview-img').src = e.target.result;
+					document.getElementById('image-preview').style.display = 'block';
+				};
+				reader.readAsDataURL(file);
+			} else {
+				document.getElementById('image-preview').style.display = 'none';
+			}
+		});
+	</script>
 </body>
 </html>
+

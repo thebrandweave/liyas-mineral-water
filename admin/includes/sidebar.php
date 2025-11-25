@@ -20,7 +20,7 @@ $current_page = $current_page ?? '';
             </a>
         </li>
         <li class="<?= ($current_page === 'products') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>products.php">
+            <a href="<?= $base_path ?>products/index.php">
                 <i class='bx bxs-shopping-bag-alt bx-sm'></i>
                 <span class="text">Products</span>
             </a>

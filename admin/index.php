@@ -6,7 +6,9 @@ require_once 'includes/auth_check.php'; // Ensures the user is logged in
 // The dashboard will now use data from your existing tables.
 
 $total_products = 0;
+$total_categories = 0;
 $total_admins = 0;
+$total_orders = 0;
 $recent_products = [];
 $visitors_count = 2834; // This is a static placeholder for now.
 
@@ -14,11 +16,17 @@ try {
     // Fetch total products count
     $total_products = $pdo->query("SELECT COUNT(*) FROM products")->fetchColumn();
 
+    // Fetch total categories count
+    $total_categories = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
+
     // Fetch total admins count
     $total_admins = $pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();
 
+    // Fetch total orders count
+    $total_orders = $pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
+
     // Fetch recently added products
-    $recent_products_stmt = $pdo->query("SELECT name, created_at, stock FROM products ORDER BY created_at DESC LIMIT 5");
+    $recent_products_stmt = $pdo->query("SELECT product_id, name, created_at, price FROM products ORDER BY created_at DESC LIMIT 5");
     $recent_products = $recent_products_stmt ? $recent_products_stmt->fetchAll(PDO::FETCH_ASSOC) : [];
 } catch (PDOException $e) {
     // If tables don't exist, we'll just show 0s and an empty list.
@@ -49,6 +57,33 @@ $page_title = "Dashboard";
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="assets/css/admin-style.css">
 	<title>Admin Panel - Liyas Mineral Water</title>
+	<style>
+		/* Make stat boxes clickable with hover effect */
+		.box-info li a {
+			transition: all 0.3s ease;
+		}
+		.box-info li a:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+		}
+		
+		/* Quick links hover effect */
+		.todo-list li a {
+			transition: all 0.2s ease;
+		}
+		.todo-list li a:hover {
+			background-color: #f5f5f5;
+			padding-left: 5px;
+		}
+		
+		/* Table row hover */
+		.table-data table tbody tr {
+			transition: background-color 0.2s ease;
+		}
+		.table-data table tbody tr:hover {
+			background-color: #f9f9f9;
+		}
+	</style>
 </head>
 <body>
 	<?php require_once __DIR__ . '/includes/sidebar.php'; ?>
@@ -100,25 +135,40 @@ $page_title = "Dashboard";
 
 			<ul class="box-info">
 				<li>
-					<i class='bx bxs-calendar-check' ></i>
-					<span class="text">
-						<h3><?= $total_products ?></h3>
-						<p>Total Products</p>
-					</span>
+					<a href="products/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+						<i class='bx bxs-shopping-bag-alt' ></i>
+						<span class="text">
+							<h3><?= $total_products ?></h3>
+							<p>Total Products</p>
+						</span>
+					</a>
 				</li>
 				<li>
-					<i class='bx bxs-group' ></i>
-					<span class="text">
-						<h3><?= $visitors_count ?></h3>
-						<p>Visitors</p>
-					</span>
+					<a href="categories.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+						<i class='bx bxs-category' ></i>
+						<span class="text">
+							<h3><?= $total_categories ?></h3>
+							<p>Categories</p>
+						</span>
+					</a>
 				</li>
 				<li>
-					<i class='bx bxs-dollar-circle' ></i>
-					<span class="text">
-						<h3><?= $total_admins ?></h3>
-						<p>Admin Users</p>
-					</span>
+					<a href="users/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+						<i class='bx bxs-group' ></i>
+						<span class="text">
+							<h3><?= $total_admins ?></h3>
+							<p>Admin Users</p>
+						</span>
+					</a>
+				</li>
+				<li>
+					<a href="orders/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+						<i class='bx bxs-cart-alt' ></i>
+						<span class="text">
+							<h3><?= $total_orders ?></h3>
+							<p>Total Orders</p>
+						</span>
+					</a>
 				</li>
 			</ul>
 
@@ -127,21 +177,29 @@ $page_title = "Dashboard";
 				<div class="order">
 					<div class="head">
 						<h3>Recent Products</h3>
-						<i class='bx bx-search' ></i>
-						<i class='bx bx-filter' ></i>
+						<a href="products/index.php" style="text-decoration: none; color: inherit;">
+							<i class='bx bx-search' title="View All Products"></i>
+						</a>
+						<a href="products/add.php" style="text-decoration: none; color: inherit;">
+							<i class='bx bx-plus' title="Add New Product"></i>
+						</a>
 					</div>
 					<table>
 						<thead>
 							<tr>
-								<th>User</th>
+								<th>Product Name</th>
+								<th>Price</th>
 								<th>Date Added</th>
-								<th>Status</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
                             <?php if (empty($recent_products)): ?>
                                 <tr>
-                                    <td colspan="3" style="text-align: center; padding: 20px;">No recent products found.</td>
+                                    <td colspan="4" style="text-align: center; padding: 20px;">
+                                        No recent products found. 
+                                        <a href="products/add.php" style="color: #4CAF50; text-decoration: none; margin-left: 10px;">Add Product</a>
+                                    </td>
                                 </tr>
                             <?php else: ?>
                                 <?php foreach ($recent_products as $product): ?>
@@ -150,27 +208,66 @@ $page_title = "Dashboard";
                                             <img src="https://i.pravatar.cc/36?u=<?= urlencode($product['name']) ?>">
                                             <p><?= htmlspecialchars($product['name']) ?></p>
                                         </td>
-                                        <td><?= date('d-m-Y', strtotime($product['created_at'])) ?></td>
-                                        <td><span class="status <?= ($product['stock'] > 0) ? 'completed' : 'pending' ?>"><?= ($product['stock'] > 0) ? 'In Stock' : 'Out of Stock' ?></span></td>
+                                        <td>$<?= number_format($product['price'], 2) ?></td>
+                                        <td><?= date('d M, Y', strtotime($product['created_at'])) ?></td>
+                                        <td>
+                                            <a href="products/edit.php?id=<?= $product['product_id'] ?>" style="color: #3b82f6; text-decoration: none;">
+                                                <i class='bx bx-edit' title="Edit"></i> Edit
+                                            </a>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
 						</tbody>
 					</table>
+					<div style="padding: 15px; text-align: center; border-top: 1px solid #eee;">
+						<a href="products/index.php" style="color: #4CAF50; text-decoration: none; font-weight: 600;">
+							View All Products <i class='bx bx-right-arrow-alt'></i>
+						</a>
+					</div>
 				</div>
 				<div class="todo">
 					<div class="head">
-						<h3>Todos</h3>
-						<i class='bx bx-plus' ></i>
-						<i class='bx bx-filter' ></i>
+						<h3>Quick Links</h3>
+						<i class='bx bx-link-external' ></i>
 					</div>
-					<ul class="todo-list">
-                        <?php foreach ($todos as $todo): ?>
-                            <li class="<?= $todo['completed'] ? 'completed' : 'not-completed' ?>">
-                                <p><?= htmlspecialchars($todo['task']) ?></p>
-                                <i class='bx bx-dots-vertical-rounded' ></i>
-                            </li>
-                        <?php endforeach; ?>
+					<ul class="todo-list" style="list-style: none; padding: 0;">
+						<li style="padding: 15px; border-bottom: 1px solid #eee;">
+							<a href="products/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between;">
+								<span style="display: flex; align-items: center; gap: 10px;">
+									<i class='bx bxs-shopping-bag-alt' style="color: #4CAF50;"></i>
+									<p style="margin: 0;">Manage Products</p>
+								</span>
+								<i class='bx bx-right-arrow-alt'></i>
+							</a>
+						</li>
+						<li style="padding: 15px; border-bottom: 1px solid #eee;">
+							<a href="categories.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between;">
+								<span style="display: flex; align-items: center; gap: 10px;">
+									<i class='bx bxs-category' style="color: #2196F3;"></i>
+									<p style="margin: 0;">Manage Categories</p>
+								</span>
+								<i class='bx bx-right-arrow-alt'></i>
+							</a>
+						</li>
+						<li style="padding: 15px; border-bottom: 1px solid #eee;">
+							<a href="users/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between;">
+								<span style="display: flex; align-items: center; gap: 10px;">
+									<i class='bx bxs-group' style="color: #FF9800;"></i>
+									<p style="margin: 0;">Manage Users</p>
+								</span>
+								<i class='bx bx-right-arrow-alt'></i>
+							</a>
+						</li>
+						<li style="padding: 15px;">
+							<a href="orders/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between;">
+								<span style="display: flex; align-items: center; gap: 10px;">
+									<i class='bx bxs-cart-alt' style="color: #9C27B0;"></i>
+									<p style="margin: 0;">View Orders</p>
+								</span>
+								<i class='bx bx-right-arrow-alt'></i>
+							</a>
+						</li>
 					</ul>
 				</div>
 			</div>
