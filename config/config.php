@@ -1,5 +1,5 @@
 <?php
-// ✅ Manual Firebase JWT include (correct order!)
+//  Manual Firebase JWT include (correct order!)
 require_once __DIR__ . '/../admin/includes/php-jwt/JWTExceptionWithPayloadInterface.php';
 require_once __DIR__ . '/../admin/includes/php-jwt/BeforeValidException.php';
 require_once __DIR__ . '/../admin/includes/php-jwt/ExpiredException.php';
