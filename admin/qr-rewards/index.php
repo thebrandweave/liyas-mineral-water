@@ -2,6 +2,32 @@
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
 
+// Set timezone to Indian Standard Time
+date_default_timezone_set('Asia/Kolkata');
+
+/**
+ * Convert database timestamp to IST format
+ * @param string $dbTimestamp Database timestamp
+ * @return string Formatted date in IST
+ */
+function formatIST($dbTimestamp) {
+    if (empty($dbTimestamp)) {
+        return '';
+    }
+    try {
+        // Create DateTime from database value
+        // MySQL timestamps are typically stored without timezone, so we interpret as server timezone
+        // Since we set MySQL timezone to IST, the value should be in IST
+        $dt = new DateTime($dbTimestamp);
+        // Ensure it's displayed in IST
+        $dt->setTimezone(new DateTimeZone('Asia/Kolkata'));
+        return $dt->format('d-m-Y H:i:s');
+    } catch (Exception $e) {
+        // Fallback
+        return date('d-m-Y H:i:s', strtotime($dbTimestamp));
+    }
+}
+
 // Check if export is requested
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     // Get filter parameters for export
@@ -93,8 +119,8 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
             $code['customer_phone'] ?? '',
             $code['customer_email'] ?? '',
             $code['customer_address'] ?? '',
-            $code['used_at'] ? date('d-m-Y H:i:s', strtotime($code['used_at'])) : '',
-            date('d-m-Y H:i:s', strtotime($code['created_at']))
+            $code['used_at'] ? formatIST($code['used_at']) : '',
+            formatIST($code['created_at'])
         ];
         fputcsv($output, $row);
     }
@@ -116,6 +142,7 @@ try {
     $total_codes = $pdo->query("SELECT COUNT(*) FROM codes")->fetchColumn();
     $used_codes = $pdo->query("SELECT COUNT(*) FROM codes WHERE is_used = 1")->fetchColumn();
     $unused_codes = $pdo->query("SELECT COUNT(*) FROM codes WHERE is_used = 0")->fetchColumn();
+    // Get recent redeemed count (last 7 days in IST)
     $recent_redeemed = $pdo->query("SELECT COUNT(*) FROM codes WHERE is_used = 1 AND used_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)")->fetchColumn();
 } catch (PDOException $e) {
     $total_codes = $used_codes = $unused_codes = $recent_redeemed = 0;
@@ -437,13 +464,13 @@ $page_title = "Reward Codes";
 									</td>
 									<td>
 										<?php if ($code['used_at']): ?>
-											<p><?= date('d-m-Y H:i', strtotime($code['used_at'])) ?></p>
+											<p><?= formatIST($code['used_at']) ?> <small style="color: var(--dark-grey); font-size: 0.85rem;">IST</small></p>
 										<?php else: ?>
 											<p style="color: var(--dark-grey);">—</p>
 										<?php endif; ?>
 									</td>
 									<td>
-										<p><?= date('d-m-Y', strtotime($code['created_at'])) ?></p>
+										<p><?= formatIST($code['created_at']) ?> <small style="color: var(--dark-grey); font-size: 0.85rem;">IST</small></p>
 									</td>
 									<td>
 										<div style="display: flex; gap: 0.5rem; align-items: center;">

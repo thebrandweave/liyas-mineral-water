@@ -43,6 +43,12 @@ try {
     $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
     $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
     
+    // Set timezone to Indian Standard Time (IST) for PHP
+    date_default_timezone_set('Asia/Kolkata');
+    
+    // Set MySQL timezone to IST as well
+    $pdo->exec("SET time_zone = '+05:30'");
+    
     // Verify connection by running a simple query
     $pdo->query("SELECT 1");
 } catch (PDOException $e) {
