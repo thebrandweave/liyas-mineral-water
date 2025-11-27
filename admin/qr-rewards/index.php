@@ -137,9 +137,48 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : (isset($_POST['page']) ? (in
 $per_page = 50;
 $offset = ($page - 1) * $per_page;
 
-// Handle bulk delete action
+// Handle single code delete action
 $delete_message = '';
 $delete_type = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_code'])) {
+    $code_id = isset($_POST['code_id']) ? (int)$_POST['code_id'] : 0;
+    
+    if ($code_id > 0) {
+        try {
+            $deleteStmt = $pdo->prepare("DELETE FROM codes WHERE id = ?");
+            $deleteStmt->execute([$code_id]);
+            
+            $deleted_count = $deleteStmt->rowCount();
+            if ($deleted_count > 0) {
+                $delete_message = "Successfully deleted reward code!";
+                $delete_type = 'success';
+            } else {
+                $delete_message = "Code not found or already deleted.";
+                $delete_type = 'error';
+            }
+            
+            // Redirect to preserve filter and search after deletion
+            $redirect_url = "index.php?filter=" . urlencode($filter);
+            if (!empty($search)) {
+                $redirect_url .= "&search=" . urlencode($search);
+            }
+            if ($page > 1) {
+                $redirect_url .= "&page=" . $page;
+            }
+            header("Location: $redirect_url&deleted=1");
+            exit;
+        } catch (PDOException $e) {
+            $delete_message = "Error deleting code: " . $e->getMessage();
+            $delete_type = 'error';
+            error_log("Single delete error: " . $e->getMessage());
+        }
+    } else {
+        $delete_message = 'Invalid code ID.';
+        $delete_type = 'error';
+    }
+}
+
+// Handle bulk delete action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bulk_delete'])) {
     // Check if deleting all matching filter (for select all functionality)
     $delete_all_matching = isset($_POST['delete_all_matching']) && $_POST['delete_all_matching'] === '1';
@@ -838,25 +877,30 @@ $page_title = "Reward Codes";
 									</td>
 									<td>
 										<div style="display: flex; gap: 0.5rem; align-items: center;">
-											<a href="<?= htmlspecialchars($redeem_url) ?>" target="_blank" title="View Redeem Page" style="color: var(--blue); text-decoration: none; padding: 0.25rem 0.5rem;">
-												<i class='bx bx-link-external' ></i>
-											</a>
-											<button 
-												onclick="copyToClipboard('<?= htmlspecialchars($code['reward_code'], ENT_QUOTES) ?>')" 
-												title="Copy Code"
-												style="background: none; border: none; color: var(--blue); cursor: pointer; padding: 0.25rem 0.5rem; font-size: 1.1rem;"
-											>
-												<i class='bx bx-copy' ></i>
-											</button>
 											<?php if ($code['customer_name']): ?>
 											<button 
-												onclick="showCustomerDetails('<?= htmlspecialchars($code['customer_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_email'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_address'] ?? '', ENT_QUOTES) ?>')" 
+												type="button"
+												onclick="event.preventDefault(); event.stopPropagation(); showCustomerDetails('<?= htmlspecialchars($code['customer_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_email'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_address'] ?? '', ENT_QUOTES) ?>')" 
 												title="View Customer Details"
 												style="background: none; border: none; color: var(--blue); cursor: pointer; padding: 0.25rem 0.5rem; font-size: 1.1rem;"
 											>
 												<i class='bx bx-user' ></i>
 											</button>
 											<?php endif; ?>
+											<form method="POST" action="" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this reward code? This action cannot be undone.');">
+												<input type="hidden" name="delete_code" value="1">
+												<input type="hidden" name="code_id" value="<?= $code['id'] ?>">
+												<input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
+												<input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
+												<input type="hidden" name="page" value="<?= $page ?>">
+												<button 
+													type="submit"
+													title="Delete Code"
+													style="background: none; border: none; color: #dc2626; cursor: pointer; padding: 0.25rem 0.5rem; font-size: 1.1rem;"
+												>
+													<i class='bx bx-trash' ></i>
+												</button>
+											</form>
 										</div>
 									</td>
 								</tr>
