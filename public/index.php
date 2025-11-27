@@ -67,6 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reward_code'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redeem Reward Code - LIYAS Mineral Water</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="apple-touch-icon" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="16x16" href="../assets/images/logo/logo-bg.jpg">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
         * {

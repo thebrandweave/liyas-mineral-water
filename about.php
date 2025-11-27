@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About | Company</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo/logo-bg.jpg">
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/logo/logo-bg.jpg">
+  <link rel="apple-touch-icon" href="assets/images/logo/logo-bg.jpg">
+  <link rel="icon" type="image/jpeg" sizes="32x32" href="assets/images/logo/logo-bg.jpg">
+  <link rel="icon" type="image/jpeg" sizes="16x16" href="assets/images/logo/logo-bg.jpg">
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>

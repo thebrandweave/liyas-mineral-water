@@ -169,6 +169,14 @@ if (isset($_GET['added'])) {
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="../assets/css/admin-style.css">
+	
+	<!-- Favicon -->
+	<link rel="icon" type="image/jpeg" href="../../assets/images/logo/logo-bg.jpg">
+	<link rel="shortcut icon" type="image/jpeg" href="../../assets/images/logo/logo-bg.jpg">
+	<link rel="apple-touch-icon" href="../../assets/images/logo/logo-bg.jpg">
+	<link rel="icon" type="image/jpeg" sizes="32x32" href="../../assets/images/logo/logo-bg.jpg">
+	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
+	
 	<title>Edit Product - Admin Panel</title>
 	<style>
 		.form-container {

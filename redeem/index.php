@@ -182,6 +182,13 @@ $message_classes = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redeem Your Reward - LIYAS International</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="apple-touch-icon" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="16x16" href="../assets/images/logo/logo-bg.jpg">
+
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 

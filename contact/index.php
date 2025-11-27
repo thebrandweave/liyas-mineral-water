@@ -7,7 +7,12 @@
     <meta name="description" content="LIYAS Mineral Water - Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
     <meta name="keywords" content="mineral water, premium water, healthy water, LIYAS, pure water">
     
-    <link rel="icon" type="image/x-icon" href="assets/images/logo/logo.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="apple-touch-icon" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="16x16" href="../assets/images/logo/logo-bg.jpg">
     
     <link rel="stylesheet" href="../assets/css/style.css">
     

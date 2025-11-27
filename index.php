@@ -6,6 +6,13 @@
     <title>LIYAS Mineral Water - Coming Soon</title>
     <meta name="description" content="Our new website is coming soon! Stay tuned for the launch of LIYAS Mineral Water.">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="assets/images/logo/logo-bg.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="assets/images/logo/logo-bg.jpg">
+    <link rel="apple-touch-icon" href="assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="16x16" href="assets/images/logo/logo-bg.jpg">
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
