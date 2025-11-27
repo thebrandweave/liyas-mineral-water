@@ -565,7 +565,7 @@ $message_classes = [
                             Follow our Instagram page to stay updated with offers and reward draws.
                             <span class="font-semibold">Only followers are eligible for the rewards draw!</span>
                         </p>
-                        <div class="flex justify-center sm:justify-start">
+                        <div class="flex justify-center sm:justify-center">
                             <a
                                 href="https://instagram.com/liyasinternational"
                                 target="_blank"
