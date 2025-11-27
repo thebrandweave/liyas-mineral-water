@@ -555,6 +555,46 @@ $page_title = "Reward Codes";
 			color: #f59e0b;
 		}
 
+		.modal-body .customer-icon {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background: #dbeafe;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto 1.5rem;
+			font-size: 2rem;
+		}
+
+		.modal-body .customer-icon i {
+			color: var(--blue);
+		}
+
+		.customer-details-item {
+			padding: 0.75rem 0;
+			border-bottom: 1px solid var(--grey);
+		}
+
+		.customer-details-item:last-child {
+			border-bottom: none;
+		}
+
+		.customer-details-label {
+			font-weight: 600;
+			color: var(--dark-grey);
+			font-size: 0.875rem;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			margin-bottom: 0.25rem;
+		}
+
+		.customer-details-value {
+			color: var(--dark);
+			font-size: 1rem;
+			word-break: break-word;
+		}
+
 		.modal-body p {
 			color: var(--dark);
 			font-size: 1rem;
@@ -938,7 +978,7 @@ $page_title = "Reward Codes";
 	</section>
 	<!-- CONTENT -->
 
-	<!-- Custom Modal Dialog -->
+	<!-- Custom Modal Dialog for Delete -->
 	<div id="deleteModal" class="modal-overlay">
 		<div class="modal-dialog">
 			<div class="modal-header">
@@ -972,6 +1012,34 @@ $page_title = "Reward Codes";
 			</div>
 		</div>
 	</div>
+
+	<!-- Customer Details Modal -->
+	<div id="customerDetailsModal" class="modal-overlay">
+		<div class="modal-dialog">
+			<div class="modal-header">
+				<h3>
+					<i class='bx bx-user' style="color: var(--blue);"></i>
+					Customer Details
+				</h3>
+				<button type="button" class="close-btn" onclick="closeCustomerDetailsModal()">
+					<i class='bx bx-x' ></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="customer-icon">
+					<i class='bx bx-user' ></i>
+				</div>
+				<div id="customerDetailsContent" style="text-align: left;">
+					<!-- Customer details will be inserted here -->
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="modal-btn modal-btn-cancel" onclick="closeCustomerDetailsModal()">
+					<i class='bx bx-x' ></i> Close
+				</button>
+			</div>
+		</div>
+	</div>
 	
 	<script src="../assets/js/admin-script.js"></script>
 	<script>
@@ -998,14 +1066,51 @@ $page_title = "Reward Codes";
 	}
 
 	function showCustomerDetails(name, phone, email, address) {
-		let details = `Customer Details:\n\nName: ${name}\nPhone: ${phone}`;
+		const modal = document.getElementById('customerDetailsModal');
+		const content = document.getElementById('customerDetailsContent');
+		
+		// Build customer details HTML
+		let detailsHTML = '<div class="customer-details-item">';
+		detailsHTML += '<div class="customer-details-label">Name</div>';
+		detailsHTML += '<div class="customer-details-value">' + escapeHtml(name) + '</div>';
+		detailsHTML += '</div>';
+		
+		detailsHTML += '<div class="customer-details-item">';
+		detailsHTML += '<div class="customer-details-label">Phone</div>';
+		detailsHTML += '<div class="customer-details-value">' + escapeHtml(phone) + '</div>';
+		detailsHTML += '</div>';
+		
 		if (email) {
-			details += `\nEmail: ${email}`;
+			detailsHTML += '<div class="customer-details-item">';
+			detailsHTML += '<div class="customer-details-label">Email</div>';
+			detailsHTML += '<div class="customer-details-value">' + escapeHtml(email) + '</div>';
+			detailsHTML += '</div>';
 		}
+		
 		if (address) {
-			details += `\n\nAddress:\n${address}`;
+			detailsHTML += '<div class="customer-details-item">';
+			detailsHTML += '<div class="customer-details-label">Address</div>';
+			detailsHTML += '<div class="customer-details-value">' + escapeHtml(address) + '</div>';
+			detailsHTML += '</div>';
 		}
-		alert(details);
+		
+		content.innerHTML = detailsHTML;
+		
+		// Show modal
+		modal.classList.add('active');
+		document.body.classList.add('modal-active');
+	}
+
+	function closeCustomerDetailsModal() {
+		const modal = document.getElementById('customerDetailsModal');
+		modal.classList.remove('active');
+		document.body.classList.remove('modal-active');
+	}
+
+	function escapeHtml(text) {
+		const div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
 	}
 
 	// Export button functionality
@@ -1279,15 +1384,30 @@ $page_title = "Reward Codes";
 	// Close modal on Escape key
 	document.addEventListener('keydown', function(e) {
 		if (e.key === 'Escape') {
-			const modal = document.getElementById('deleteModal');
-			if (modal.classList.contains('active')) {
+			const deleteModal = document.getElementById('deleteModal');
+			const customerModal = document.getElementById('customerDetailsModal');
+			
+			if (deleteModal && deleteModal.classList.contains('active')) {
 				closeDeleteModal();
+			} else if (customerModal && customerModal.classList.contains('active')) {
+				closeCustomerDetailsModal();
 			}
 		}
 	});
+
+	// Close customer details modal when clicking outside
+	const customerModalOverlay = document.getElementById('customerDetailsModal');
+	if (customerModalOverlay) {
+		customerModalOverlay.addEventListener('click', function(e) {
+			if (e.target === customerModalOverlay) {
+				closeCustomerDetailsModal();
+			}
+		});
+	}
 
 	// Initialize UI on page load
 	updateSelectionUI();
 	</script>
 </body>
+</html>
 </html>
