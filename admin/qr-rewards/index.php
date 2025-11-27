@@ -7,13 +7,9 @@ date_default_timezone_set('Asia/Kolkata');
 
 /**
  * Convert database timestamp to IST format
- * @param string $dbTimestamp Database timestamp
- * @return string Formatted date in IST
  */
 function formatIST($dbTimestamp) {
-	if (empty($dbTimestamp)) {
-		return '';
-	}
+	if (empty($dbTimestamp)) return '';
 	try {
 		$dt = new DateTime($dbTimestamp);
 		$dt->setTimezone(new DateTimeZone('Asia/Kolkata'));
@@ -23,11 +19,14 @@ function formatIST($dbTimestamp) {
 	}
 }
 
-// CSV EXPORT (respects filter + search)
-if (isset($_GET['export']) && $_GET['export'] === 'csv') {
-	$filter = $_GET['filter'] ?? 'all';
-	$search = $_GET['search'] ?? '';
-
+/**
+ * Build WHERE clause + params based on filter/search
+ * @param string $filter
+ * @param string $search
+ * @param array  $params (by ref)
+ * @return string WHERE clause (or empty string)
+ */
+function buildFilterWhereClause($filter, $search, &$params) {
 	$where_conditions = [];
 	$params = [];
 
@@ -42,8 +41,50 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 		$params[':search'] = "%$search%";
 	}
 
-	$where_clause = !empty($where_conditions) ? "WHERE " . implode(" AND ", $where_conditions) : "";
+	return !empty($where_conditions)
+		? "WHERE " . implode(" AND ", $where_conditions)
+		: "";
+}
 
+/**
+ * Bind params to prepared statement
+ */
+function bindFilterParams(PDOStatement $stmt, array $params) {
+	foreach ($params as $key => $value) {
+		$stmt->bindValue($key, $value);
+	}
+}
+
+/**
+ * Build redirect URL preserving filter/search/page and deleted count
+ */
+function buildRedirectUrl($filter, $search, $page = 1, $deletedCount = null) {
+	$redirect_url = "index.php?filter=" . urlencode($filter);
+	if (!empty($search)) {
+		$redirect_url .= "&search=" . urlencode($search);
+	}
+	if ($page > 1) {
+		$redirect_url .= "&page=" . (int)$page;
+	}
+	if ($deletedCount !== null) {
+		$redirect_url .= "&deleted=" . (int)$deletedCount;
+	}
+	return $redirect_url;
+}
+
+// Read filter/search/page from request
+$filter = $_GET['filter'] ?? $_POST['filter'] ?? 'all'; // all, used, unused
+$search = $_GET['search'] ?? $_POST['search'] ?? '';
+$page   = isset($_GET['page']) ? (int)$_GET['page'] : (isset($_POST['page']) ? (int)$_POST['page'] : 1);
+$per_page = 50;
+$offset   = ($page - 1) * $per_page;
+
+// Build where + params once and reuse everywhere
+$params = [];
+$where_clause = buildFilterWhereClause($filter, $search, $params);
+
+// CSV EXPORT (uses same filter/search)
+if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 	try {
 		$query = "SELECT id, reward_code, is_used, used_at, created_at,
 						 customer_name, customer_phone, customer_email, customer_address
@@ -53,9 +94,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 
 		$stmt = $pdo->prepare($query);
 		if (!empty($params)) {
-			foreach ($params as $key => $value) {
-				$stmt->bindValue($key, $value);
-			}
+			bindFilterParams($stmt, $params);
 		}
 		$stmt->execute();
 		$codes = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -110,30 +149,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 	exit;
 }
 
-// Get filter/search/page
-$filter = $_GET['filter'] ?? $_POST['filter'] ?? 'all'; // all, used, unused
-$search = $_GET['search'] ?? $_POST['search'] ?? '';
-$page   = isset($_GET['page']) ? (int)$_GET['page'] : (isset($_POST['page']) ? (int)$_POST['page'] : 1);
-$per_page = 50;
-$offset   = ($page - 1) * $per_page;
-
-// Build WHERE clause (used by listing + delete-all)
-$where_conditions = [];
-$params = [];
-
-if ($filter === 'used') {
-	$where_conditions[] = "is_used = 1";
-} elseif ($filter === 'unused') {
-	$where_conditions[] = "is_used = 0";
-}
-
-if (!empty($search)) {
-	$where_conditions[] = "reward_code LIKE :search";
-	$params[':search'] = "%$search%";
-}
-
-$where_clause = !empty($where_conditions) ? "WHERE " . implode(" AND ", $where_conditions) : "";
-
 // Handle delete actions
 $delete_message = '';
 $delete_type = '';
@@ -149,15 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$deleteStmt->execute([$code_id]);
 				$deleted_count = $deleteStmt->rowCount();
 
-				$redirect_url = "index.php?filter=" . urlencode($filter);
-				if (!empty($search)) {
-					$redirect_url .= "&search=" . urlencode($search);
-				}
-				if ($page > 1) {
-					$redirect_url .= "&page=" . $page;
-				}
-				$redirect_url .= "&deleted=" . (int)$deleted_count;
-				header("Location: $redirect_url");
+				header("Location: " . buildRedirectUrl($filter, $search, $page, $deleted_count));
 				exit;
 			} catch (PDOException $e) {
 				$delete_message = "Error deleting code: " . $e->getMessage();
@@ -169,10 +176,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$delete_type = 'error';
 		}
 	}
-	// BULK DELETE (only selected IDs on current page)
+	// BULK DELETE (selected IDs on current page)
 	elseif (isset($_POST['bulk_delete'])) {
 		$selected_ids = isset($_POST['selected_ids']) && is_array($_POST['selected_ids']) ? $_POST['selected_ids'] : [];
-		$ids = array_filter(array_map('intval', $selected_ids), fn($id) => $id > 0);
+		$ids = array();
+		foreach ($selected_ids as $id) {
+			$id = (int)$id;
+			if ($id > 0) $ids[] = $id;
+		}
 
 		if (!empty($ids)) {
 			try {
@@ -182,15 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$stmt->execute($ids);
 				$deleted_count = $stmt->rowCount();
 
-				$redirect_url = "index.php?filter=" . urlencode($filter);
-				if (!empty($search)) {
-					$redirect_url .= "&search=" . urlencode($search);
-				}
-				if ($page > 1) {
-					$redirect_url .= "&page=" . $page;
-				}
-				$redirect_url .= "&deleted=" . (int)$deleted_count;
-				header("Location: $redirect_url");
+				header("Location: " . buildRedirectUrl($filter, $search, $page, $deleted_count));
 				exit;
 			} catch (PDOException $e) {
 				$delete_message = "Error deleting selected codes: " . $e->getMessage();
@@ -205,23 +208,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	// DELETE ALL FILTERED (ALL PAGES)
 	elseif (isset($_POST['delete_all_filtered'])) {
 		try {
-			// Delete according to current filter/search
 			$sql = "DELETE FROM codes " . $where_clause;
 			$stmt = $pdo->prepare($sql);
 			if (!empty($params)) {
-				foreach ($params as $key => $value) {
-					$stmt->bindValue($key, $value);
-				}
+				bindFilterParams($stmt, $params);
 			}
 			$stmt->execute();
 			$deleted_count = $stmt->rowCount();
 
-			$redirect_url = "index.php?filter=" . urlencode($filter);
-			if (!empty($search)) {
-				$redirect_url .= "&search=" . urlencode($search);
-			}
-			$redirect_url .= "&deleted=" . (int)$deleted_count;
-			header("Location: $redirect_url");
+			header("Location: " . buildRedirectUrl($filter, $search, 1, $deleted_count));
 			exit;
 		} catch (PDOException $e) {
 			$delete_message = "Error deleting filtered codes: " . $e->getMessage();
@@ -263,9 +258,7 @@ try {
 	$count_query = "SELECT COUNT(*) FROM codes $where_clause";
 	$count_stmt = $pdo->prepare($count_query);
 	if (!empty($params)) {
-		foreach ($params as $key => $value) {
-			$count_stmt->bindValue($key, $value);
-		}
+		bindFilterParams($count_stmt, $params);
 	}
 	$count_stmt->execute();
 	$total_records = (int)$count_stmt->fetchColumn();
@@ -286,9 +279,7 @@ try {
 			  LIMIT :limit OFFSET :offset";
 	$stmt = $pdo->prepare($query);
 	if (!empty($params)) {
-		foreach ($params as $key => $value) {
-			$stmt->bindValue($key, $value);
-		}
+		bindFilterParams($stmt, $params);
 	}
 	$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
 	$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -324,7 +315,6 @@ $page_title   = "Reward Codes";
 	<link rel="stylesheet" href="../assets/css/admin-style.css">
 	<title>Reward Codes - Admin Panel</title>
 	<style>
-		/* Button animation (existing) */
 		.button {
 			width: 50px;
 			height: 50px;
@@ -375,7 +365,6 @@ $page_title   = "Reward Codes";
 		.action-btn:hover { background-color: #22c55e; }
 		.action-btn.add::before { content: "Generate Codes"; }
 
-		/* Modal overlay (blur background) */
 		.modal-overlay {
 			display: none;
 			position: fixed;
@@ -391,9 +380,7 @@ $page_title   = "Reward Codes";
 			justify-content: center;
 			animation: fadeIn 0.2s ease-out;
 		}
-		.modal-overlay.active {
-			display: flex;
-		}
+		.modal-overlay.active { display: flex; }
 		@keyframes fadeIn {
 			from { opacity: 0; }
 			to   { opacity: 1; }
@@ -514,7 +501,6 @@ $page_title   = "Reward Codes";
 			transition: filter 0.2s;
 		}
 
-		/* Alert styles for delete messages */
 		.alert {
 			margin: 1rem 0;
 			padding: 0.75rem 1rem;
@@ -540,7 +526,6 @@ $page_title   = "Reward Codes";
 	<?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
 
 	<section id="content">
-		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu bx-sm'></i>
 			<a href="#" class="nav-link"><?= $page_title ?></a>
@@ -583,7 +568,6 @@ $page_title   = "Reward Codes";
 				</div>
 			<?php endif; ?>
 
-			<!-- Stats -->
 			<ul class="box-info">
 				<li>
 					<i class='bx bxs-ticket'></i>
@@ -615,7 +599,6 @@ $page_title   = "Reward Codes";
 				</li>
 			</ul>
 
-			<!-- Filters -->
 			<div class="table-data">
 				<div class="order">
 					<div class="head">
@@ -648,7 +631,6 @@ $page_title   = "Reward Codes";
 				</div>
 			</div>
 
-			<!-- Reward Codes Table -->
 			<div class="table-data">
 				<div class="order">
 					<div class="head" style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem;">
@@ -682,9 +664,7 @@ $page_title   = "Reward Codes";
 						<table>
 							<thead>
 								<tr>
-									<th>
-										<input type="checkbox" id="selectAll" style="cursor:pointer;">
-									</th>
+									<th><input type="checkbox" id="selectAll" style="cursor:pointer;"></th>
 									<th>ID</th>
 									<th>Reward Code</th>
 									<th>Status</th>
@@ -773,7 +753,6 @@ $page_title   = "Reward Codes";
 							</tbody>
 						</table>
 
-						<!-- Pagination -->
 						<?php if ($total_pages > 1): ?>
 						<div style="padding: 1.5rem; border-top: 1px solid var(--grey); display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
 							<?php if ($page > 1): ?>
@@ -871,7 +850,7 @@ $page_title   = "Reward Codes";
 					notification.querySelector('.num').textContent = originalNum;
 				}, 2000);
 			}
-		}, function(err) {
+		}, function() {
 			const textarea = document.createElement('textarea');
 			textarea.value = text;
 			document.body.appendChild(textarea);
@@ -927,7 +906,6 @@ $page_title   = "Reward Codes";
 		return div.innerHTML;
 	}
 
-	// Export button
 	document.getElementById('exportBtn').addEventListener('click', function(e) {
 		e.preventDefault();
 		const filterSelect = document.getElementById('filterSelect');
@@ -941,7 +919,6 @@ $page_title   = "Reward Codes";
 		window.location.href = exportUrl;
 	});
 
-	// Close customer modal on background click
 	const customerModalOverlay = document.getElementById('customerDetailsModal');
 	if (customerModalOverlay) {
 		customerModalOverlay.addEventListener('click', function(e) {
@@ -949,13 +926,6 @@ $page_title   = "Reward Codes";
 				closeCustomerDetailsModal();
 			}
 		});
-	}
-
-	// SELECT ALL + DESELECT ALL
-	function toggleSelectAll(source) {
-		const checkboxes = document.querySelectorAll('.row-checkbox');
-		checkboxes.forEach(cb => { cb.checked = source.checked; });
-		updateSelectAllState();
 	}
 
 	function updateSelectAllState() {
@@ -975,7 +945,9 @@ $page_title   = "Reward Codes";
 	const selectAllCheckbox = document.getElementById('selectAll');
 	if (selectAllCheckbox) {
 		selectAllCheckbox.addEventListener('change', function() {
-			toggleSelectAll(this);
+			const checkboxes = document.querySelectorAll('.row-checkbox');
+			checkboxes.forEach(cb => { cb.checked = this.checked; });
+			updateSelectAllState();
 		});
 	}
 
@@ -998,7 +970,6 @@ $page_title   = "Reward Codes";
 		});
 	}
 
-	// BULK DELETE (with centered modal + blur)
 	let bulkDeleteMode = null; // "all" or "selected"
 	let bulkSelectedIds = [];
 
@@ -1021,21 +992,11 @@ $page_title   = "Reward Codes";
 		bulkSelectedIds = [];
 	}
 
-	if (bulkCancelBtn) {
-		bulkCancelBtn.addEventListener('click', function() {
-			closeBulkDeleteModal();
-		});
-	}
-	if (bulkCloseIcon) {
-		bulkCloseIcon.addEventListener('click', function() {
-			closeBulkDeleteModal();
-		});
-	}
+	if (bulkCancelBtn) bulkCancelBtn.addEventListener('click', closeBulkDeleteModal);
+	if (bulkCloseIcon) bulkCloseIcon.addEventListener('click', closeBulkDeleteModal);
 	if (bulkModal) {
 		bulkModal.addEventListener('click', function(e) {
-			if (e.target === bulkModal) {
-				closeBulkDeleteModal();
-			}
+			if (e.target === bulkModal) closeBulkDeleteModal();
 		});
 	}
 
@@ -1051,7 +1012,6 @@ $page_title   = "Reward Codes";
 				return;
 			}
 
-			// If header "Select All" is checked, treat this as "delete all filtered"
 			if (selectAll && selectAll.checked && totalFiltered > 0) {
 				bulkDeleteMode = 'all';
 				bulkSelectedIds = [];
@@ -1071,12 +1031,10 @@ $page_title   = "Reward Codes";
 				return;
 			}
 
-			// Build a form dynamically and submit
 			const form = document.createElement('form');
 			form.method = 'POST';
 			form.action = '';
 
-			// Preserve filter/search/page
 			const filterInput = document.createElement('input');
 			filterInput.type = 'hidden';
 			filterInput.name = 'filter';
