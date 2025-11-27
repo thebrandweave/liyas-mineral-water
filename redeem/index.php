@@ -557,22 +557,24 @@ $message_classes = [
 
                     <div class="relative rounded-3xl bg-gradient-to-br from-[#f09433] via-[#dc2743] to-[#bc1888] px-5 py-5 text-white shadow-lg overflow-hidden">
                         <div class="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-xl"></div>
-                        <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold">
+                        <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold justify-center sm:justify-start">
                             <i class="fab fa-instagram"></i>
                             Follow Us on Instagram
                         </h3>
-                        <p class="mb-4 text-sm leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed text-center sm:text-left">
                             Follow our Instagram page to stay updated with offers and reward draws.
                             <span class="font-semibold">Only followers are eligible for the rewards draw!</span>
                         </p>
-                        <a
-                            href="https://instagram.com/liyasinternational"
-                            target="_blank"
-                            class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#bc1888] shadow-md transition hover:translate-y-[1px] hover:shadow-lg"
-                        >
-                            <i class="fab fa-instagram"></i>
-                            Follow @liyasinternational
-                        </a>
+                        <div class="flex justify-center sm:justify-start">
+                            <a
+                                href="https://instagram.com/liyasinternational"
+                                target="_blank"
+                                class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#bc1888] shadow-md transition hover:translate-y-[1px] hover:shadow-lg"
+                            >
+                                <i class="fab fa-instagram"></i>
+                                Follow @liyasinternational
+                            </a>
+                        </div>
                     </div>
 
                     <div class="relative rounded-2xl bg-slate-50 px-4 py-3 text-xs text-slate-600 space-y-1.5">
