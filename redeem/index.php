@@ -557,7 +557,7 @@ $message_classes = [
 
                     <div class="relative rounded-3xl bg-gradient-to-br from-[#f09433] via-[#dc2743] to-[#bc1888] px-5 py-5 text-white shadow-lg overflow-hidden">
                         <div class="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/10 blur-xl"></div>
-                        <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold justify-center sm:justify-start">
+                        <h3 class="mb-2 flex items-center gap-2 text-lg font-semibold justify-center sm:justify-center">
                             <i class="fab fa-instagram"></i>
                             Follow Us on Instagram
                         </h3>
