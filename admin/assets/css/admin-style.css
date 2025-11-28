@@ -272,6 +272,11 @@ body {
 	object-fit: cover;
 	border-radius: 50%;
 }
+#content nav .profile i {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 #content nav .switch-mode {
 	display: block;
 	min-width: 50px;
@@ -501,62 +506,403 @@ body {
 /* MAIN */
 /* CONTENT */
 
+/* ============================================
+   MOBILE RESPONSIVENESS
+   ============================================ */
+
+/* Tablet and below (768px) */
 @media screen and (max-width: 768px) {
 	#sidebar {
-		width: 200px;
+		width: 280px;
+		transform: translateX(-100%);
+		z-index: 3000;
+	}
+	
+	#sidebar.show {
+		transform: translateX(0);
+	}
+	
+	#sidebar.hide {
+		width: 280px;
+		transform: translateX(-100%);
 	}
 
 	#content {
-		width: calc(100% - 60px);
-		left: 200px;
+		width: 100%;
+		left: 0;
 	}
-
+	
+	#content nav {
+		padding: 0 16px;
+	}
+	
 	#content nav .nav-link {
 		display: none;
 	}
+	
+	#content nav form {
+		max-width: 200px;
+		margin-right: 8px;
+	}
+	
+	#content main {
+		padding: 24px 16px;
+	}
+	
+	#content main .head-title .left h1 {
+		font-size: 28px;
+	}
+	
+	#content main .box-info {
+		grid-template-columns: repeat(2, 1fr);
+		grid-gap: 16px;
+	}
+	
+	#content main .box-info li {
+		padding: 16px;
+	}
+	
+	#content main .box-info li .bx {
+		width: 60px;
+		height: 60px;
+		font-size: 28px;
+	}
+	
+	#content main .box-info li .text h3 {
+		font-size: 20px;
+	}
+	
+	#content main .table-data {
+		grid-gap: 16px;
+	}
+	
+	#content main .table-data > div {
+		padding: 16px;
+	}
+	
+	#content main .table-data .head h3 {
+		font-size: 20px;
+	}
 }
 
+/* Mobile phones (576px and below) */
 @media screen and (max-width: 576px) {
-	#content nav form .form-input input {
+	/* Sidebar overlay on mobile */
+	#sidebar {
+		width: 280px;
+		box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+	}
+	
+	/* Overlay when sidebar is open */
+	body.sidebar-open::before {
+		content: '';
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 2999;
+		transition: opacity 0.3s ease;
+	}
+	
+	/* Navbar mobile adjustments */
+	#content nav {
+		height: auto;
+		min-height: 56px;
+		padding: 8px 12px;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	
+	#content nav .bx.bx-menu {
+		font-size: 24px;
+		margin-right: 8px;
+	}
+	
+	#content nav .nav-link {
 		display: none;
 	}
-
+	
+	/* Search form mobile behavior */
+	#content nav form {
+		order: 3;
+		width: 100%;
+		max-width: 100%;
+		margin: 8px 0 0 0;
+		display: none;
+	}
+	
+	#content nav form.show {
+		display: block;
+	}
+	
+	#content nav form .form-input {
+		height: 40px;
+	}
+	
+	#content nav form .form-input input {
+		display: none;
+		padding: 0 12px;
+		font-size: 14px;
+	}
+	
 	#content nav form .form-input button {
 		width: auto;
 		height: auto;
+		padding: 8px 12px;
 		background: transparent;
-		border-radius: none;
+		border-radius: 8px;
 		color: var(--dark);
+		font-size: 20px;
 	}
-
+	
+	#content nav form.show .form-input {
+		display: flex;
+	}
+	
 	#content nav form.show .form-input input {
 		display: block;
 		width: 100%;
 	}
+	
 	#content nav form.show .form-input button {
-		width: 36px;
+		width: 40px;
 		height: 100%;
-		border-radius: 0 36px 36px 0;
+		border-radius: 0 8px 8px 0;
 		color: var(--light);
-		background: var(--red);
+		background: var(--blue);
 	}
-
+	
+	/* Hide notification and profile when search is open */
 	#content nav form.show ~ .notification,
-	#content nav form.show ~ .profile {
+	#content nav form.show ~ .profile,
+	#content nav form.show ~ .switch-mode {
 		display: none;
 	}
-
+	
+	/* Notification and profile adjustments */
+	#content nav .notification {
+		font-size: 18px;
+		margin-left: auto;
+	}
+	
+	#content nav .profile {
+		font-size: 18px;
+	}
+	
+	#content nav .switch-mode {
+		min-width: 40px;
+		height: 20px;
+	}
+	
+	/* Main content mobile adjustments */
+	#content main {
+		padding: 16px 12px;
+	}
+	
+	#content main .head-title {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
+	
+	#content main .head-title .left h1 {
+		font-size: 24px;
+		margin-bottom: 8px;
+	}
+	
+	#content main .head-title .left .breadcrumb {
+		font-size: 14px;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+	
+	#content main .head-title .left .breadcrumb li {
+		font-size: 14px;
+	}
+	
+	/* Statistics cards - single column on mobile */
 	#content main .box-info {
 		grid-template-columns: 1fr;
+		grid-gap: 12px;
+		margin-top: 20px;
 	}
-
+	
+	#content main .box-info li {
+		padding: 16px;
+		grid-gap: 16px;
+	}
+	
+	#content main .box-info li .bx {
+		width: 50px;
+		height: 50px;
+		font-size: 24px;
+		min-width: 50px;
+	}
+	
+	#content main .box-info li .text h3 {
+		font-size: 18px;
+	}
+	
+	#content main .box-info li .text p {
+		font-size: 14px;
+	}
+	
+	/* Table data mobile adjustments */
+	#content main .table-data {
+		grid-gap: 12px;
+		margin-top: 16px;
+	}
+	
+	#content main .table-data > div {
+		padding: 12px;
+		border-radius: 12px;
+	}
+	
 	#content main .table-data .head {
-		min-width: 420px;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+		margin-bottom: 16px;
 	}
+	
+	#content main .table-data .head h3 {
+		font-size: 18px;
+		margin-right: 0;
+	}
+	
+	/* Tables - horizontal scroll on mobile */
+	#content main .table-data .order {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
 	#content main .table-data .order table {
-		min-width: 420px;
+		min-width: 600px;
+		font-size: 14px;
 	}
+	
+	#content main .table-data .order table th {
+		padding: 8px 4px;
+		font-size: 12px;
+		white-space: nowrap;
+	}
+	
+	#content main .table-data .order table td {
+		padding: 12px 4px;
+		font-size: 13px;
+	}
+	
+	#content main .table-data .order table tr td:first-child {
+		padding-left: 4px;
+	}
+	
+	/* Status badges mobile */
+	#content main .table-data .order table tr td .status {
+		font-size: 10px;
+		padding: 4px 10px;
+		white-space: nowrap;
+	}
+	
+	/* Todo list mobile */
 	#content main .table-data .todo .todo-list {
-		min-width: 420px;
+		min-width: auto;
+	}
+	
+	#content main .table-data .todo .todo-list li {
+		padding: 12px 16px;
+		font-size: 14px;
+	}
+	
+	/* Buttons and forms mobile */
+	.btn-group,
+	.action-buttons-wrapper,
+	.action-buttons {
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	
+	button, .btn, a.btn {
+		padding: 8px 16px;
+		font-size: 14px;
+		min-height: 40px;
+	}
+	
+	/* Form inputs mobile */
+	.form-group {
+		margin-bottom: 16px;
+	}
+	
+	.form-group label {
+		font-size: 14px;
+		margin-bottom: 6px;
+	}
+	
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		padding: 10px 12px;
+		font-size: 14px;
+	}
+	
+	/* Modal adjustments for mobile */
+	.modal-dialog {
+		width: 95%;
+		max-width: 95%;
+		margin: 10px;
+	}
+	
+	.modal-header {
+		padding: 1rem;
+	}
+	
+	.modal-body {
+		padding: 1rem;
+	}
+	
+	.modal-footer {
+		padding: 1rem;
+		flex-direction: column;
+	}
+	
+	.modal-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+/* Very small phones (360px and below) */
+@media screen and (max-width: 360px) {
+	#content nav {
+		padding: 8px;
+	}
+	
+	#content main {
+		padding: 12px 8px;
+	}
+	
+	#content main .head-title .left h1 {
+		font-size: 20px;
+	}
+	
+	#content main .box-info li {
+		padding: 12px;
+	}
+	
+	#content main .box-info li .bx {
+		width: 40px;
+		height: 40px;
+		font-size: 20px;
+		min-width: 40px;
+	}
+	
+	#content main .box-info li .text h3 {
+		font-size: 16px;
+	}
+	
+	#content main .table-data .order table {
+		min-width: 500px;
+		font-size: 12px;
 	}
 }

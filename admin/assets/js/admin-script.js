@@ -16,7 +16,14 @@ const menuBar = document.querySelector('#content nav .bx.bx-menu');
 const sidebar = document.getElementById('sidebar');
 
 menuBar.addEventListener('click', function () {
-	sidebar.classList.toggle('hide');
+	if (window.innerWidth <= 768) {
+		// Mobile: toggle sidebar with overlay
+		sidebar.classList.toggle('show');
+		document.body.classList.toggle('sidebar-open');
+	} else {
+		// Desktop: toggle hide class
+		sidebar.classList.toggle('hide');
+	}
 });
 
 const searchButton = document.querySelector('#content nav form .form-input button');
@@ -37,17 +44,38 @@ searchButton.addEventListener('click', function (e) {
 
 // Function to handle responsive adjustments on load and resize
 function handleResponsive() {
-    if (window.innerWidth < 768) {
-        sidebar.classList.add('hide');
-    } else {
+    if (window.innerWidth <= 768) {
+        // Mobile: hide sidebar by default, remove hide class
         sidebar.classList.remove('hide');
+        sidebar.classList.remove('show');
+        document.body.classList.remove('sidebar-open');
+    } else {
+        // Desktop: show sidebar, remove mobile classes
+        sidebar.classList.remove('show');
+        document.body.classList.remove('sidebar-open');
+        // Keep hide state if it was set
     }
 
     if (window.innerWidth > 576) {
-        searchButtonIcon.classList.replace('bx-x', 'bx-search');
-        searchForm.classList.remove('show');
+        if (searchButtonIcon) {
+            searchButtonIcon.classList.replace('bx-x', 'bx-search');
+        }
+        if (searchForm) {
+            searchForm.classList.remove('show');
+        }
     }
 }
+
+// Close sidebar when clicking overlay (mobile only)
+document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('show')) {
+        // Check if click is outside sidebar
+        if (!sidebar.contains(e.target) && !menuBar.contains(e.target)) {
+            sidebar.classList.remove('show');
+            document.body.classList.remove('sidebar-open');
+        }
+    }
+});
 
 // Initial call on page load
 handleResponsive();

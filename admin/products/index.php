@@ -445,7 +445,7 @@ try {
 										</p>
 									</td>
 									<td>
-										<p style="font-weight: 600; color: var(--green);">$<?= number_format($product['price'], 2) ?></p>
+										<p style="font-weight: 600; color: var(--green);"><?= number_format($product['price'], 2) ?></p>
 									</td>
 									<td>
 										<p><?= date('d-m-Y', strtotime($product['created_at'])) ?></p>

@@ -220,7 +220,7 @@ $page_title = "Dashboard";
                                             <?php endif; ?>
                                             <p style="display: inline-block; vertical-align: middle; margin: 0;"><?= htmlspecialchars($product['name']) ?></p>
                                         </td>
-                                        <td>$<?= number_format($product['price'], 2) ?></td>
+                                        <td><?= number_format($product['price'], 2) ?></td>
                                         <td><?= date('d M, Y', strtotime($product['created_at'])) ?></td>
                                         <td>
                                             <a href="products/edit.php?id=<?= $product['product_id'] ?>" style="color: #3b82f6; text-decoration: none;">
