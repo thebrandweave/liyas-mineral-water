@@ -542,7 +542,7 @@ $page_title   = "Reward Codes";
 				<span class="num"><?= $recent_redeemed ?></span>
 			</a>
 			<a href="#" class="profile">
-				<img src="https://i.pravatar.cc/36?u=<?= urlencode($admin_name) ?>" alt="Profile">
+				<i class='bx bx-user-circle' style="font-size: 2rem; color: var(--dark-grey);"></i>
 			</a>
 		</nav>
 

@@ -115,7 +115,7 @@ $page_title = "Dashboard";
 				<span class="num">8</span>
 			</a>
 			<a href="#" class="profile">
-				<img src="https://i.pravatar.cc/36?u=<?= urlencode($admin_name) ?>" alt="Profile">
+				<i class='bx bx-user-circle' style="font-size: 2rem; color: var(--dark-grey);"></i>
 			</a>
 		</nav>
 		<!-- NAVBAR -->
