@@ -26,7 +26,7 @@ try {
     $total_orders = $pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
 
     // Fetch recently added products
-    $recent_products_stmt = $pdo->query("SELECT product_id, name, created_at, price FROM products ORDER BY created_at DESC LIMIT 5");
+    $recent_products_stmt = $pdo->query("SELECT product_id, name, created_at, price, image FROM products ORDER BY created_at DESC LIMIT 5");
     $recent_products = $recent_products_stmt ? $recent_products_stmt->fetchAll(PDO::FETCH_ASSOC) : [];
 } catch (PDOException $e) {
     // If tables don't exist, we'll just show 0s and an empty list.
@@ -213,8 +213,12 @@ $page_title = "Dashboard";
                                 <?php foreach ($recent_products as $product): ?>
                                     <tr>
                                         <td>
-                                            <img src="https://i.pravatar.cc/36?u=<?= urlencode($product['name']) ?>">
-                                            <p><?= htmlspecialchars($product['name']) ?></p>
+                                            <?php if (!empty($product['image'])): ?>
+                                                <img src="../<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 36px; height: 36px; object-fit: cover; border-radius: 6px; margin-right: 0.5rem;">
+                                            <?php else: ?>
+                                                <i class='bx bx-package' style="font-size: 1.5rem; color: var(--dark-grey); margin-right: 0.5rem; vertical-align: middle;"></i>
+                                            <?php endif; ?>
+                                            <p style="display: inline-block; vertical-align: middle; margin: 0;"><?= htmlspecialchars($product['name']) ?></p>
                                         </td>
                                         <td>$<?= number_format($product['price'], 2) ?></td>
                                         <td><?= date('d M, Y', strtotime($product['created_at'])) ?></td>
