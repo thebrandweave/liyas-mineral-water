@@ -60,48 +60,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="icon" type="image/jpeg" sizes="32x32" href="../assets/images/logo/logo-bg.jpg">
 <link rel="icon" type="image/jpeg" sizes="16x16" href="../assets/images/logo/logo-bg.jpg">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="assets/css/new-login.css">
+<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="assets/css/prody-admin.css">
 </head>
 <body>
-<main class="main">
-	<div class="container">
-		<section class="wrapper">
-			<div class="heading">
-				<h1 class="text text-large">Create Account</h1>
-				<p class="text text-normal">Already a user? <span><a href="login.php" class="text text-links">Sign In</a></span>
+<div class="login-container">
+	<div class="login-card">
+		<div class="login-logo">
+			<div class="login-logo-icon" style="background: transparent; padding: 0;">
+				<img src="../assets/images/logo/logo-bg.jpg" alt="Liyas Logo" style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover;">
+			</div>
+			<h1 class="login-title">Liyas</h1>
+			<p class="login-subtitle">Create Admin Account</p>
+		</div>
+
+		<?php if ($error): ?>
+			<div class="alert alert-error">
+				<?= htmlspecialchars($error) ?>
+			</div>
+		<?php endif; ?>
+		<?php if ($success): ?>
+			<div class="alert alert-success">
+				<?= htmlspecialchars($success) ?>
+			</div>
+		<?php endif; ?>
+
+		<form method="post" class="form-modern">
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input 
+					type="text" 
+					name="username" 
+					id="username" 
+					class="form-input" 
+					placeholder="Enter username" 
+					required 
+					autofocus
+				>
+			</div>
+			<div class="form-group">
+				<label for="email">Email Address</label>
+				<input 
+					type="email" 
+					name="email" 
+					id="email" 
+					class="form-input" 
+					placeholder="Enter your email" 
+					required
+				>
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input 
+					type="password" 
+					name="password" 
+					id="password" 
+					class="form-input" 
+					placeholder="Enter password (min 6 characters)" 
+					required
+					minlength="6"
+				>
+			</div>
+			<div class="form-group">
+				<label for="confirm_password">Confirm Password</label>
+				<input 
+					type="password" 
+					name="confirm_password" 
+					id="confirm_password" 
+					class="form-input" 
+					placeholder="Confirm your password" 
+					required
+					minlength="6"
+				>
+			</div>
+			<div class="form-actions">
+				<button type="submit" name="submit" class="btn btn-primary" style="width: 100%;">
+					<i class='bx bx-user-plus'></i> Sign Up
+				</button>
+			</div>
+			<div style="text-align: center; margin-top: 1rem;">
+				<p style="color: var(--text-secondary); font-size: 14px;">
+					Already a user? <a href="login.php" style="color: var(--blue); text-decoration: none;">Sign In</a>
 				</p>
 			</div>
-
-            <?php if ($error): ?>
-                <div class="alert alert-error" style="margin-top: 1rem;"><?= htmlspecialchars($error) ?></div>
-            <?php endif; ?>
-            <?php if ($success): ?>
-                <div class="alert alert-success" style="margin-top: 1rem;"><?= htmlspecialchars($success) ?></div>
-            <?php endif; ?>
-
-			<form name="signup" class="form" method="post">
-				<div class="input-control">
-					<input type="text" name="username" id="username" class="input-field" placeholder="Username" required autofocus>
-				</div>
-				<div class="input-control">
-					<input type="email" name="email" id="email" class="input-field" placeholder="Email Address" required>
-				</div>
-				<div class="input-control">
-					<input type="password" name="password" id="password" class="input-field" placeholder="Password" required>
-				</div>
-				<div class="input-control">
-					<input type="password" name="confirm_password" id="confirm_password" class="input-field" placeholder="Confirm Password" required>
-				</div>
-				<div class="input-control">
-					<input type="submit" name="submit" class="input-submit" value="Sign Up">
-				</div>
-			</form>
-		</section>
+		</form>
 	</div>
-</main>
+</div>
 </body>
 </html>

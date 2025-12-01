@@ -77,11 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+	<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="../assets/css/admin-style.css">
+	<link rel="stylesheet" href="../assets/css/prody-admin.css">
 	
 	<!-- Favicon -->
 	<link rel="icon" type="image/jpeg" href="../../assets/images/logo/logo-bg.jpg">
@@ -90,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<link rel="icon" type="image/jpeg" sizes="32x32" href="../../assets/images/logo/logo-bg.jpg">
 	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
 	
-	<title>Add Product - Admin Panel</title>
+	<title>Add Product - Liyas Admin</title>
 	<style>
 		.form-container {
 			background: var(--light);
@@ -202,142 +200,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	</style>
 </head>
 <body>
-	<?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
-
-	<section id="content">
-		<nav>
-			<i class='bx bx-menu bx-sm' ></i>
-			<a href="#" class="nav-link"><?= $page_title ?></a>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+	<div class="container">
+		<?php include '../includes/sidebar.php'; ?>
+		
+		<div class="main-content">
+			<div class="header">
+				<div class="breadcrumb">
+					<i class='bx bx-home'></i>
+					<span>Products</span>
+					<span>/</span>
+					<span>Add Product</span>
 				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell bx-tada-hover' ></i>
-				<span class="num">0</span>
-			</a>
-			<a href="#" class="profile">
-				<i class='bx bx-user-circle' style="font-size: 2rem; color: var(--dark-grey);"></i>
-			</a>
-		</nav>
-
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Add Product</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="../index.php">Dashboard</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a href="index.php">Products</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a class="active" href="#">Add Product</a>
-						</li>
-					</ul>
-				</div>
-				<a href="index.php" class="btn-download">
-					<i class='bx bx-arrow-back'></i>
-					<span class="text">Back to Products</span>
-				</a>
-			</div>
-
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Product Information</h3>
-						<i class='bx bxs-shopping-bag-alt' ></i>
-					</div>
-
-					<div class="form-container">
-						<?php if ($error): ?>
-							<div class="alert alert-error">
-								<i class='bx bx-error-circle' ></i> <?= htmlspecialchars($error) ?>
-							</div>
-						<?php endif; ?>
-
-						<?php if ($success): ?>
-							<div class="alert alert-success">
-								<i class='bx bx-check-circle' ></i> <?= htmlspecialchars($success) ?>
-							</div>
-						<?php endif; ?>
-
-						<form method="POST" action="" enctype="multipart/form-data">
-							<div class="form-group">
-								<label for="name">Product Name <span style="color: #dc2626;">*</span></label>
-								<input 
-									type="text" 
-									name="name" 
-									id="name" 
-									value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" 
-									required
-									placeholder="e.g., Liyas Mineral Water 500ml"
-								>
-								<small>Enter a descriptive name for your product</small>
-							</div>
-
-							<div class="form-group">
-								<label for="description">Description</label>
-								<textarea 
-									name="description" 
-									id="description" 
-									placeholder="Describe your product..."
-								><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-								<small>Provide details about the product (optional)</small>
-							</div>
-
-							<div class="form-group">
-								<label for="price">Price <span style="color: #dc2626;">*</span></label>
-								<input 
-									type="number" 
-									name="price" 
-									id="price" 
-									value="<?= htmlspecialchars($_POST['price'] ?? '') ?>" 
-									step="0.01" 
-									min="0.01"
-									required
-									placeholder="0.00"
-								>
-								<small>Enter the price in USD</small>
-							</div>
-
-							<div class="form-group">
-								<label for="image">Product Image</label>
-								<input 
-									type="file" 
-									name="image" 
-									id="image" 
-									accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-								>
-								<small>Upload a product image (JPEG, PNG, GIF, or WebP - Max 5MB)</small>
-								<div id="image-preview" style="margin-top: 1rem; display: none;">
-									<img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--grey);">
-								</div>
-							</div>
-
-							<div class="btn-group">
-								<button type="submit" class="btn btn-primary">
-									<i class='bx bx-save' ></i> Add Product
-								</button>
-								<a href="index.php" class="btn btn-secondary">
-									<i class='bx bx-x' ></i> Cancel
-								</a>
-							</div>
-						</form>
-					</div>
+				<div class="header-actions">
+					<a href="index.php" class="header-btn">
+						<i class='bx bx-arrow-back'></i>
+						<span>Back</span>
+					</a>
 				</div>
 			</div>
-		</main>
-	</section>
+			
+			<div class="content-area">
+				<?php if ($error): ?>
+					<div class="alert alert-error">
+						<?= htmlspecialchars($error) ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if ($success): ?>
+					<div class="alert alert-success">
+						<?= htmlspecialchars($success) ?>
+					</div>
+				<?php endif; ?>
+
+				<div class="form-card">
+					<div class="form-header">
+						<h2>Add New Product</h2>
+					</div>
+
+					<form method="POST" action="" enctype="multipart/form-data" class="form-modern">
+						<div class="form-group">
+							<label for="name">Product Name <span style="color: var(--red);">*</span></label>
+							<input 
+								type="text" 
+								name="name" 
+								id="name" 
+								class="form-input"
+								value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" 
+								required
+								placeholder="e.g., Liyas Mineral Water 500ml"
+							>
+							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter a descriptive name for your product</small>
+						</div>
+
+						<div class="form-group">
+							<label for="description">Description</label>
+							<textarea 
+								name="description" 
+								id="description" 
+								class="form-textarea"
+								placeholder="Describe your product..."
+							><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Provide details about the product (optional)</small>
+						</div>
+
+						<div class="form-group">
+							<label for="price">Price <span style="color: var(--red);">*</span></label>
+							<input 
+								type="number" 
+								name="price" 
+								id="price" 
+								class="form-input"
+								value="<?= htmlspecialchars($_POST['price'] ?? '') ?>" 
+								step="0.01" 
+								min="0.01"
+								required
+								placeholder="0.00"
+							>
+							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter the price</small>
+						</div>
+
+						<div class="form-group">
+							<label for="image">Product Image</label>
+							<input 
+								type="file" 
+								name="image" 
+								id="image" 
+								class="form-input"
+								accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+							>
+							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Upload a product image (JPEG, PNG, GIF, or WebP - Max 5MB)</small>
+							<div id="image-preview" style="margin-top: 1rem; display: none;">
+								<img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--border-light);">
+							</div>
+						</div>
+
+						<div class="form-actions">
+							<button type="submit" class="btn btn-primary">
+								<i class='bx bx-save'></i> Add Product
+							</button>
+							<a href="index.php" class="btn btn-secondary">
+								<i class='bx bx-x'></i> Cancel
+							</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 	
-	<script src="../assets/js/admin-script.js"></script>
 	<script>
 		// Image preview
 		document.getElementById('image').addEventListener('change', function(e) {

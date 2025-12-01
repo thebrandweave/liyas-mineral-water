@@ -308,12 +308,10 @@ $page_title   = "Reward Codes";
 	<link rel="icon" type="image/jpeg" sizes="32x32" href="../../assets/images/logo/logo-bg.jpg">
 	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
 	
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+	<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="../assets/css/admin-style.css">
-	<title>Reward Codes - Admin Panel</title>
+	<link rel="stylesheet" href="../assets/css/prody-admin.css">
+	<title>Reward Codes - Liyas Admin</title>
 	<style>
 		.button {
 			width: 50px;
@@ -523,155 +521,98 @@ $page_title   = "Reward Codes";
 	</style>
 </head>
 <body>
-	<?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
-
-	<section id="content">
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<a href="#" class="nav-link"><?= $page_title ?></a>
-			<form action="index.php" method="GET">
-				<div class="form-input">
-					<input type="search" name="search" placeholder="Search reward codes..." value="<?= htmlspecialchars($search) ?>">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+	<div class="container">
+		<?php include '../includes/sidebar.php'; ?>
+		
+		<div class="main-content">
+			<div class="header">
+				<div class="breadcrumb">
+					<i class='bx bx-home'></i>
+					<span>QR Rewards</span>
 				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell bx-tada-hover'></i>
-				<span class="num"><?= $recent_redeemed ?></span>
-			</a>
-			<a href="#" class="profile">
-				<i class='bx bx-user-circle' style="font-size: 2rem; color: var(--dark-grey);"></i>
-			</a>
-		</nav>
-
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Reward Codes</h1>
-					<ul class="breadcrumb">
-						<li><a href="../index.php">Dashboard</a></li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li><a class="active" href="#">Reward Codes</a></li>
-					</ul>
+				<div class="header-actions">
+					<form action="index.php" method="GET" style="display: flex; align-items: center; gap: 0.5rem;">
+						<input type="search" name="search" placeholder="Search reward codes..." value="<?= htmlspecialchars($search) ?>" style="padding: 0.5rem 0.75rem; border: 1px solid var(--border-light); border-radius: 6px; font-size: 14px; font-family: inherit;">
+						<button type="submit" class="header-btn" style="padding: 0.5rem;">
+							<i class='bx bx-search'></i>
+						</button>
+					</form>
 				</div>
-				<a href="generate.php" class="button action-btn add" title="Generate new reward codes">
-					<svg class="svgIcon" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"></path></svg>
-				</a>
 			</div>
-
-			<?php if (!empty($delete_message)): ?>
-				<div class="alert <?= $delete_type === 'success' ? 'alert-success' : 'alert-error' ?>">
-					<i class='bx <?= $delete_type === 'success' ? 'bx-check-circle' : 'bx-error-circle' ?>'></i>
-					<span><?= htmlspecialchars($delete_message) ?></span>
-				</div>
-			<?php endif; ?>
-
-			<ul class="box-info">
-				<li>
-					<i class='bx bxs-ticket'></i>
-					<span class="text">
-						<h3><?= number_format($total_codes) ?></h3>
-						<p>Total Codes</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-check-circle'></i>
-					<span class="text">
-						<h3><?= number_format($used_codes) ?></h3>
-						<p>Redeemed</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-time'></i>
-					<span class="text">
-						<h3><?= number_format($unused_codes) ?></h3>
-						<p>Available</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-calendar-check'></i>
-					<span class="text">
-						<h3><?= number_format($recent_redeemed) ?></h3>
-						<p>Redeemed (7 days)</p>
-					</span>
-				</li>
-			</ul>
-
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Filter Reward Codes</h3>
-						<i class='bx bx-filter'></i>
+			
+			<div class="content-area">
+				<?php if (!empty($delete_message)): ?>
+					<div class="alert <?= $delete_type === 'success' ? 'alert-success' : 'alert-error' ?>">
+						<?= htmlspecialchars($delete_message) ?>
 					</div>
-					<div style="padding: 1rem;">
-						<form method="GET" action="" id="filterForm" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-							<input type="hidden" name="search" id="searchInput" value="<?= htmlspecialchars($search) ?>">
-							<select name="filter" id="filterSelect" style="padding: 0.5rem 1rem; border: 1px solid var(--grey); border-radius: 8px; background: var(--light); font-family: var(--opensans);">
-								<option value="all"   <?= $filter === 'all'   ? 'selected' : '' ?>>All Codes</option>
-								<option value="used"  <?= $filter === 'used'  ? 'selected' : '' ?>>Redeemed Only</option>
-								<option value="unused"<?= $filter === 'unused'? 'selected' : '' ?>>Available Only</option>
-							</select>
-							<button type="submit" style="padding: 0.5rem 1.5rem; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--opensans);">
-								<i class='bx bx-filter'></i> Apply Filter
-							</button>
-							<button type="button" id="exportBtn"
-							   style="padding: 0.5rem 1.5rem; background: var(--green); color: white; border: none; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--opensans);"
-							   title="Export filtered results to Excel">
-								<i class='bx bx-download'></i> Export Excel
-							</button>
-							<?php if ($filter !== 'all' || !empty($search)): ?>
-								<a href="index.php" style="padding: 0.5rem 1.5rem; background: var(--dark-grey); color: white; text-decoration: none; border-radius: 8px; display: inline-block;">
-									<i class='bx bx-x'></i> Clear
+				<?php endif; ?>
+
+				<div class="table-card" style="margin-bottom: 1.5rem;">
+					<div class="table-header">
+						<div class="table-title">Filter Reward Codes</div>
+						<div class="table-actions">
+							<form method="GET" action="" id="filterForm" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+								<input type="hidden" name="search" id="searchInput" value="<?= htmlspecialchars($search) ?>">
+								<select name="filter" id="filterSelect" class="form-select" style="padding: 0.5rem 0.75rem; border: 1px solid var(--border-light); border-radius: 6px; font-size: 14px; font-family: inherit;">
+									<option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All Codes</option>
+									<option value="used" <?= $filter === 'used' ? 'selected' : '' ?>>Redeemed Only</option>
+									<option value="unused" <?= $filter === 'unused' ? 'selected' : '' ?>>Available Only</option>
+								</select>
+								<button type="submit" class="table-btn">
+									<i class='bx bx-filter'></i> Apply
+								</button>
+								<button type="button" id="exportBtn" class="table-btn" style="background: var(--green); color: white; border-color: var(--green);">
+									<i class='bx bx-download'></i> Export
+								</button>
+								<a href="generate.php" class="table-btn btn-primary">
+									<i class='bx bx-plus'></i> Generate
 								</a>
-							<?php endif; ?>
-						</form>
+								<?php if ($filter !== 'all' || !empty($search)): ?>
+									<a href="index.php" class="table-btn">
+										<i class='bx bx-x'></i> Clear
+									</a>
+								<?php endif; ?>
+							</form>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="table-data">
-				<div class="order">
-					<div class="head" style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem;">
-						<h3>Reward Codes (<?= number_format($total_records) ?> total)</h3>
+				<div class="table-card">
+					<div class="table-header">
+						<div class="table-title">
+							All Reward Codes
+							<i class='bx bx-chevron-down'></i>
+						</div>
 						<?php if (!empty($reward_codes)): ?>
-						<div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-							<button 
-								type="button" 
-								id="deleteSelectedBtn"
-								style="padding: 0.4rem 1rem; background:#dc2626; color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; font-family:var(--opensans); font-size:0.9rem;">
+						<div class="table-actions">
+							<button type="button" id="deleteSelectedBtn" class="table-btn" style="background: var(--red); color: white; border-color: var(--red);">
 								<i class='bx bx-trash'></i> Delete Selected
 							</button>
-							<button 
-								type="button"
-								id="deselectAllBtn"
-								style="padding: 0.4rem 1rem; background:#e5e7eb; color:#111827; border:none; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; font-family:var(--opensans); font-size:0.9rem;">
+							<button type="button" id="deselectAllBtn" class="table-btn">
 								<i class='bx bx-x-circle'></i> Deselect All
 							</button>
 						</div>
 						<?php endif; ?>
 					</div>
-
+					
 					<?php if (empty($reward_codes)): ?>
 						<div style="padding: 3rem; text-align: center;">
-							<i class='bx bxs-ticket' style="font-size: 4rem; color: var(--dark-grey); margin-bottom: 1rem;"></i>
-							<p style="color: var(--dark-grey); font-size: 1.1rem; margin-bottom: 0.5rem;">No reward codes found</p>
-							<p style="color: var(--dark-grey); font-size: 0.9rem;">Generate reward codes using: <code>php scripts/generate_reward_codes.php [count] [prefix]</code></p>
-							<p style="color: var(--dark-grey); font-size: 0.9rem; margin-top: 0.5rem;">Or use the <a href="generate.php" style="color: var(--blue);">Generate Codes</a> page</p>
+							<i class='bx bx-qr' style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+							<p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 0.5rem;">No reward codes found</p>
+							<p style="color: var(--text-muted); font-size: 0.9rem;">Get started by <a href="generate.php" style="color: var(--blue);">generating reward codes</a></p>
 						</div>
 					<?php else: ?>
 						<table>
 							<thead>
 								<tr>
-									<th><input type="checkbox" id="selectAll" style="cursor:pointer;"></th>
+									<th style="width: 40px;"><input type="checkbox" id="selectAll" style="cursor:pointer;"></th>
 									<th>ID</th>
 									<th>Reward Code</th>
 									<th>Status</th>
-									<th>Customer Name</th>
+									<th>Customer</th>
 									<th>Phone</th>
 									<th>Redeemed At</th>
-									<th>Created At</th>
+									<th>Created</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -679,74 +620,51 @@ $page_title   = "Reward Codes";
 								<?php foreach ($reward_codes as $code): ?>
 								<tr>
 									<td>
-										<input 
-											type="checkbox" 
-											class="row-checkbox" 
-											value="<?= $code['id'] ?>" 
-											style="width:16px;height:16px;cursor:pointer;">
+										<input type="checkbox" class="row-checkbox" value="<?= $code['id'] ?>" style="width:16px;height:16px;cursor:pointer;">
 									</td>
-									<td><p><?= $code['id'] ?></p></td>
+									<td><?= $code['id'] ?></td>
 									<td>
-										<p style="font-family: monospace; font-weight: 600; color: var(--blue);">
+										<strong style="font-family: monospace; color: var(--blue);">
 											<?= htmlspecialchars($code['reward_code']) ?>
-										</p>
+										</strong>
 									</td>
 									<td>
 										<?php if ($code['is_used']): ?>
-											<span class="status completed">Redeemed</span>
+											<span class="badge badge-completed">Redeemed</span>
 										<?php else: ?>
-											<span class="status pending">Available</span>
+											<span class="badge badge-pending">Available</span>
 										<?php endif; ?>
+									</td>
+									<td><?= htmlspecialchars($code['customer_name'] ?? '—') ?></td>
+									<td><?= htmlspecialchars($code['customer_phone'] ?? '—') ?></td>
+									<td>
+										<?php if ($code['used_at']): ?>
+											<span style="font-size: 13px;"><?= formatIST($code['used_at']) ?></span>
+											<br><small style="color: var(--text-muted);">IST</small>
+										<?php else: ?>
+											<span style="color: var(--text-muted);">—</span>
+										<?php endif; ?>
+									</td>
+									<td>
+										<span style="font-size: 13px;"><?= formatIST($code['created_at']) ?></span>
+										<br><small style="color: var(--text-muted);">IST</small>
 									</td>
 									<td>
 										<?php if ($code['customer_name']): ?>
-											<p style="font-weight: 600;"><?= htmlspecialchars($code['customer_name']) ?></p>
-										<?php else: ?>
-											<p style="color: var(--dark-grey);">—</p>
+										<button type="button" onclick="showCustomerDetails('<?= htmlspecialchars($code['customer_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_email'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_address'] ?? '', ENT_QUOTES) ?>')" class="btn-action btn-view">
+											<i class='bx bx-user'></i> View
+										</button>
 										<?php endif; ?>
-									</td>
-									<td>
-										<?php if ($code['customer_phone']): ?>
-											<p><?= htmlspecialchars($code['customer_phone']) ?></p>
-										<?php else: ?>
-											<p style="color: var(--dark-grey);">—</p>
-										<?php endif; ?>
-									</td>
-									<td>
-										<?php if ($code['used_at']): ?>
-											<p><?= formatIST($code['used_at']) ?> <small style="color: var(--dark-grey); font-size: 0.85rem;">IST</small></p>
-										<?php else: ?>
-											<p style="color: var(--dark-grey);">—</p>
-										<?php endif; ?>
-									</td>
-									<td>
-										<p><?= formatIST($code['created_at']) ?> <small style="color: var(--dark-grey); font-size: 0.85rem;">IST</small></p>
-									</td>
-									<td>
-										<div style="display: flex; gap: 0.5rem; align-items: center;">
-											<?php if ($code['customer_name']): ?>
-											<button 
-												type="button"
-												onclick="event.preventDefault(); event.stopPropagation(); showCustomerDetails('<?= htmlspecialchars($code['customer_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_email'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_address'] ?? '', ENT_QUOTES) ?>')" 
-												title="View Customer Details"
-												style="background: none; border: none; color: var(--blue); cursor: pointer; padding: 0.25rem 0.5rem; font-size: 1.1rem;">
-												<i class='bx bx-user'></i>
+										<form method="POST" action="" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this reward code?');">
+											<input type="hidden" name="delete_code" value="1">
+											<input type="hidden" name="code_id" value="<?= $code['id'] ?>">
+											<input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
+											<input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
+											<input type="hidden" name="page" value="<?= $page ?>">
+											<button type="submit" class="btn-action btn-delete">
+												<i class='bx bx-trash'></i> Delete
 											</button>
-											<?php endif; ?>
-											<form method="POST" action="" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this reward code? This action cannot be undone.');">
-												<input type="hidden" name="delete_code" value="1">
-												<input type="hidden" name="code_id" value="<?= $code['id'] ?>">
-												<input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
-												<input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
-												<input type="hidden" name="page" value="<?= $page ?>">
-												<button 
-													type="submit"
-													title="Delete Code"
-													style="background: none; border: none; color: #dc2626; cursor: pointer; padding: 0.25rem 0.5rem; font-size: 1.1rem;">
-													<i class='bx bx-trash'></i>
-												</button>
-											</form>
-										</div>
+										</form>
 									</td>
 								</tr>
 								<?php endforeach; ?>
@@ -754,29 +672,29 @@ $page_title   = "Reward Codes";
 						</table>
 
 						<?php if ($total_pages > 1): ?>
-						<div style="padding: 1.5rem; border-top: 1px solid var(--grey); display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
-							<?php if ($page > 1): ?>
-								<a href="?page=<?= $page - 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--opensans);">
-									<i class='bx bx-chevron-left'></i> Previous
-								</a>
-							<?php endif; ?>
-							
-							<span style="padding: 0.5rem 1rem; color: var(--dark); font-family: var(--opensans);">
-								Page <?= $page ?> of <?= $total_pages ?>
-							</span>
-							
-							<?php if ($page < $total_pages): ?>
-								<a href="?page=<?= $page + 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--opensans);">
-									Next <i class='bx bx-chevron-right'></i>
-								</a>
-							<?php endif; ?>
-						</div>
+							<div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-light); display: flex; justify-content: center; gap: 0.75rem; align-items: center;">
+								<?php if ($page > 1): ?>
+									<a href="?page=<?= $page - 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" class="table-btn">
+										<i class='bx bx-chevron-left'></i> Previous
+									</a>
+								<?php endif; ?>
+								
+								<span style="padding: 0.5rem 1rem; color: var(--text-secondary);">
+									Page <?= $page ?> of <?= $total_pages ?>
+								</span>
+								
+								<?php if ($page < $total_pages): ?>
+									<a href="?page=<?= $page + 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" class="table-btn">
+										Next <i class='bx bx-chevron-right'></i>
+									</a>
+								<?php endif; ?>
+							</div>
 						<?php endif; ?>
 					<?php endif; ?>
 				</div>
 			</div>
-		</main>
-	</section>
+		</div>
+	</div>
 
 	<!-- Customer Details Modal -->
 	<div id="customerDetailsModal" class="modal-overlay">
@@ -838,7 +756,6 @@ $page_title   = "Reward Codes";
 		</div>
 	</div>
 	
-	<script src="../assets/js/admin-script.js"></script>
 	<script>
 	function copyToClipboard(text) {
 		navigator.clipboard.writeText(text).then(function() {

@@ -270,12 +270,10 @@ $page_title   = "Orders";
 	<link rel="icon" type="image/jpeg" sizes="32x32" href="../../assets/images/logo/logo-bg.jpg">
 	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
 	
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+	<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="../assets/css/admin-style.css">
-	<title>Orders - Admin Panel</title>
+	<link rel="stylesheet" href="../assets/css/prody-admin.css">
+	<title>Orders - Liyas Admin</title>
 	<style>
 		.modal-overlay {
 			display: none;
@@ -426,209 +424,136 @@ $page_title   = "Orders";
 			font-weight: 600;
 			display: inline-block;
 		}
-		.status.pending { background: #fef3c7; color: #92400e; }
-		.status.processing { background: #dbeafe; color: #1e40af; }
-		.status.shipped { background: #e0e7ff; color: #3730a3; }
-		.status.delivered { background: #d1fae5; color: #065f46; }
-		.status.cancelled { background: #fee2e2; color: #991b1b; }
+		.status.pending,
+		.badge-pending { background: var(--yellow-light); color: #92400e; }
+		.status.processing,
+		.badge-processing { background: var(--blue-light); color: var(--blue-dark); }
+		.status.shipped,
+		.badge-shipped { background: #e0e7ff; color: #3730a3; }
+		.status.delivered,
+		.badge-completed { background: var(--green-light); color: #065f46; }
+		.status.cancelled,
+		.badge-cancelled { background: #fee2e2; color: #991b1b; }
 	</style>
 </head>
 <body>
-	<?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
-
-	<section id="content">
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<a href="#" class="nav-link"><?= $page_title ?></a>
-			<form action="index.php" method="GET">
-				<div class="form-input">
-					<input type="search" name="search" placeholder="Search orders..." value="<?= htmlspecialchars($search) ?>">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+	<div class="container">
+		<?php include '../includes/sidebar.php'; ?>
+		
+		<div class="main-content">
+			<div class="header">
+				<div class="breadcrumb">
+					<i class='bx bx-home'></i>
+					<span>Orders</span>
 				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell bx-tada-hover'></i>
-				<span class="num"><?= $pending_orders ?></span>
-			</a>
-			<a href="#" class="profile">
-				<i class='bx bx-user-circle' style="font-size: 2rem; color: var(--dark-grey);"></i>
-			</a>
-		</nav>
-
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Orders</h1>
-					<ul class="breadcrumb">
-						<li><a href="../index.php">Dashboard</a></li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li><a class="active" href="#">Orders</a></li>
-					</ul>
+				<div class="header-actions">
+					<form action="index.php" method="GET" style="display: flex; align-items: center; gap: 0.5rem;">
+						<input type="search" name="search" placeholder="Search orders..." value="<?= htmlspecialchars($search) ?>" style="padding: 0.5rem 0.75rem; border: 1px solid var(--border-light); border-radius: 6px; font-size: 14px; font-family: inherit;">
+						<button type="submit" class="header-btn" style="padding: 0.5rem;">
+							<i class='bx bx-search'></i>
+						</button>
+					</form>
 				</div>
 			</div>
+			
+			<div class="content-area">
 
-			<?php if (!empty($update_message)): ?>
-				<div class="alert <?= $update_type === 'success' ? 'alert-success' : 'alert-error' ?>">
-					<i class='bx <?= $update_type === 'success' ? 'bx-check-circle' : 'bx-error-circle' ?>'></i>
-					<span><?= htmlspecialchars($update_message) ?></span>
-				</div>
-			<?php endif; ?>
-
-			<ul class="box-info">
-				<li>
-					<i class='bx bxs-cart-alt'></i>
-					<span class="text">
-						<h3><?= number_format($total_orders) ?></h3>
-						<p>Total Orders</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-time'></i>
-					<span class="text">
-						<h3><?= number_format($pending_orders) ?></h3>
-						<p>Pending</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-package'></i>
-					<span class="text">
-						<h3><?= number_format($processing_orders) ?></h3>
-						<p>Processing</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-truck'></i>
-					<span class="text">
-						<h3><?= number_format($shipped_orders) ?></h3>
-						<p>Shipped</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-check-circle'></i>
-					<span class="text">
-						<h3><?= number_format($delivered_orders) ?></h3>
-						<p>Delivered</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-wallet'></i>
-					<span class="text">
-						<h3><?= formatCurrency($total_revenue) ?></h3>
-						<p>Total Revenue</p>
-					</span>
-				</li>
-			</ul>
-
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Filter Orders</h3>
-						<i class='bx bx-filter'></i>
+				<?php if (!empty($update_message)): ?>
+					<div class="alert <?= $update_type === 'success' ? 'alert-success' : 'alert-error' ?>">
+						<?= htmlspecialchars($update_message) ?>
 					</div>
-					<div style="padding: 1rem;">
-						<form method="GET" action="" id="filterForm" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-							<input type="hidden" name="search" id="searchInput" value="<?= htmlspecialchars($search) ?>">
-							<select name="filter" id="filterSelect" style="padding: 0.5rem 1rem; border: 1px solid var(--grey); border-radius: 8px; background: var(--light); font-family: var(--opensans);">
-								<option value="all"   <?= $filter === 'all'   ? 'selected' : '' ?>>All Orders</option>
-								<option value="pending"  <?= $filter === 'pending'  ? 'selected' : '' ?>>Pending</option>
-								<option value="processing"<?= $filter === 'processing'? 'selected' : '' ?>>Processing</option>
-								<option value="shipped"<?= $filter === 'shipped'? 'selected' : '' ?>>Shipped</option>
-								<option value="delivered"<?= $filter === 'delivered'? 'selected' : '' ?>>Delivered</option>
-								<option value="cancelled"<?= $filter === 'cancelled'? 'selected' : '' ?>>Cancelled</option>
-							</select>
-							<button type="submit" style="padding: 0.5rem 1.5rem; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--opensans);">
-								<i class='bx bx-filter'></i> Apply Filter
-							</button>
-							<button type="button" id="exportBtn"
-							   style="padding: 0.5rem 1.5rem; background: var(--green); color: white; border: none; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--opensans);"
-							   title="Export filtered results to Excel">
-								<i class='bx bx-download'></i> Export Excel
-							</button>
-							<?php if ($filter !== 'all' || !empty($search)): ?>
-								<a href="index.php" style="padding: 0.5rem 1.5rem; background: var(--dark-grey); color: white; text-decoration: none; border-radius: 8px; display: inline-block;">
-									<i class='bx bx-x'></i> Clear
-								</a>
-							<?php endif; ?>
-						</form>
+				<?php endif; ?>
+
+				<div class="table-card" style="margin-bottom: 1.5rem;">
+					<div class="table-header">
+						<div class="table-title">Filter Orders</div>
+						<div class="table-actions">
+							<form method="GET" action="" id="filterForm" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+								<input type="hidden" name="search" id="searchInput" value="<?= htmlspecialchars($search) ?>">
+								<select name="filter" id="filterSelect" class="form-select" style="padding: 0.5rem 0.75rem; border: 1px solid var(--border-light); border-radius: 6px; font-size: 14px; font-family: inherit;">
+									<option value="all" <?= $filter === 'all' ? 'selected' : '' ?>>All Orders</option>
+									<option value="pending" <?= $filter === 'pending' ? 'selected' : '' ?>>Pending</option>
+									<option value="processing" <?= $filter === 'processing' ? 'selected' : '' ?>>Processing</option>
+									<option value="shipped" <?= $filter === 'shipped' ? 'selected' : '' ?>>Shipped</option>
+									<option value="delivered" <?= $filter === 'delivered' ? 'selected' : '' ?>>Delivered</option>
+									<option value="cancelled" <?= $filter === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+								</select>
+								<button type="submit" class="table-btn">
+									<i class='bx bx-filter'></i> Apply
+								</button>
+								<button type="button" id="exportBtn" class="table-btn" style="background: var(--green); color: white; border-color: var(--green);">
+									<i class='bx bx-download'></i> Export
+								</button>
+								<?php if ($filter !== 'all' || !empty($search)): ?>
+									<a href="index.php" class="table-btn">
+										<i class='bx bx-x'></i> Clear
+									</a>
+								<?php endif; ?>
+							</form>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Orders (<?= number_format($total_records) ?> total)</h3>
+				<div class="table-card">
+					<div class="table-header">
+						<div class="table-title">
+							All Orders
+							<i class='bx bx-chevron-down'></i>
+						</div>
 					</div>
-
+					
 					<?php if (empty($orders)): ?>
 						<div style="padding: 3rem; text-align: center;">
-							<i class='bx bxs-cart-alt' style="font-size: 4rem; color: var(--dark-grey); margin-bottom: 1rem;"></i>
-							<p style="color: var(--dark-grey); font-size: 1.1rem;">No orders found</p>
+							<i class='bx bx-cart' style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+							<p style="color: var(--text-secondary); font-size: 1.1rem;">No orders found</p>
 						</div>
 					<?php else: ?>
 						<table>
 							<thead>
 								<tr>
-									<th>Order ID</th>
+									<th>ID</th>
 									<th>Customer</th>
 									<th>Contact</th>
-									<th>Shipping Address</th>
+									<th>Address</th>
 									<th>Amount</th>
 									<th>Status</th>
-									<th>Created At</th>
+									<th>Created</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php foreach ($orders as $order): ?>
 								<tr>
-									<td><p><strong>#<?= $order['order_id'] ?></strong></p></td>
+									<td><strong>#<?= $order['order_id'] ?></strong></td>
 									<td>
-										<p style="font-weight: 600;"><?= htmlspecialchars($order['customer_name']) ?></p>
+										<strong><?= htmlspecialchars($order['customer_name']) ?></strong>
 										<?php if ($order['customer_email']): ?>
-											<p style="color: var(--dark-grey); font-size: 0.85rem;"><?= htmlspecialchars($order['customer_email']) ?></p>
+											<br><span style="color: var(--text-muted); font-size: 12px;"><?= htmlspecialchars($order['customer_email']) ?></span>
 										<?php endif; ?>
 									</td>
+									<td><?= htmlspecialchars($order['customer_phone'] ?? '—') ?></td>
 									<td>
-										<?php if ($order['customer_phone']): ?>
-											<p><?= htmlspecialchars($order['customer_phone']) ?></p>
-										<?php else: ?>
-											<p style="color: var(--dark-grey);">—</p>
-										<?php endif; ?>
-									</td>
-									<td>
-										<p style="max-width: 250px; word-break: break-word; font-size: 0.9rem;">
+										<span style="max-width: 250px; word-break: break-word; font-size: 13px; color: var(--text-secondary);">
 											<?= htmlspecialchars($order['shipping_address']) ?>
-										</p>
+										</span>
 									</td>
+									<td><strong><?= formatCurrency($order['total_amount']) ?></strong></td>
 									<td>
-										<p style="font-weight: 600; color: var(--green);"><?= formatCurrency($order['total_amount']) ?></p>
-									</td>
-									<td>
-										<span class="status <?= htmlspecialchars($order['status']) ?>">
+										<span class="badge badge-<?= htmlspecialchars($order['status']) ?>">
 											<?= ucfirst($order['status']) ?>
 										</span>
 									</td>
 									<td>
-										<p><?= formatIST($order['created_at']) ?> <small style="color: var(--dark-grey); font-size: 0.85rem;">IST</small></p>
+										<span style="font-size: 13px;"><?= formatIST($order['created_at']) ?></span>
+										<br><small style="color: var(--text-muted);">IST</small>
 									</td>
 									<td>
-										<div style="display: flex; gap: 0.5rem; align-items: center;">
-											<a href="view.php?id=<?= $order['order_id'] ?>" 
-											   style="background: var(--blue); color: white; padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.3rem;"
-											   title="View Details">
-												<i class='bx bx-show'></i> View
-											</a>
-											<button 
-												type="button"
-												onclick="openStatusModal(<?= $order['order_id'] ?>, '<?= htmlspecialchars($order['status'], ENT_QUOTES) ?>')" 
-												title="Update Status"
-												style="background: var(--green); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.3rem;">
-												<i class='bx bx-edit'></i> Status
-											</button>
-										</div>
+										<a href="view.php?id=<?= $order['order_id'] ?>" class="btn-action btn-view">
+											<i class='bx bx-show'></i> View
+										</a>
+										<a href="javascript:void(0);" onclick="openStatusModal(<?= $order['order_id'] ?>, '<?= htmlspecialchars($order['status'], ENT_QUOTES) ?>')" class="btn-action btn-edit">
+											<i class='bx bx-edit'></i> Status
+										</a>
 									</td>
 								</tr>
 								<?php endforeach; ?>
@@ -636,29 +561,29 @@ $page_title   = "Orders";
 						</table>
 
 						<?php if ($total_pages > 1): ?>
-						<div style="padding: 1.5rem; border-top: 1px solid var(--grey); display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
-							<?php if ($page > 1): ?>
-								<a href="?page=<?= $page - 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--opensans);">
-									<i class='bx bx-chevron-left'></i> Previous
-								</a>
-							<?php endif; ?>
-							
-							<span style="padding: 0.5rem 1rem; color: var(--dark); font-family: var(--opensans);">
-								Page <?= $page ?> of <?= $total_pages ?>
-							</span>
-							
-							<?php if ($page < $total_pages): ?>
-								<a href="?page=<?= $page + 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" style="padding: 0.5rem 1rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; font-family: var(--opensans);">
-									Next <i class='bx bx-chevron-right'></i>
-								</a>
-							<?php endif; ?>
-						</div>
+							<div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-light); display: flex; justify-content: center; gap: 0.75rem; align-items: center;">
+								<?php if ($page > 1): ?>
+									<a href="?page=<?= $page - 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" class="table-btn">
+										<i class='bx bx-chevron-left'></i> Previous
+									</a>
+								<?php endif; ?>
+								
+								<span style="padding: 0.5rem 1rem; color: var(--text-secondary);">
+									Page <?= $page ?> of <?= $total_pages ?>
+								</span>
+								
+								<?php if ($page < $total_pages): ?>
+									<a href="?page=<?= $page + 1 ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" class="table-btn">
+										Next <i class='bx bx-chevron-right'></i>
+									</a>
+								<?php endif; ?>
+							</div>
 						<?php endif; ?>
 					<?php endif; ?>
 				</div>
 			</div>
-		</main>
-	</section>
+		</div>
+	</div>
 
 	<!-- Status Update Modal -->
 	<div id="statusModal" class="modal-overlay">
@@ -704,7 +629,6 @@ $page_title   = "Orders";
 		</div>
 	</div>
 	
-	<script src="../assets/js/admin-script.js"></script>
 	<script>
 		document.getElementById('exportBtn').addEventListener('click', function(e) {
 			e.preventDefault();

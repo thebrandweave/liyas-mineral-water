@@ -164,11 +164,9 @@ if (isset($_GET['added'])) {
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+	<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="../assets/css/admin-style.css">
+	<link rel="stylesheet" href="../assets/css/prody-admin.css">
 	
 	<!-- Favicon -->
 	<link rel="icon" type="image/jpeg" href="../../assets/images/logo/logo-bg.jpg">
@@ -177,298 +175,133 @@ if (isset($_GET['added'])) {
 	<link rel="icon" type="image/jpeg" sizes="32x32" href="../../assets/images/logo/logo-bg.jpg">
 	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
 	
-	<title>Edit Product - Admin Panel</title>
-	<style>
-		.form-container {
-			background: var(--light);
-			padding: 2rem;
-			border-radius: 12px;
-			margin-top: 1rem;
-		}
-
-		.form-group {
-			margin-bottom: 1.5rem;
-		}
-
-		.form-group label {
-			display: block;
-			margin-bottom: 0.5rem;
-			color: var(--dark);
-			font-weight: 600;
-			font-size: 0.9rem;
-		}
-
-		.form-group input[type="text"],
-		.form-group input[type="number"],
-		.form-group textarea {
-			width: 100%;
-			padding: 0.75rem 1rem;
-			border: 1px solid var(--grey);
-			border-radius: 8px;
-			background: white;
-			font-size: 1rem;
-			font-family: var(--opensans);
-			transition: border-color 0.2s;
-		}
-
-		.form-group input:focus,
-		.form-group textarea:focus {
-			outline: none;
-			border-color: var(--blue);
-		}
-
-		.form-group textarea {
-			resize: vertical;
-			min-height: 120px;
-		}
-
-		.form-group small {
-			display: block;
-			margin-top: 0.25rem;
-			color: var(--dark-grey);
-			font-size: 0.85rem;
-		}
-
-		.alert {
-			padding: 1rem;
-			border-radius: 8px;
-			margin-bottom: 1.5rem;
-		}
-
-		.alert-success {
-			background: #d4edda;
-			color: #155724;
-			border: 1px solid #c3e6cb;
-		}
-
-		.alert-error {
-			background: #f8d7da;
-			color: #721c24;
-			border: 1px solid #f5c6cb;
-		}
-
-		.btn-group {
-			display: flex;
-			gap: 1rem;
-			margin-top: 2rem;
-		}
-
-		.btn {
-			padding: 0.75rem 2rem;
-			border: none;
-			border-radius: 8px;
-			font-size: 1rem;
-			font-weight: 600;
-			cursor: pointer;
-			text-decoration: none;
-			display: inline-flex;
-			align-items: center;
-			gap: 0.5rem;
-			transition: all 0.2s;
-		}
-
-		.btn-primary {
-			background: var(--blue);
-			color: white;
-		}
-
-		.btn-primary:hover {
-			background: #2563eb;
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-		}
-
-		.btn-secondary {
-			background: var(--grey);
-			color: var(--dark);
-		}
-
-		.btn-secondary:hover {
-			background: #d1d5db;
-		}
-
-		.product-info {
-			background: #f8f9fa;
-			padding: 1rem;
-			border-radius: 8px;
-			margin-bottom: 1.5rem;
-		}
-
-		.product-info p {
-			margin: 0.5rem 0;
-			color: var(--dark-grey);
-		}
-
-		.product-info strong {
-			color: var(--dark);
-		}
-	</style>
+	<title>Edit Product - Liyas Admin</title>
 </head>
 <body>
-	<?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
-
-	<section id="content">
-		<nav>
-			<i class='bx bx-menu bx-sm' ></i>
-			<a href="#" class="nav-link"><?= $page_title ?></a>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+	<div class="container">
+		<?php include '../includes/sidebar.php'; ?>
+		
+		<div class="main-content">
+			<div class="header">
+				<div class="breadcrumb">
+					<i class='bx bx-home'></i>
+					<span>Products</span>
+					<span>/</span>
+					<span>Edit Product</span>
 				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell bx-tada-hover' ></i>
-				<span class="num">0</span>
-			</a>
-			<a href="#" class="profile">
-				<i class='bx bx-user-circle' style="font-size: 2rem; color: var(--dark-grey);"></i>
-			</a>
-		</nav>
-
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Edit Product</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="../index.php">Dashboard</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a href="index.php">Products</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a class="active" href="#">Edit Product</a>
-						</li>
-					</ul>
+				<div class="header-actions">
+					<a href="index.php" class="header-btn">
+						<i class='bx bx-arrow-back'></i>
+						<span>Back</span>
+					</a>
 				</div>
-				<a href="index.php" class="btn-download">
-					<i class='bx bx-arrow-back'></i>
-					<span class="text">Back to Products</span>
-				</a>
 			</div>
-
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Product Information</h3>
-						<i class='bx bxs-shopping-bag-alt' ></i>
+			
+			<div class="content-area">
+				<?php if ($error): ?>
+					<div class="alert alert-error">
+						<?= htmlspecialchars($error) ?>
 					</div>
+				<?php endif; ?>
 
-					<div class="form-container">
-						<?php if ($error): ?>
-							<div class="alert alert-error">
-								<i class='bx bx-error-circle' ></i> <?= htmlspecialchars($error) ?>
-								<br><small style="margin-top: 0.5rem; display: block;">
-									<strong>Debug Info:</strong><br>
-									URL Parameter 'id': <?= htmlspecialchars(var_export($_GET['id'] ?? 'not set', true)) ?><br>
-									Parsed product_id: <?= $product_id ?><br>
-									Full URL: <?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? 'unknown') ?><br>
-									Query String: <?= htmlspecialchars($_SERVER['QUERY_STRING'] ?? 'none') ?>
-								</small>
+				<?php if ($success): ?>
+					<div class="alert alert-success">
+						<?= htmlspecialchars($success) ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if ($product): ?>
+					<div class="form-card">
+						<div class="form-header">
+							<h2>Edit Product #<?= $product['product_id'] ?></h2>
+						</div>
+
+						<form method="POST" action="" enctype="multipart/form-data" class="form-modern">
+							<div class="form-group">
+								<label for="name">Product Name <span style="color: var(--red);">*</span></label>
+								<input 
+									type="text" 
+									name="name" 
+									id="name" 
+									class="form-input"
+									value="<?= htmlspecialchars($product['name']) ?>" 
+									required
+									placeholder="e.g., Liyas Mineral Water 500ml"
+								>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter a descriptive name for your product</small>
 							</div>
-						<?php endif; ?>
 
-						<?php if ($success): ?>
-							<div class="alert alert-success">
-								<i class='bx bx-check-circle' ></i> <?= htmlspecialchars($success) ?>
-							</div>
-						<?php endif; ?>
-
-						<?php if ($product): ?>
-							<div class="product-info">
-								<p><strong>Product ID:</strong> #<?= $product['product_id'] ?></p>
-								<p><strong>Created:</strong> <?= date('d-m-Y H:i', strtotime($product['created_at'])) ?></p>
+							<div class="form-group">
+								<label for="description">Description</label>
+								<textarea 
+									name="description" 
+									id="description" 
+									class="form-textarea"
+									placeholder="Describe your product..."
+								><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Provide details about the product (optional)</small>
 							</div>
 
-							<form method="POST" action="" enctype="multipart/form-data">
-								<div class="form-group">
-									<label for="name">Product Name <span style="color: #dc2626;">*</span></label>
-									<input 
-										type="text" 
-										name="name" 
-										id="name" 
-										value="<?= htmlspecialchars($product['name']) ?>" 
-										required
-										placeholder="e.g., Liyas Mineral Water 500ml"
-									>
-									<small>Enter a descriptive name for your product</small>
-								</div>
+							<div class="form-group">
+								<label for="price">Price <span style="color: var(--red);">*</span></label>
+								<input 
+									type="number" 
+									name="price" 
+									id="price" 
+									class="form-input"
+									value="<?= htmlspecialchars($product['price']) ?>" 
+									step="0.01" 
+									min="0.01"
+									required
+									placeholder="0.00"
+								>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter the price</small>
+							</div>
 
-								<div class="form-group">
-									<label for="description">Description</label>
-									<textarea 
-										name="description" 
-										id="description" 
-										placeholder="Describe your product..."
-									><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
-									<small>Provide details about the product (optional)</small>
-								</div>
-
-								<div class="form-group">
-									<label for="price">Price <span style="color: #dc2626;">*</span></label>
-									<input 
-										type="number" 
-										name="price" 
-										id="price" 
-										value="<?= htmlspecialchars($product['price']) ?>" 
-										step="0.01" 
-										min="0.01"
-										required
-										placeholder="0.00"
-									>
-									<small>Enter the price in USD</small>
-								</div>
-
-								<div class="form-group">
-									<label for="image">Product Image</label>
-									<?php if (!empty($product['image'])): ?>
-										<div style="margin-bottom: 1rem;">
-											<img src="../../<?= htmlspecialchars($product['image']) ?>" alt="Current image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--grey); margin-bottom: 0.5rem;">
-											<br>
-											<label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-												<input type="checkbox" name="delete_image" value="1">
-												<span style="color: #dc2626;">Delete current image</span>
-											</label>
-										</div>
-									<?php endif; ?>
-									<input 
-										type="file" 
-										name="image" 
-										id="image" 
-										accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-									>
-									<small><?= !empty($product['image']) ? 'Upload a new image to replace the current one' : 'Upload a product image (JPEG, PNG, GIF, or WebP - Max 5MB)' ?></small>
-									<div id="image-preview" style="margin-top: 1rem; display: none;">
-										<img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--grey);">
+							<div class="form-group">
+								<label for="image">Product Image</label>
+								<?php if (!empty($product['image'])): ?>
+									<div style="margin-bottom: 1rem;">
+										<img src="../../<?= htmlspecialchars($product['image']) ?>" alt="Current image" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--border-light); margin-bottom: 0.5rem;">
+										<br>
+										<label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+											<input type="checkbox" name="delete_image" value="1">
+											<span style="color: var(--red);">Delete current image</span>
+										</label>
 									</div>
+								<?php endif; ?>
+								<input 
+									type="file" 
+									name="image" 
+									id="image" 
+									class="form-input"
+									accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+								>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;"><?= !empty($product['image']) ? 'Upload a new image to replace the current one' : 'Upload a product image (JPEG, PNG, GIF, or WebP - Max 5MB)' ?></small>
+								<div id="image-preview" style="margin-top: 1rem; display: none;">
+									<img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--border-light);">
 								</div>
-
-								<div class="btn-group">
-									<button type="submit" name="update" class="btn btn-primary">
-										<i class='bx bx-save' ></i> Update Product
-									</button>
-									<a href="index.php" class="btn btn-secondary">
-										<i class='bx bx-x' ></i> Cancel
-									</a>
-								</div>
-							</form>
-						<?php else: ?>
-							<div class="alert alert-error">
-								Product not found.
 							</div>
-						<?php endif; ?>
+
+							<div class="form-actions">
+								<button type="submit" name="update" class="btn btn-primary">
+									<i class='bx bx-save'></i> Update Product
+								</button>
+								<a href="index.php" class="btn btn-secondary">
+									<i class='bx bx-x'></i> Cancel
+								</a>
+							</div>
+						</form>
 					</div>
-				</div>
+				<?php else: ?>
+					<div class="alert alert-error">
+						Product not found.
+					</div>
+				<?php endif; ?>
 			</div>
-		</main>
-	</section>
+		</div>
+	</div>
 	
-	<script src="../assets/js/admin-script.js"></script>
 	<script>
 		// Image preview
 		const imageInput = document.getElementById('image');

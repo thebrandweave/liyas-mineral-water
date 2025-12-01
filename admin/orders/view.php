@@ -117,12 +117,10 @@ $page_title   = "Order #" . $order['order_id'];
 	<link rel="icon" type="image/jpeg" sizes="32x32" href="../../assets/images/logo/logo-bg.jpg">
 	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
 	
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+	<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="../assets/css/admin-style.css">
-	<title>Order #<?= $order['order_id'] ?> - Admin Panel</title>
+	<link rel="stylesheet" href="../assets/css/prody-admin.css">
+	<title>Order #<?= $order['order_id'] ?> - Liyas Admin</title>
 	<style>
 		.order-details-card {
 			background: white;
@@ -168,11 +166,16 @@ $page_title   = "Order #" . $order['order_id'];
 			font-weight: 600;
 			display: inline-block;
 		}
-		.status.pending { background: #fef3c7; color: #92400e; }
-		.status.processing { background: #dbeafe; color: #1e40af; }
-		.status.shipped { background: #e0e7ff; color: #3730a3; }
-		.status.delivered { background: #d1fae5; color: #065f46; }
-		.status.cancelled { background: #fee2e2; color: #991b1b; }
+		.status.pending,
+		.badge-pending { background: var(--yellow-light); color: #92400e; }
+		.status.processing,
+		.badge-processing { background: var(--blue-light); color: var(--blue-dark); }
+		.status.shipped,
+		.badge-shipped { background: #e0e7ff; color: #3730a3; }
+		.status.delivered,
+		.badge-completed { background: var(--green-light); color: #065f46; }
+		.status.cancelled,
+		.badge-cancelled { background: #fee2e2; color: #991b1b; }
 		.alert {
 			margin: 1rem 0;
 			padding: 0.75rem 1rem;
@@ -345,124 +348,106 @@ $page_title   = "Order #" . $order['order_id'];
 	</style>
 </head>
 <body>
-	<?php require_once __DIR__ . '/../includes/sidebar.php'; ?>
-
-	<section id="content">
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<a href="#" class="nav-link"><?= $page_title ?></a>
-			<form action="index.php" method="GET">
-				<div class="form-input">
-					<input type="search" name="search" placeholder="Search orders..." value="">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+	<div class="container">
+		<?php include '../includes/sidebar.php'; ?>
+		
+		<div class="main-content">
+			<div class="header">
+				<div class="breadcrumb">
+					<i class='bx bx-home'></i>
+					<span>Orders</span>
+					<span>/</span>
+					<span>Order #<?= $order['order_id'] ?></span>
 				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell bx-tada-hover'></i>
-				<span class="num">0</span>
-			</a>
-			<a href="#" class="profile">
-				<i class='bx bx-user-circle' style="font-size: 2rem; color: var(--dark-grey);"></i>
-			</a>
-		</nav>
-
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Order #<?= $order['order_id'] ?></h1>
-					<ul class="breadcrumb">
-						<li><a href="../index.php">Dashboard</a></li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li><a href="index.php">Orders</a></li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li><a class="active" href="#">Order #<?= $order['order_id'] ?></a></li>
-					</ul>
-				</div>
-				<a href="index.php" style="padding: 0.75rem 1.5rem; background: var(--blue); color: white; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--opensans);">
-					<i class='bx bx-arrow-back'></i> Back to Orders
-				</a>
-			</div>
-
-			<?php if (!empty($update_message)): ?>
-				<div class="alert <?= $update_type === 'success' ? 'alert-success' : 'alert-error' ?>">
-					<i class='bx <?= $update_type === 'success' ? 'bx-check-circle' : 'bx-error-circle' ?>'></i>
-					<span><?= htmlspecialchars($update_message) ?></span>
-				</div>
-			<?php endif; ?>
-
-			<!-- Order Information -->
-			<div class="order-details-card">
-				<h3><i class='bx bx-info-circle'></i> Order Information</h3>
-				<div class="detail-row">
-					<div class="detail-label">Order ID:</div>
-					<div class="detail-value"><strong>#<?= $order['order_id'] ?></strong></div>
-				</div>
-				<div class="detail-row">
-					<div class="detail-label">Status:</div>
-					<div class="detail-value">
-						<span class="status <?= htmlspecialchars($order['status']) ?>">
-							<?= ucfirst($order['status']) ?>
-						</span>
-						<button 
-							type="button"
-							onclick="openStatusModal()" 
-							style="margin-left: 1rem; background: var(--green); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.3rem;">
-							<i class='bx bx-edit'></i> Update
-						</button>
-					</div>
-				</div>
-				<div class="detail-row">
-					<div class="detail-label">Total Amount:</div>
-					<div class="detail-value" style="font-size: 1.2rem; font-weight: 600; color: var(--green);">
-						<?= formatCurrency($order['total_amount']) ?>
-					</div>
-				</div>
-				<div class="detail-row">
-					<div class="detail-label">Created At:</div>
-					<div class="detail-value"><?= formatIST($order['created_at']) ?> <small style="color: var(--dark-grey);">IST</small></div>
-				</div>
-				<div class="detail-row">
-					<div class="detail-label">Last Updated:</div>
-					<div class="detail-value"><?= formatIST($order['updated_at']) ?> <small style="color: var(--dark-grey);">IST</small></div>
+				<div class="header-actions">
+					<a href="index.php" class="header-btn">
+						<i class='bx bx-arrow-back'></i>
+						<span>Back</span>
+					</a>
 				</div>
 			</div>
-
-			<!-- Customer Information -->
-			<div class="order-details-card">
-				<h3><i class='bx bx-user'></i> Customer Information</h3>
-				<div class="detail-row">
-					<div class="detail-label">Name:</div>
-					<div class="detail-value"><?= htmlspecialchars($order['customer_name']) ?></div>
-				</div>
-				<?php if ($order['customer_email']): ?>
-				<div class="detail-row">
-					<div class="detail-label">Email:</div>
-					<div class="detail-value"><?= htmlspecialchars($order['customer_email']) ?></div>
-				</div>
+			
+			<div class="content-area">
+				<?php if (!empty($update_message)): ?>
+					<div class="alert <?= $update_type === 'success' ? 'alert-success' : 'alert-error' ?>">
+						<?= htmlspecialchars($update_message) ?>
+					</div>
 				<?php endif; ?>
-				<?php if ($order['customer_phone']): ?>
-				<div class="detail-row">
-					<div class="detail-label">Phone:</div>
-					<div class="detail-value"><?= htmlspecialchars($order['customer_phone']) ?></div>
-				</div>
-				<?php endif; ?>
-				<div class="detail-row">
-					<div class="detail-label">Shipping Address:</div>
-					<div class="detail-value" style="white-space: pre-line;"><?= htmlspecialchars($order['shipping_address']) ?></div>
-				</div>
-			</div>
 
-			<!-- Order Items -->
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Order Items (<?= count($order_items) ?>)</h3>
+				<!-- Order Information -->
+				<div class="form-card" style="margin-bottom: 1.5rem;">
+					<div class="form-header">
+						<h2>Order Information</h2>
 					</div>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Order ID:</div>
+						<div><strong>#<?= $order['order_id'] ?></strong></div>
+					</div>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Status:</div>
+						<div>
+							<span class="badge badge-<?= htmlspecialchars($order['status']) ?>">
+								<?= ucfirst($order['status']) ?>
+							</span>
+							<button type="button" onclick="openStatusModal()" class="btn" style="margin-left: 1rem; padding: 0.5rem 1rem; font-size: 13px;">
+								<i class='bx bx-edit'></i> Update
+							</button>
+						</div>
+					</div>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Total Amount:</div>
+						<div style="font-size: 1.2rem; font-weight: 600; color: var(--green);">
+							<?= formatCurrency($order['total_amount']) ?>
+						</div>
+					</div>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Created At:</div>
+						<div><?= formatIST($order['created_at']) ?> <small style="color: var(--text-muted);">IST</small></div>
+					</div>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0;">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Last Updated:</div>
+						<div><?= formatIST($order['updated_at']) ?> <small style="color: var(--text-muted);">IST</small></div>
+					</div>
+				</div>
+
+				<!-- Customer Information -->
+				<div class="form-card" style="margin-bottom: 1.5rem;">
+					<div class="form-header">
+						<h2>Customer Information</h2>
+					</div>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Name:</div>
+						<div><?= htmlspecialchars($order['customer_name']) ?></div>
+					</div>
+					<?php if ($order['customer_email']): ?>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Email:</div>
+						<div><?= htmlspecialchars($order['customer_email']) ?></div>
+					</div>
+					<?php endif; ?>
+					<?php if ($order['customer_phone']): ?>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Phone:</div>
+						<div><?= htmlspecialchars($order['customer_phone']) ?></div>
+					</div>
+					<?php endif; ?>
+					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0;">
+						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Shipping Address:</div>
+						<div style="white-space: pre-line;"><?= htmlspecialchars($order['shipping_address']) ?></div>
+					</div>
+				</div>
+
+				<!-- Order Items -->
+				<div class="table-card">
+					<div class="table-header">
+						<div class="table-title">
+							Order Items (<?= count($order_items) ?>)
+						</div>
+					</div>
+					
 					<?php if (empty($order_items)): ?>
 						<div style="padding: 2rem; text-align: center;">
-							<p style="color: var(--dark-grey);">No items found in this order.</p>
+							<p style="color: var(--text-secondary);">No items found in this order.</p>
 						</div>
 					<?php else: ?>
 						<div style="padding: 1rem;">
@@ -472,32 +457,32 @@ $page_title   = "Order #" . $order['order_id'];
 								$item_total = (float)$item['price_at_purchase'] * (int)$item['quantity'];
 								$subtotal += $item_total;
 							?>
-								<div class="product-item">
+								<div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--border-light);">
 									<?php if ($item['product_image']): ?>
-										<img src="../../uploads/products/<?= htmlspecialchars($item['product_image']) ?>" 
+										<img src="../../<?= htmlspecialchars($item['product_image']) ?>" 
 											 alt="<?= htmlspecialchars($item['product_name'] ?? 'Product') ?>" 
-											 class="product-image"
+											 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; background: var(--bg-main);"
 											 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Crect fill=\'%23e5e7eb\' width=\'60\' height=\'60\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%239ca3af\' font-size=\'12\'%3ENo Image%3C/text%3E%3C/svg%3E';">
 									<?php else: ?>
-										<div class="product-image" style="display: flex; align-items: center; justify-content: center; color: var(--dark-grey);">
+										<div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); background: var(--bg-main); border-radius: 8px;">
 											<i class='bx bx-image' style="font-size: 1.5rem;"></i>
 										</div>
 									<?php endif; ?>
-									<div class="product-info">
-										<div class="product-name">
+									<div style="flex: 1;">
+										<div style="font-weight: 600; margin-bottom: 0.25rem;">
 											<?= htmlspecialchars($item['product_name'] ?? 'Product #' . ($item['product_id'] ?? 'N/A')) ?>
 										</div>
-										<div class="product-meta">
+										<div style="font-size: 13px; color: var(--text-muted);">
 											Quantity: <?= $item['quantity'] ?> × <?= formatCurrency($item['price_at_purchase']) ?>
 										</div>
 									</div>
-									<div class="product-price">
+									<div style="font-weight: 600; color: var(--green); text-align: right;">
 										<?= formatCurrency($item_total) ?>
 									</div>
 								</div>
 							<?php endforeach; ?>
 							
-							<div style="padding: 1rem; border-top: 2px solid var(--grey); margin-top: 1rem;">
+							<div style="padding: 1rem; border-top: 2px solid var(--border-light); margin-top: 1rem;">
 								<div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; font-weight: 600;">
 									<span>Total Amount:</span>
 									<span style="color: var(--green);"><?= formatCurrency($order['total_amount']) ?></span>
@@ -507,8 +492,8 @@ $page_title   = "Order #" . $order['order_id'];
 					<?php endif; ?>
 				</div>
 			</div>
-		</main>
-	</section>
+		</div>
+	</div>
 
 	<!-- Status Update Modal -->
 	<div id="statusModal" class="modal-overlay">
@@ -551,7 +536,6 @@ $page_title   = "Order #" . $order['order_id'];
 		</div>
 	</div>
 	
-	<script src="../assets/js/admin-script.js"></script>
 	<script>
 		function openStatusModal() {
 			const modal = document.getElementById('statusModal');

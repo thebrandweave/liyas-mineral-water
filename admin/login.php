@@ -71,39 +71,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="icon" type="image/jpeg" sizes="32x32" href="../assets/images/logo/logo-bg.jpg">
 <link rel="icon" type="image/jpeg" sizes="16x16" href="../assets/images/logo/logo-bg.jpg">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="assets/css/new-login.css">
+<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="assets/css/prody-admin.css">
 </head>
 <body>
-<main class="main">
-	<div class="container">
-		<section class="wrapper">
-			<div class="heading">
-				<h1 class="text text-large">Sign In</h1>
-				<p class="text text-normal">New user? <span><a href="signup.php" class="text text-links">Create an account</a></span>
+<div class="login-container">
+	<div class="login-card">
+		<div class="login-logo">
+			<div class="login-logo-icon" style="background: transparent; padding: 0;">
+				<img src="../assets/images/logo/logo-bg.jpg" alt="Liyas Logo" style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover;">
+			</div>
+			<h1 class="login-title">Liyas</h1>
+			<p class="login-subtitle">Admin Panel</p>
+		</div>
+
+		<?php if ($error): ?>
+			<div class="alert alert-error">
+				<?= htmlspecialchars($error) ?>
+			</div>
+		<?php endif; ?>
+
+		<form method="post" class="form-modern">
+			<div class="form-group">
+				<label for="email">Email Address</label>
+				<input 
+					type="email" 
+					name="email" 
+					id="email" 
+					class="form-input" 
+					placeholder="Enter your email" 
+					required 
+					autofocus
+				>
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input 
+					type="password" 
+					name="password" 
+					id="password" 
+					class="form-input" 
+					placeholder="Enter your password" 
+					required
+				>
+			</div>
+			<div class="form-actions">
+				<button type="submit" name="submit" class="btn btn-primary" style="width: 100%;">
+					<i class='bx bx-log-in'></i> Sign In
+				</button>
+			</div>
+			<div style="text-align: center; margin-top: 1rem;">
+				<p style="color: var(--text-secondary); font-size: 14px;">
+					New user? <a href="signup.php" style="color: var(--blue); text-decoration: none;">Create an account</a>
 				</p>
 			</div>
-
-      <?php if ($error): ?>
-        <div class="alert alert-error" style="margin-top: 1rem;"><?= htmlspecialchars($error) ?></div>
-      <?php endif; ?>
-
-			<form name="signin" class="form" method="post">
-				<div class="input-control">
-					<input type="email" name="email" id="email" class="input-field" placeholder="Email Address" required autofocus>
-				</div>
-				<div class="input-control">
-					<input type="password" name="password" id="password" class="input-field" placeholder="Password" required>
-				</div>
-				<div class="input-control">
-					<input type="submit" name="submit" class="input-submit" value="Sign In">
-				</div>
-			</form>
-		</section>
+		</form>
 	</div>
-</main>
+</div>
 </body>
 </html>

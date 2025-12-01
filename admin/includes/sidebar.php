@@ -6,52 +6,88 @@ $base_path = (in_array($current_dir, ['users', 'orders', 'products', 'categories
 
 // Define the current page, defaulting to an empty string if not set
 $current_page = $current_page ?? '';
+
+// Calculate counts for badges
+$products_count = 0;
+$categories_count = 0;
+$orders_count = 0;
+$users_count = 0;
+
+try {
+    if (isset($pdo)) {
+        $products_count = $pdo->query("SELECT COUNT(*) FROM products")->fetchColumn();
+        $categories_count = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
+        $orders_count = $pdo->query("SELECT COUNT(*) FROM orders WHERE status = 'pending'")->fetchColumn();
+        $users_count = $pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();
+    }
+} catch (PDOException $e) {
+    // Handle error silently
+}
+
+// Determine current page for active state
+$current_file = basename($_SERVER['PHP_SELF']);
+$current_dir = basename(dirname($_SERVER['PHP_SELF']));
 ?>
-<section id="sidebar">
-    <a href="<?= $base_path ?>index.php" class="brand">
-        <i class='bx bxs-smile bx-lg'></i>
-        <span class="text">Admin Panel</span>
-    </a>
-    <ul class="side-menu top">
-        <li class="<?= ($current_page === 'dashboard') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>index.php">
-                <i class='bx bxs-dashboard bx-sm'></i>
-                <span class="text">Dashboard</span>
-            </a>
-        </li>
-        <li class="<?= ($current_page === 'products') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>products/index.php">
-                <i class='bx bxs-shopping-bag-alt bx-sm'></i>
-                <span class="text">Products</span>
-            </a>
-        </li>
-        <li class="<?= ($current_page === 'categories') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>categories/index.php">
-                <i class='bx bxs-category bx-sm'></i>
-                <span class="text">Categories</span>
-            </a>
-        </li>
-        <li class="<?= ($current_page === 'orders') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>orders/index.php">
-                <i class='bx bxs-cart-alt bx-sm'></i>
-                <span class="text">Orders</span>
-            </a>
-        </li>
-        <li class="<?= ($current_page === 'users') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>users/index.php">
-                <i class='bx bxs-group bx-sm'></i>
-                <span class="text">Users</span>
-            </a>
-        </li>
-        <li class="<?= ($current_page === 'qr-rewards') ? 'active' : '' ?>">
-            <a href="<?= $base_path ?>qr-rewards/index.php">
-                <i class='bx bxs-qr-scan bx-sm'></i>
-                <span class="text">QR Rewards</span>
-            </a>
-        </li>
-    </ul>
-    <ul class="side-menu">
-        <li><a href="#"><i class='bx bxs-cog bx-sm'></i><span class="text">Settings</span></a></li>
-        <li><a href="<?= $base_path ?>logout.php" class="logout"><i class='bx bxs-log-out-circle bx-sm'></i><span class="text">Logout</span></a></li>
-    </ul>
-</section>
+<div class="sidebar">
+    <div class="logo" style="justify-content: center;">
+        <span class="logo-text">Liyas</span>
+    </div>
+    
+    <div class="search-box">
+        <div class="search-wrapper">
+            <i class='bx bx-search search-icon'></i>
+            <input type="text" class="search-input" placeholder="Search...">
+        </div>
+    </div>
+    
+    <nav class="nav-menu">
+        <a href="<?= $base_path ?>index.php" class="nav-item <?= ($current_file == 'index.php' && $current_dir == 'admin') ? 'active' : '' ?>">
+            <i class='bx bx-home'></i>
+            <span>Dashboard</span>
+        </a>
+        
+        <a href="<?= $base_path ?>products/index.php" class="nav-item <?= ($current_dir == 'products' || $current_page === 'products') ? 'active' : '' ?>">
+            <i class='bx bx-shopping-bag'></i>
+            <span>Products</span>
+            <?php if($products_count > 0): ?>
+                <span class="nav-badge"><?= $products_count ?></span>
+            <?php endif; ?>
+        </a>
+        
+        <a href="<?= $base_path ?>categories/index.php" class="nav-item <?= ($current_dir == 'categories' || $current_page === 'categories') ? 'active' : '' ?>">
+            <i class='bx bx-category'></i>
+            <span>Categories</span>
+            <?php if($categories_count > 0): ?>
+                <span class="nav-badge"><?= $categories_count ?></span>
+            <?php endif; ?>
+        </a>
+        
+        <a href="<?= $base_path ?>orders/index.php" class="nav-item <?= ($current_dir == 'orders' || $current_page === 'orders') ? 'active' : '' ?>">
+            <i class='bx bx-cart'></i>
+            <span>Orders</span>
+            <?php if($orders_count > 0): ?>
+                <span class="badge-count"><?= $orders_count ?></span>
+            <?php endif; ?>
+        </a>
+        
+        <a href="<?= $base_path ?>users/index.php" class="nav-item <?= ($current_dir == 'users' || $current_page === 'users') ? 'active' : '' ?>">
+            <i class='bx bx-group'></i>
+            <span>Users</span>
+            <?php if($users_count > 0): ?>
+                <span class="nav-badge"><?= $users_count ?></span>
+            <?php endif; ?>
+        </a>
+        
+        <a href="<?= $base_path ?>qr-rewards/index.php" class="nav-item <?= ($current_dir == 'qr-rewards' || $current_page === 'qr-rewards') ? 'active' : '' ?>">
+            <i class='bx bx-qr'></i>
+            <span>QR Rewards</span>
+        </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+        <a href="<?= $base_path ?>logout.php" class="nav-item">
+            <i class='bx bx-log-out'></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
