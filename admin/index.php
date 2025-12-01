@@ -120,8 +120,10 @@ function getStatusBadgeClass($status) {
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
     
-    <!-- Cal Sans Font -->
-    <link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Google Font: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>

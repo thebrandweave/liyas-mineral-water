@@ -71,7 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="icon" type="image/jpeg" sizes="32x32" href="../assets/images/logo/logo-bg.jpg">
 <link rel="icon" type="image/jpeg" sizes="16x16" href="../assets/images/logo/logo-bg.jpg">
 
-<link rel="preload" href="https://cal.com/fonts/CalSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Google Font: Poppins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <link rel="stylesheet" href="assets/css/prody-admin.css">
 </head>
@@ -123,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			</div>
 			<div style="text-align: center; margin-top: 1rem;">
 				<p style="color: var(--text-secondary); font-size: 14px;">
-					New user? <a href="signup.php" style="color: var(--blue); text-decoration: none;">Create an account</a>
+					<!-- New user? <a href="signup.php" style="color: var(--blue); text-decoration: none;">Create an account</a> -->
 				</p>
 			</div>
 		</form>
