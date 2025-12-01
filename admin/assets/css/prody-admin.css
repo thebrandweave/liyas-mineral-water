@@ -586,6 +586,11 @@ tbody tr:hover {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .container {
+        display: block;
+        height: auto;
+    }
+
     .sidebar {
         position: fixed;
         left: -224px;
@@ -597,6 +602,11 @@ tbody tr:hover {
     
     .sidebar.active {
         left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        min-height: 100vh;
     }
     
     .table-header {

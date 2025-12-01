@@ -115,6 +115,33 @@ function generateUniqueRewardCode($pdo, $prefix, $length) {
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="../assets/css/prody-admin.css">
 	<title>Generate Reward Codes - Liyas Admin</title>
+
+	<style>
+		/* Centered modal with blurred background for generate codes form */
+		.modal-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(15, 23, 42, 0.35);
+			backdrop-filter: blur(4px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 999;
+			padding: 1.5rem;
+		}
+
+		.modal-card {
+			max-width: 720px;
+			width: 100%;
+		}
+
+		@media (max-width: 768px) {
+			.modal-overlay {
+				align-items: flex-start;
+				padding-top: 4rem;
+			}
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
@@ -137,82 +164,85 @@ function generateUniqueRewardCode($pdo, $prefix, $length) {
 			</div>
 			
 			<div class="content-area">
-				<?php if ($message): ?>
-					<div class="alert <?= $message_type === 'success' ? 'alert-success' : 'alert-error' ?>">
-						<?= htmlspecialchars($message) ?>
-					</div>
-				<?php endif; ?>
+				<div class="modal-overlay">
+					<div class="modal-card">
+						<?php if ($message): ?>
+							<div class="alert <?= $message_type === 'success' ? 'alert-success' : 'alert-error' ?>" style="margin-bottom: 1rem;">
+								<?= htmlspecialchars($message) ?>
+							</div>
+						<?php endif; ?>
 
-				<?php if ($generated_count > 0 && !empty($sample_codes)): ?>
-					<div class="form-card" style="margin-bottom: 1.5rem; background: var(--green-light); border-color: var(--green);">
-						<h3 style="margin-bottom: 1rem;">Sample codes generated:</h3>
-						<?php foreach ($sample_codes as $sample): ?>
-							<code style="display: block; margin: 0.5rem 0; padding: 0.5rem; background: white; border-radius: 4px; font-family: monospace; color: var(--text-primary);"><?= htmlspecialchars($sample) ?></code>
-						<?php endforeach; ?>
-						<p style="margin-top: 1rem;">
-							<a href="index.php" style="color: var(--blue);">View all codes →</a>
-						</p>
-					</div>
-				<?php endif; ?>
+						<?php if ($generated_count > 0 && !empty($sample_codes)): ?>
+							<div class="form-card" style="margin-bottom: 1.5rem; background: var(--green-light); border-color: var(--green);">
+								<h3 style="margin-bottom: 1rem;">Sample codes generated:</h3>
+								<?php foreach ($sample_codes as $sample): ?>
+									<code style="display: block; margin: 0.5rem 0; padding: 0.5rem; background: white; border-radius: 4px; font-family: monospace; color: var(--text-primary);"><?= htmlspecialchars($sample) ?></code>
+								<?php endforeach; ?>
+								<p style="margin-top: 1rem;">
+									<a href="index.php" style="color: var(--blue);">View all codes →</a>
+								</p>
+							</div>
+						<?php endif; ?>
 
-				<div class="form-card">
-					<div class="form-header">
-						<h2>Generate Reward Codes</h2>
-					</div>
+						<div class="form-card">
+							<div class="form-header">
+								<h2>Generate Reward Codes</h2>
+							</div>
 
-					<form method="POST" action="" class="form-modern">
-						<div class="form-group">
-							<label for="count">Number of Codes to Generate <span style="color: var(--red);">*</span></label>
-							<input 
-								type="number" 
-								name="count" 
-								id="count" 
-								class="form-input"
-								value="100" 
-								min="1" 
-								max="10000" 
-								required
-							>
-							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Between 1 and 10,000 codes</small>
+							<form method="POST" action="" class="form-modern">
+								<div class="form-group">
+									<label for="count">Number of Codes to Generate <span style="color: var(--red);">*</span></label>
+									<input 
+										type="number" 
+										name="count" 
+										id="count" 
+										class="form-input"
+										value="100" 
+										min="1" 
+										max="10000" 
+										required
+									>
+									<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Between 1 and 10,000 codes</small>
+								</div>
+
+								<div class="form-group">
+									<label for="prefix">Code Prefix <span style="color: var(--red);">*</span></label>
+									<input 
+										type="text" 
+										name="prefix" 
+										id="prefix" 
+										class="form-input"
+										value="Liyas" 
+										placeholder="Liyas"
+										maxlength="20"
+										required
+									>
+									<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Example: "Liyas" will create codes like "Liyas-ABC123XYZ"</small>
+								</div>
+
+								<div class="form-actions">
+									<button type="submit" name="generate" class="btn btn-primary">
+										<i class='bx bx-plus-circle'></i> Generate Codes
+									</button>
+									<a href="index.php" class="btn btn-secondary">
+										<i class='bx bx-x'></i> Cancel
+									</a>
+								</div>
+							</form>
+
+							<div style="padding: 1.5rem; margin-top: 1.5rem; background: var(--bg-main); border-radius: 8px; border: 1px solid var(--border-light);">
+								<h4 style="margin-bottom: 0.75rem; font-size: 16px;">💡 How it works:</h4>
+								<ul style="color: var(--text-secondary); font-size: 13px; line-height: 1.8; padding-left: 1.5rem;">
+									<li>All bottles use ONE common QR code that redirects to the redeem page</li>
+									<li>Each bottle has a UNIQUE reward code printed on the sticker</li>
+									<li>Users manually enter the reward code on the redeem page</li>
+									<li>Codes are 6-10 random characters after the prefix</li>
+									<li>Example format: <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-family: monospace;">Liyas-SFA123Fcg</code></li>
+								</ul>
+							</div>
 						</div>
-
-						<div class="form-group">
-							<label for="prefix">Code Prefix <span style="color: var(--red);">*</span></label>
-							<input 
-								type="text" 
-								name="prefix" 
-								id="prefix" 
-								class="form-input"
-								value="Liyas" 
-								placeholder="Liyas"
-								maxlength="20"
-								required
-							>
-							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Example: "Liyas" will create codes like "Liyas-ABC123XYZ"</small>
-						</div>
-
-						<div class="form-actions">
-							<button type="submit" name="generate" class="btn btn-primary">
-								<i class='bx bx-plus-circle'></i> Generate Codes
-							</button>
-							<a href="index.php" class="btn btn-secondary">
-								<i class='bx bx-x'></i> Cancel
-							</a>
-						</div>
-					</form>
-
-					<div style="padding: 1.5rem; margin-top: 1.5rem; background: var(--bg-main); border-radius: 8px; border: 1px solid var(--border-light);">
-						<h4 style="margin-bottom: 0.75rem; font-size: 16px;">💡 How it works:</h4>
-						<ul style="color: var(--text-secondary); font-size: 13px; line-height: 1.8; padding-left: 1.5rem;">
-							<li>All bottles use ONE common QR code that redirects to the redeem page</li>
-							<li>Each bottle has a UNIQUE reward code printed on the sticker</li>
-							<li>Users manually enter the reward code on the redeem page</li>
-							<li>Codes are 6-10 random characters after the prefix</li>
-							<li>Example format: <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-family: monospace;">Liyas-SFA123Fcg</code></li>
-						</ul>
 					</div>
 				</div>
-			</div>
 		</div>
 	</div>
 </body>

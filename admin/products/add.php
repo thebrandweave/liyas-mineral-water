@@ -90,112 +90,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	
 	<title>Add Product - Liyas Admin</title>
 	<style>
-		.form-container {
-			background: var(--light);
-			padding: 2rem;
-			border-radius: 12px;
-			margin-top: 1rem;
-		}
-
-		.form-group {
-			margin-bottom: 1.5rem;
-		}
-
-		.form-group label {
-			display: block;
-			margin-bottom: 0.5rem;
-			color: var(--dark);
-			font-weight: 600;
-			font-size: 0.9rem;
-		}
-
-		.form-group input[type="text"],
-		.form-group input[type="number"],
-		.form-group textarea {
-			width: 100%;
-			padding: 0.75rem 1rem;
-			border: 1px solid var(--grey);
-			border-radius: 8px;
-			background: white;
-			font-size: 1rem;
-			font-family: var(--opensans);
-			transition: border-color 0.2s;
-		}
-
-		.form-group input:focus,
-		.form-group textarea:focus {
-			outline: none;
-			border-color: var(--blue);
-		}
-
-		.form-group textarea {
-			resize: vertical;
-			min-height: 120px;
-		}
-
-		.form-group small {
-			display: block;
-			margin-top: 0.25rem;
-			color: var(--dark-grey);
-			font-size: 0.85rem;
-		}
-
-		.alert {
-			padding: 1rem;
-			border-radius: 8px;
-			margin-bottom: 1.5rem;
-		}
-
-		.alert-success {
-			background: #d4edda;
-			color: #155724;
-			border: 1px solid #c3e6cb;
-		}
-
-		.alert-error {
-			background: #f8d7da;
-			color: #721c24;
-			border: 1px solid #f5c6cb;
-		}
-
-		.btn-group {
+		/* Centered modal with blurred background for add product form */
+		.modal-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(15, 23, 42, 0.35);
+			backdrop-filter: blur(4px);
 			display: flex;
-			gap: 1rem;
-			margin-top: 2rem;
-		}
-
-		.btn {
-			padding: 0.75rem 2rem;
-			border: none;
-			border-radius: 8px;
-			font-size: 1rem;
-			font-weight: 600;
-			cursor: pointer;
-			text-decoration: none;
-			display: inline-flex;
 			align-items: center;
-			gap: 0.5rem;
-			transition: all 0.2s;
+			justify-content: center;
+			z-index: 999;
+			padding: 1.5rem;
 		}
 
-		.btn-primary {
-			background: var(--blue);
-			color: white;
+		.modal-card {
+			max-width: 720px;
+			width: 100%;
 		}
 
-		.btn-primary:hover {
-			background: #2563eb;
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-		}
-
-		.btn-secondary {
-			background: var(--grey);
-			color: var(--dark);
-		}
-
-		.btn-secondary:hover {
-			background: #d1d5db;
+		@media (max-width: 768px) {
+			.modal-overlay {
+				align-items: flex-start;
+				padding-top: 4rem;
+			}
 		}
 	</style>
 </head>
@@ -220,89 +137,91 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			</div>
 			
 			<div class="content-area">
-				<?php if ($error): ?>
-					<div class="alert alert-error">
-						<?= htmlspecialchars($error) ?>
-					</div>
-				<?php endif; ?>
-
-				<?php if ($success): ?>
-					<div class="alert alert-success">
-						<?= htmlspecialchars($success) ?>
-					</div>
-				<?php endif; ?>
-
-				<div class="form-card">
-					<div class="form-header">
-						<h2>Add New Product</h2>
-					</div>
-
-					<form method="POST" action="" enctype="multipart/form-data" class="form-modern">
-						<div class="form-group">
-							<label for="name">Product Name <span style="color: var(--red);">*</span></label>
-							<input 
-								type="text" 
-								name="name" 
-								id="name" 
-								class="form-input"
-								value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" 
-								required
-								placeholder="e.g., Liyas Mineral Water 500ml"
-							>
-							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter a descriptive name for your product</small>
+				<div class="modal-overlay">
+					<div class="form-card modal-card">
+						<div class="form-header">
+							<h2>Add New Product</h2>
 						</div>
 
-						<div class="form-group">
-							<label for="description">Description</label>
-							<textarea 
-								name="description" 
-								id="description" 
-								class="form-textarea"
-								placeholder="Describe your product..."
-							><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Provide details about the product (optional)</small>
-						</div>
-
-						<div class="form-group">
-							<label for="price">Price <span style="color: var(--red);">*</span></label>
-							<input 
-								type="number" 
-								name="price" 
-								id="price" 
-								class="form-input"
-								value="<?= htmlspecialchars($_POST['price'] ?? '') ?>" 
-								step="0.01" 
-								min="0.01"
-								required
-								placeholder="0.00"
-							>
-							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter the price</small>
-						</div>
-
-						<div class="form-group">
-							<label for="image">Product Image</label>
-							<input 
-								type="file" 
-								name="image" 
-								id="image" 
-								class="form-input"
-								accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-							>
-							<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Upload a product image (JPEG, PNG, GIF, or WebP - Max 5MB)</small>
-							<div id="image-preview" style="margin-top: 1rem; display: none;">
-								<img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--border-light);">
+						<?php if ($error): ?>
+							<div class="alert alert-error">
+								<?= htmlspecialchars($error) ?>
 							</div>
-						</div>
+						<?php endif; ?>
 
-						<div class="form-actions">
-							<button type="submit" class="btn btn-primary">
-								<i class='bx bx-save'></i> Add Product
-							</button>
-							<a href="index.php" class="btn btn-secondary">
-								<i class='bx bx-x'></i> Cancel
-							</a>
-						</div>
-					</form>
+						<?php if ($success): ?>
+							<div class="alert alert-success">
+								<?= htmlspecialchars($success) ?>
+							</div>
+						<?php endif; ?>
+
+						<form method="POST" action="" enctype="multipart/form-data" class="form-modern">
+							<div class="form-group">
+								<label for="name">Product Name <span style="color: var(--red);">*</span></label>
+								<input 
+									type="text" 
+									name="name" 
+									id="name" 
+									class="form-input"
+									value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" 
+									required
+									placeholder="e.g., Liyas Mineral Water 500ml"
+								>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter a descriptive name for your product</small>
+							</div>
+
+							<div class="form-group">
+								<label for="description">Description</label>
+								<textarea 
+									name="description" 
+									id="description" 
+									class="form-textarea"
+									placeholder="Describe your product..."
+								><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Provide details about the product (optional)</small>
+							</div>
+
+							<div class="form-group">
+								<label for="price">Price <span style="color: var(--red);">*</span></label>
+								<input 
+									type="number" 
+									name="price" 
+									id="price" 
+									class="form-input"
+									value="<?= htmlspecialchars($_POST['price'] ?? '') ?>" 
+									step="0.01" 
+									min="0.01"
+									required
+									placeholder="0.00"
+								>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Enter the price</small>
+							</div>
+
+							<div class="form-group">
+								<label for="image">Product Image</label>
+								<input 
+									type="file" 
+									name="image" 
+									id="image" 
+									class="form-input"
+									accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+								>
+								<small style="color: var(--text-muted); font-size: 12px; margin-top: 0.25rem; display: block;">Upload a product image (JPEG, PNG, GIF, or WebP - Max 5MB)</small>
+								<div id="image-preview" style="margin-top: 1rem; display: none;">
+									<img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--border-light);">
+								</div>
+							</div>
+
+							<div class="form-actions">
+								<button type="submit" class="btn btn-primary">
+									<i class='bx bx-save'></i> Add Product
+								</button>
+								<a href="index.php" class="btn btn-secondary">
+									<i class='bx bx-x'></i> Cancel
+								</a>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
