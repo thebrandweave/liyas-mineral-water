@@ -606,8 +606,8 @@ tbody tr:hover {
         height: auto;
     }
 
-    /* Sidebar visible by default; can be collapsed off-canvas */
-    .sidebar {
+	/* Sidebar hidden by default; slides in when body has .sidebar-open */
+	.sidebar {
 		position: fixed;
 		left: 0;
 		top: 0;
@@ -617,13 +617,13 @@ tbody tr:hover {
 		border-right: 1px solid var(--border-light);
 		border-bottom: none;
 		background: var(--bg-white);
-		transform: translateX(0);
+		transform: translateX(-100%);
 		transition: transform 0.2s ease-out;
 	}
 
-	body.sidebar-collapsed .sidebar {
-		transform: translateX(-100%);
-    }
+	body.sidebar-open .sidebar {
+		transform: translateX(0);
+	}
 
     .main-content {
         margin-left: 0;

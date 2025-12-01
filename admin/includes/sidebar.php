@@ -98,18 +98,11 @@ $current_dir = basename(dirname($_SERVER['PHP_SELF']));
 
 <script>
 (function () {
-    var body = document.body;
-
-    // Collapse sidebar by default on small screens
-    if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
-        body.classList.add('sidebar-collapsed');
-    }
-
     var toggle = document.getElementById('sidebarToggle');
     if (!toggle) return;
 
     toggle.addEventListener('click', function () {
-        body.classList.toggle('sidebar-collapsed');
+        document.body.classList.toggle('sidebar-open');
     });
 })();
 </script>
