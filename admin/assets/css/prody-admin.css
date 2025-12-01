@@ -201,6 +201,29 @@ body {
     gap: 0.75rem;
 }
 
+/* Sidebar toggle button (mobile) */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1100;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-white);
+    color: var(--text-primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.sidebar-toggle i {
+    font-size: 18px;
+}
+
 .header-btn {
     display: flex;
     align-items: center;
@@ -583,22 +606,31 @@ tbody tr:hover {
         height: auto;
     }
 
+    /* Off-canvas sidebar on mobile with toggle */
     .sidebar {
         position: fixed;
-        left: -224px;
+        left: -240px;
         top: 0;
         bottom: 0;
+        width: 224px;
         z-index: 1000;
-        transition: left 0.3s;
+        border-right: 1px solid var(--border-light);
+        border-bottom: none;
+        background: var(--bg-white);
+        transition: left 0.3s ease;
     }
-    
-    .sidebar.active {
+
+    body.sidebar-open .sidebar {
         left: 0;
     }
 
     .main-content {
         margin-left: 0;
         min-height: 100vh;
+    }
+
+    .sidebar-toggle {
+        display: inline-flex;
     }
     
     .table-header {

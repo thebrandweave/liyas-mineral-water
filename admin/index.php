@@ -131,8 +131,8 @@ function getStatusBadgeClass($status) {
     <!-- Styles -->
     <link rel="stylesheet" href="assets/css/prody-admin.css">
     
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Chart.js (deferred so it doesn't block initial render) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
     
     <style>
         .stats-grid {

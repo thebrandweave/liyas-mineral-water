@@ -28,6 +28,10 @@ try {
 $current_file = basename($_SERVER['PHP_SELF']);
 $current_dir = basename(dirname($_SERVER['PHP_SELF']));
 ?>
+
+<button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+    <i class='bx bx-menu'></i>
+</button>
 <div class="sidebar">
     <div class="logo" style="justify-content: center;">
         <span class="logo-text">Liyas</span>
@@ -91,3 +95,14 @@ $current_dir = basename(dirname($_SERVER['PHP_SELF']));
         </a>
     </div>
 </div>
+
+<script>
+(function () {
+    var toggle = document.getElementById('sidebarToggle');
+    if (!toggle) return;
+
+    toggle.addEventListener('click', function () {
+        document.body.classList.toggle('sidebar-open');
+    });
+})();
+</script>
