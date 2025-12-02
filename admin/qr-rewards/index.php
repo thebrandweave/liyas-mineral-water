@@ -564,11 +564,17 @@ $page_title   = "Reward Codes";
 								<button type="submit" class="table-btn">
 									<i class='bx bx-filter'></i> Apply
 								</button>
-								<button type="button" id="exportBtn" class="table-btn" style="background: var(--green); color: white; border-color: var(--green);">
-									<i class='bx bx-download'></i> Export
+								<button type="button" id="exportBtn" class="btn-action btn-add noselect">
+									<span class="text">Export</span>
+									<span class="icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+									</span>
 								</button>
-								<a href="generate.php" class="table-btn btn-primary">
-									<i class='bx bx-plus'></i> Generate
+								<a href="generate.php" class="btn-action btn-add noselect">
+									<span class="text">Generate</span>
+									<span class="icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+									</span>
 								</a>
 								<?php if ($filter !== 'all' || !empty($search)): ?>
 									<a href="index.php" class="table-btn">
@@ -588,10 +594,13 @@ $page_title   = "Reward Codes";
 						</div>
 						<?php if (!empty($reward_codes)): ?>
 						<div class="table-actions">
-							<button type="button" id="deleteSelectedBtn" class="table-btn" style="background: var(--red); color: white; border-color: var(--red);">
-								<i class='bx bx-trash'></i> Delete Selected
+							<button type="button" id="deleteSelectedBtn" class="btn-action btn-delete noselect">
+								<span class="text">Delete Selected</span>
+								<span class="icon">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+								</span>
 							</button>
-							<button type="button" id="deselectAllBtn" class="table-btn">
+							<button type="button" id="deselectAllBtn" class="btn btn-secondary">
 								<i class='bx bx-x-circle'></i> Deselect All
 							</button>
 						</div>
@@ -652,10 +661,13 @@ $page_title   = "Reward Codes";
 										<span style="font-size: 13px;"><?= formatIST($code['created_at']) ?></span>
 										<br><small style="color: var(--text-muted);">IST</small>
 									</td>
-									<td>
+									<td style="white-space: nowrap;">
 										<?php if ($code['customer_name']): ?>
-										<button type="button" onclick="showCustomerDetails('<?= htmlspecialchars($code['customer_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_email'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_address'] ?? '', ENT_QUOTES) ?>')" class="btn-action btn-view">
-											<i class='bx bx-user'></i> View
+										<button type="button" onclick="showCustomerDetails('<?= htmlspecialchars($code['customer_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_email'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($code['customer_address'] ?? '', ENT_QUOTES) ?>')" class="btn-action btn-view noselect" style="margin-right: 0.5rem;">
+											<span class="text">View</span>
+											<span class="icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+											</span>
 										</button>
 										<?php endif; ?>
 										<form method="POST" action="" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this reward code?');">
@@ -664,8 +676,11 @@ $page_title   = "Reward Codes";
 											<input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
 											<input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
 											<input type="hidden" name="page" value="<?= $page ?>">
-											<button type="submit" class="btn-action btn-delete">
-												<i class='bx bx-trash'></i> Delete
+											<button type="submit" class="btn-action btn-delete noselect">
+												<span class="text">Delete</span>
+												<span class="icon">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+												</span>
 											</button>
 										</form>
 									</td>
@@ -718,7 +733,7 @@ $page_title   = "Reward Codes";
 				<div id="customerDetailsContent" style="text-align: left;"></div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="modal-btn modal-btn-cancel" onclick="closeCustomerDetailsModal()">
+				<button type="button" class="btn btn-secondary" onclick="closeCustomerDetailsModal()">
 					<i class='bx bx-x'></i> Close
 				</button>
 			</div>
@@ -749,11 +764,14 @@ $page_title   = "Reward Codes";
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="modal-btn modal-btn-cancel" id="bulkDeleteCancelBtn">
+				<button type="button" class="btn btn-secondary" id="bulkDeleteCancelBtn">
 					<i class='bx bx-x'></i> Cancel
 				</button>
-				<button type="button" class="modal-btn modal-btn-delete" id="bulkDeleteConfirmBtn">
-					<i class='bx bx-trash'></i> Delete
+				<button type="button" class="btn-action btn-delete noselect" id="bulkDeleteConfirmBtn">
+					<span class="text">Delete</span>
+					<span class="icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+					</span>
 				</button>
 			</div>
 		</div>

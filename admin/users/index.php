@@ -395,9 +395,21 @@ try {
 							</div>
 
 							<div class="form-actions">
-								<button type="submit" name="save_admin" class="btn btn-primary">
-									<i class='bx bx-save'></i> <?= $editing_admin ? 'Update Admin' : 'Add Admin' ?>
+								<?php if ($editing_admin): ?>
+								<button type="submit" name="save_admin" class="btn-action btn-edit noselect">
+									<span class="text">Admin</span>
+									<span class="icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 18.08V19h.92l9.06-9.06-.92-.92z" fill="currentColor"/><path d="M20.71 6.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+									</span>
 								</button>
+								<?php else: ?>
+								<button type="submit" name="save_admin" class="btn-action btn-add noselect">
+									<span class="text">Add</span>
+									<span class="icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+									</span>
+								</button>
+								<?php endif; ?>
 								<button type="button" class="btn btn-secondary" onclick="closeAdminModal()">
 									<i class='bx bx-x'></i> Cancel
 								</button>
@@ -415,9 +427,11 @@ try {
 						</div>
 						<div class="table-actions">
 							<?php if (!$editing_admin): ?>
-							<a href="javascript:void(0);" onclick="openAdminModal();" class="table-btn btn-primary">
-								<i class='bx bx-plus'></i>
-								<span>Add New</span>
+							<a href="javascript:void(0);" onclick="openAdminModal();" class="btn-action btn-add noselect">
+								<span class="text">Add</span>
+								<span class="icon">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+								</span>
 							</a>
 							<?php endif; ?>
 						</div>
@@ -459,12 +473,18 @@ try {
 									</td>
 									<td><?= date('d-m-Y', strtotime($admin['created_at'])) ?></td>
 									<td>
-										<a href="?edit=<?= $admin['admin_id'] ?>" class="btn-action btn-edit">
-											<i class='bx bx-edit'></i> Edit
+										<a href="?edit=<?= $admin['admin_id'] ?>" class="btn-action btn-edit noselect">
+											<span class="text">Edit</span>
+											<span class="icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+											</span>
 										</a>
 										<?php if ($admin['admin_id'] != $current_admin_id): ?>
-										<a href="javascript:void(0);" onclick="confirmDelete(<?= $admin['admin_id'] ?>, '<?= htmlspecialchars(addslashes($admin['username'])) ?>')" class="btn-action btn-delete">
-											<i class='bx bx-trash'></i> Delete
+										<a href="javascript:void(0);" onclick="confirmDelete(<?= $admin['admin_id'] ?>, '<?= htmlspecialchars(addslashes($admin['username'])) ?>')" class="btn-action btn-delete noselect">
+											<span class="text">Delete</span>
+											<span class="icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+											</span>
 										</a>
 										<?php endif; ?>
 									</td>
@@ -499,11 +519,15 @@ try {
 		</div>
 	</div>
 	
+	<?php include '../includes/delete_confirm_modal.php'; ?>
+	
+	<script src="../assets/js/delete-confirm.js"></script>
 	<script>
+	// Override confirmDelete for admin users
 	function confirmDelete(adminId, adminName) {
-		if (confirm(`Are you sure you want to delete admin user "${adminName}"?\n\nThis action cannot be undone!`)) {
-			window.location.href = `index.php?delete=${adminId}`;
-		}
+		window.confirmDelete(adminId, adminName, function(id) {
+			window.location.href = `index.php?delete=${id}`;
+		});
 	}
 
 	function openAdminModal() {

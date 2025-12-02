@@ -353,40 +353,256 @@ tbody tr:hover {
     vertical-align: middle;
 }
 
+/* Uiverse.io Button Styles */
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .btn-action {
+    width: 110px;
+    height: 38px;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    font-size: 13px;
+    position: relative;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
     text-decoration: none;
-    border-radius: 4px;
-    transition: all 0.2s;
     margin-right: 0.5rem;
+    overflow: hidden;
+    font-family: inherit;
 }
 
-.btn-edit {
-    color: var(--blue);
+/* Wider buttons for longer text in table actions */
+.table-actions .btn-action {
+    width: 165px;
+    min-width: 165px;
 }
 
-.btn-edit:hover {
-    background: var(--blue-light);
+.table-actions .btn-action .text {
+    transform: translateX(20px);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: visible;
+    max-width: none;
+    letter-spacing: 0.01em;
+    padding-right: 5px;
 }
 
+.table-actions .btn-action .icon {
+    transform: translateX(130px);
+    width: 28px;
+}
+
+.table-actions .btn-action:hover .icon {
+    width: 165px;
+}
+
+/* Smaller buttons for table cells */
+table .btn-action {
+    width: 100px;
+    height: 36px;
+}
+
+/* Prevent text overlap in table cells */
+table td {
+    white-space: nowrap;
+}
+
+table td .btn-action {
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.btn-action, .btn-action span {
+    transition: 200ms;
+}
+
+.btn-action .text {
+    transform: translateX(28px);
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 50px);
+}
+
+table .btn-action .text {
+    transform: translateX(22px);
+    font-size: 12px;
+}
+
+.btn-action .icon {
+    position: absolute;
+    transform: translateX(75px);
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+table .btn-action .icon {
+    transform: translateX(65px);
+    height: 28px;
+    width: 28px;
+}
+
+.btn-action svg {
+    width: 14px;
+    height: 14px;
+    fill: #eee;
+    stroke: #eee;
+}
+
+.btn-action:focus {
+    outline: none;
+}
+
+.btn-action:active .icon svg {
+    transform: scale(0.8);
+}
+
+table .btn-action:hover .icon {
+    width: 120px;
+}
+
+/* Delete Button - Red */
 .btn-delete {
-    color: var(--red);
+    background: #e62222;
+}
+
+.btn-delete .icon {
+    border-left: 1px solid #c41b1b;
+    height: 30px;
+}
+
+table .btn-delete .icon {
+    height: 28px;
 }
 
 .btn-delete:hover {
-    background: #fee2e2;
+    background: #ff3636;
 }
 
+.btn-delete:hover .text {
+    color: transparent;
+}
+
+.btn-delete:hover .icon {
+    width: 110px;
+    border-left: none;
+    transform: translateX(0);
+}
+
+table .btn-delete:hover .icon {
+    width: 100px;
+}
+
+/* Edit Button - Blue */
+.btn-edit {
+    background: var(--blue);
+}
+
+.btn-edit .icon {
+    border-left: 1px solid var(--blue-dark);
+    height: 30px;
+}
+
+table .btn-edit .icon {
+    height: 28px;
+}
+
+.btn-edit:hover {
+    background: #4a9eff;
+}
+
+.btn-edit:hover .text {
+    color: transparent;
+}
+
+.btn-edit:hover .icon {
+    width: 110px;
+    border-left: none;
+    transform: translateX(0);
+}
+
+table .btn-edit:hover .icon {
+    width: 100px;
+}
+
+/* Add Button - Green */
+.btn-add {
+    background: var(--green);
+}
+
+.btn-add .icon {
+    border-left: 1px solid #047857;
+    height: 30px;
+}
+
+table .btn-add .icon {
+    height: 28px;
+}
+
+.btn-add:hover {
+    background: #10b981;
+}
+
+.btn-add:hover .text {
+    color: transparent;
+}
+
+.btn-add:hover .icon {
+    width: 110px;
+    border-left: none;
+    transform: translateX(0);
+}
+
+table .btn-add:hover .icon {
+    width: 100px;
+}
+
+/* View Button - Green */
 .btn-view {
-    color: var(--green);
+    background: var(--green);
+    width: 100px;
+    height: 36px;
+}
+
+.btn-view .icon {
+    border-left: 1px solid #047857;
+    height: 28px;
+    transform: translateX(65px);
+}
+
+.btn-view .text {
+    transform: translateX(22px);
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
 }
 
 .btn-view:hover {
-    background: var(--green-light);
+    background: #10b981;
+}
+
+.btn-view:hover .text {
+    color: transparent;
+}
+
+.btn-view:hover .icon {
+    width: 100px;
+    border-left: none;
+    transform: translateX(0);
 }
 
 /* Forms */
@@ -456,6 +672,11 @@ tbody tr:hover {
     display: flex;
     gap: 0.75rem;
     padding-top: 1rem;
+    align-items: center;
+}
+
+.form-actions .btn-secondary {
+    height: 38px;
 }
 
 .btn {
@@ -486,6 +707,12 @@ tbody tr:hover {
     background: var(--bg-white);
     color: var(--text-secondary);
     border: 1px solid var(--border-medium);
+    height: 38px;
+    padding: 0 1rem;
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 110px;
+    justify-content: center;
 }
 
 .btn-secondary:hover {
@@ -597,6 +824,128 @@ tbody tr:hover {
     color: var(--text-secondary);
     text-align: center;
     margin-bottom: 2rem;
+}
+
+/* Delete Confirmation Modal */
+.delete-confirm-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.delete-confirm-modal.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.delete-confirm-dialog {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 480px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease-out;
+    position: relative;
+    z-index: 10001;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.delete-confirm-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.delete-confirm-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.delete-confirm-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.15s;
+}
+
+.delete-confirm-header .close-btn:hover {
+    background: var(--bg-main);
+    color: var(--text-primary);
+}
+
+.delete-confirm-body {
+    padding: 1.25rem 1.5rem 0.75rem;
+    text-align: center;
+}
+
+.delete-confirm-warning-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 999px;
+    background: #fee2e2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 2rem;
+}
+
+.delete-confirm-warning-icon i {
+    color: #dc2626;
+}
+
+.delete-confirm-body p {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.delete-confirm-footer {
+    padding: 0.9rem 1.5rem 1.25rem;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+body.modal-active {
+    overflow: hidden;
 }
 
 /* Responsive */

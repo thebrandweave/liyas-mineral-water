@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					<i class='bx bx-home'></i>
 					<span>Products</span>
 					<span>/</span>
-					<span>Add Product</span>
+					<span>Add</span>
 				</div>
 				<div class="header-actions">
 					<a href="index.php" class="header-btn">
@@ -216,8 +216,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 							</div>
 
 							<div class="form-actions">
-								<button type="submit" class="btn btn-primary">
-									<i class='bx bx-save'></i> Add Product
+								<button type="submit" class="btn-action btn-add noselect">
+									<span class="text">Add Product</span>
+									<span class="icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+									</span>
 								</button>
 								<a href="index.php" class="btn btn-secondary">
 									<i class='bx bx-x'></i> Cancel
