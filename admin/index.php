@@ -323,7 +323,7 @@ function getStatusBadgeClass($status) {
                     <div class="table-header">
                         <div class="table-title">
                             Recent Orders
-                            <i class='bx bx-chevron-down'></i>
+                            <!-- <i class='bx bx-chevron-down'></i> -->
                         </div>
                         <div class="table-actions">
                             <a href="orders/index.php" class="table-btn">

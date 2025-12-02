@@ -501,7 +501,7 @@ $page_title   = "Orders";
 					<div class="table-header">
 						<div class="table-title">
 							All Orders
-							<i class='bx bx-chevron-down'></i>
+							<!-- <i class='bx bx-chevron-down'></i> -->
 						</div>
 					</div>
 					

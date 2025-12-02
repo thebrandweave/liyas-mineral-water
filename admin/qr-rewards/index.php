@@ -590,7 +590,7 @@ $page_title   = "Reward Codes";
 					<div class="table-header">
 						<div class="table-title">
 							All Reward Codes
-							<i class='bx bx-chevron-down'></i>
+							<!-- <i class='bx bx-chevron-down'></i> -->
 						</div>
 						<?php if (!empty($reward_codes)): ?>
 						<div class="table-actions">

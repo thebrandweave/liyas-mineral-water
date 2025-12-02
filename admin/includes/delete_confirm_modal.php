@@ -4,9 +4,9 @@
 		<div class="delete-confirm-header">
 			<h3>
 				<i class='bx bx-trash' style="color:#dc2626;"></i>
-				Confirm Deletion
+				<span>Confirm Deletion</span>
 			</h3>
-			<button type="button" class="close-btn" onclick="closeDeleteModal()">
+			<button type="button" class="close-btn" onclick="closeDeleteModal()" aria-label="Close">
 				<i class='bx bx-x'></i>
 			</button>
 		</div>
@@ -14,10 +14,10 @@
 			<div class="delete-confirm-warning-icon">
 				<i class='bx bx-error'></i>
 			</div>
-			<p id="deleteConfirmMessage">
+			<p id="deleteConfirmMessage" style="word-break: break-word; hyphens: auto;">
 				You are about to delete this item. This action cannot be undone.
 			</p>
-			<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem;">
+			<p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; word-break: break-word;">
 				Please confirm to proceed.
 			</p>
 		</div>

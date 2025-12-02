@@ -355,7 +355,7 @@ try {
 					<div class="table-header">
 						<div class="table-title">
 							All Categories
-							<i class='bx bx-chevron-down'></i>
+							<!-- <i class='bx bx-chevron-down'></i> -->
 						</div>
 						<div class="table-actions">
 							<?php if (!$editing_category): ?>
