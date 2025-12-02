@@ -501,6 +501,84 @@ $page_title   = "Reward Codes";
 			filter: blur(2px);
 			transition: filter 0.2s;
 		}
+		
+		/* Table Responsive Wrapper */
+		.table-responsive-wrapper {
+			width: 100%;
+			overflow-x: auto;
+			overflow-y: visible;
+			-webkit-overflow-scrolling: touch;
+			position: relative;
+		}
+		
+		.table-responsive-wrapper table {
+			min-width: 800px;
+			width: 100%;
+		}
+		
+		/* Mobile optimizations */
+		@media (max-width: 768px) {
+			.table-responsive-wrapper {
+				overflow-x: scroll;
+				-webkit-overflow-scrolling: touch;
+				scrollbar-width: thin;
+				scrollbar-color: var(--border-medium) transparent;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar {
+				height: 8px;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar-track {
+				background: var(--bg-main);
+				border-radius: 4px;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar-thumb {
+				background: var(--border-medium);
+				border-radius: 4px;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+				background: var(--text-secondary);
+			}
+			
+			.table-responsive-wrapper table {
+				min-width: 900px;
+			}
+			
+			.table-responsive-wrapper table th,
+			.table-responsive-wrapper table td {
+				padding: 0.75rem 1rem;
+				font-size: 13px;
+			}
+			
+			.table-responsive-wrapper table th:first-child,
+			.table-responsive-wrapper table td:first-child {
+				position: sticky;
+				left: 0;
+				background: var(--bg-white);
+				z-index: 10;
+				box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+			}
+			
+			.table-responsive-wrapper table th:last-child,
+			.table-responsive-wrapper table td:last-child {
+				min-width: 180px;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.table-responsive-wrapper table {
+				min-width: 1000px;
+			}
+			
+			.table-responsive-wrapper table th,
+			.table-responsive-wrapper table td {
+				padding: 0.5rem 0.75rem;
+				font-size: 12px;
+			}
+		}
 
 		.alert {
 			margin: 1rem 0;
@@ -614,21 +692,22 @@ $page_title   = "Reward Codes";
 							<p style="color: var(--text-muted); font-size: 0.9rem;">Get started by <a href="generate.php" style="color: var(--blue);">generating reward codes</a></p>
 						</div>
 					<?php else: ?>
-						<table>
-							<thead>
-								<tr>
-									<th style="width: 40px;"><input type="checkbox" id="selectAll" style="cursor:pointer;"></th>
-									<th>ID</th>
-									<th>Reward Code</th>
-									<th>Status</th>
-									<th>Customer</th>
-									<th>Phone</th>
-									<th>Redeemed At</th>
-									<th>Created</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
+						<div class="table-responsive-wrapper">
+							<table>
+								<thead>
+									<tr>
+										<th style="width: 40px;"><input type="checkbox" id="selectAll" style="cursor:pointer;"></th>
+										<th>ID</th>
+										<th>Reward Code</th>
+										<th>Status</th>
+										<th>Customer</th>
+										<th>Phone</th>
+										<th>Redeemed At</th>
+										<th>Created</th>
+										<th>Actions</th>
+									</tr>
+								</thead>
+								<tbody>
 								<?php foreach ($reward_codes as $code): ?>
 								<tr>
 									<td>
@@ -686,8 +765,9 @@ $page_title   = "Reward Codes";
 									</td>
 								</tr>
 								<?php endforeach; ?>
-							</tbody>
-						</table>
+								</tbody>
+							</table>
+						</div>
 
 						<?php if ($total_pages > 1): ?>
 							<div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-light); display: flex; justify-content: center; gap: 0.75rem; align-items: center;">

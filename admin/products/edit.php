@@ -179,6 +179,33 @@ if (isset($_GET['added'])) {
 	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
 	
 	<title>Edit Product - Liyas Admin</title>
+	<style>
+		/* Centered modal with blurred background for edit product form */
+		.modal-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(15, 23, 42, 0.35);
+			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 999;
+			padding: 1.5rem;
+		}
+
+		.modal-card {
+			max-width: 720px;
+			width: 100%;
+		}
+
+		@media (max-width: 768px) {
+			.modal-overlay {
+				align-items: flex-start;
+				padding-top: 4rem;
+			}
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
@@ -214,7 +241,8 @@ if (isset($_GET['added'])) {
 				<?php endif; ?>
 
 				<?php if ($product): ?>
-					<div class="form-card">
+					<div class="modal-overlay">
+						<div class="form-card modal-card">
 						<div class="form-header">
 							<h2>Edit Product #<?= $product['product_id'] ?></h2>
 						</div>
@@ -288,9 +316,9 @@ if (isset($_GET['added'])) {
 
 							<div class="form-actions">
 								<button type="submit" name="update" class="btn-action btn-edit noselect">
-									<span class="text">Update </span>
+									<span class="text">Update Product</span>
 									<span class="icon">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
 									</span>
 								</button>
 								<a href="index.php" class="btn btn-secondary">
@@ -298,6 +326,7 @@ if (isset($_GET['added'])) {
 								</a>
 							</div>
 						</form>
+						</div>
 					</div>
 				<?php else: ?>
 					<div class="alert alert-error">
