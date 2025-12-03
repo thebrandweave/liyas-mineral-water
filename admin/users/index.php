@@ -478,7 +478,7 @@ try {
 											</span>
 										</a>
 										<?php if ($admin['admin_id'] != $current_admin_id): ?>
-										<a href="javascript:void(0);" onclick="confirmDelete(<?= $admin['admin_id'] ?>, '<?= htmlspecialchars(addslashes($admin['username'])) ?>')" class="btn-action btn-delete noselect">
+										<a href="javascript:void(0);" onclick="handleUserDelete(<?= $admin['admin_id'] ?>, '<?= htmlspecialchars(addslashes($admin['username'])) ?>')" class="btn-action btn-delete noselect">
 											<span class="text">Delete</span>
 											<span class="icon">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
@@ -521,11 +521,17 @@ try {
 	
 	<script src="../assets/js/delete-confirm.js"></script>
 	<script>
-	// Override confirmDelete for admin users
-	function confirmDelete(adminId, adminName) {
-		window.confirmDelete(adminId, adminName, function(id) {
-			window.location.href = `index.php?delete=${id}`;
-		});
+	// User delete handler using shared modal, with graceful fallback
+	function handleUserDelete(adminId, adminName) {
+		if (typeof window.showDeleteConfirm === 'function') {
+			window.showDeleteConfirm(adminId, adminName, function(id) {
+				window.location.href = 'index.php?delete=' + id;
+			});
+		} else {
+			if (confirm('Are you sure you want to delete admin user "' + adminName + '"?\n\nThis action cannot be undone!')) {
+				window.location.href = 'index.php?delete=' + adminId;
+			}
+		}
 	}
 
 	function openAdminModal() {

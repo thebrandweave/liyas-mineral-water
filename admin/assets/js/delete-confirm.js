@@ -45,7 +45,7 @@
 	}
 	
 	// Public function to show delete confirmation
-	window.confirmDelete = function(itemId, itemName, callback, customMessage) {
+	window.showDeleteConfirm = function(itemId, itemName, callback, customMessage) {
 		if (!modal || !message) {
 			console.error('Delete confirmation modal not found. Make sure delete_confirm_modal.php is included.');
 			return;

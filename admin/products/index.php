@@ -260,7 +260,7 @@ try {
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
 												</span>
 											</a>
-											<a href="javascript:void(0);" onclick="confirmDelete(<?= $product['product_id'] ?>, '<?= htmlspecialchars(addslashes($product['name'])) ?>')" class="btn-action btn-delete noselect">
+											<a href="javascript:void(0);" onclick="handleProductDelete(<?= $product['product_id'] ?>, '<?= htmlspecialchars(addslashes($product['name'])) ?>')" class="btn-action btn-delete noselect">
 												<span class="text">Delete</span>
 												<span class="icon">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
@@ -302,11 +302,17 @@ try {
 	
 	<script src="../assets/js/delete-confirm.js"></script>
 	<script>
-	// Override confirmDelete for products
-	function confirmDelete(productId, productName) {
-		window.confirmDelete(productId, productName, function(id) {
-			window.location.href = `index.php?delete=${id}`;
-		});
+	// Product delete handler using shared modal, with graceful fallback
+	function handleProductDelete(productId, productName) {
+		if (typeof window.showDeleteConfirm === 'function') {
+			window.showDeleteConfirm(productId, productName, function(id) {
+				window.location.href = 'index.php?delete=' + id;
+			});
+		} else {
+			if (confirm('Are you sure you want to delete \"' + productName + '\"?\\n\\nThis action cannot be undone!')) {
+				window.location.href = 'index.php?delete=' + productId;
+			}
+		}
 	}
 	</script>
 </body>
