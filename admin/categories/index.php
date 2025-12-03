@@ -379,7 +379,6 @@ try {
 						<table>
 							<thead>
 								<tr>
-									<th>ID</th>
 									<th>Category Name</th>
 									<th>Description</th>
 									<th>Products</th>
@@ -390,7 +389,6 @@ try {
 							<tbody>
 								<?php foreach ($categories as $category): ?>
 								<tr>
-									<td><?= str_pad($category['category_id'], 2, '0', STR_PAD_LEFT) ?></td>
 									<td><strong><?= htmlspecialchars($category['name']) ?></strong></td>
 									<td>
 										<span style="color: var(--text-secondary); max-width: 300px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">

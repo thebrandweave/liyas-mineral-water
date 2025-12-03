@@ -512,7 +512,7 @@ $page_title   = "Reward Codes";
 		}
 		
 		.table-responsive-wrapper table {
-			min-width: 800px;
+			min-width: 750px;
 			width: 100%;
 		}
 		
@@ -544,7 +544,7 @@ $page_title   = "Reward Codes";
 			}
 			
 			.table-responsive-wrapper table {
-				min-width: 900px;
+				min-width: 850px;
 			}
 			
 			.table-responsive-wrapper table th,
@@ -570,7 +570,7 @@ $page_title   = "Reward Codes";
 		
 		@media (max-width: 480px) {
 			.table-responsive-wrapper table {
-				min-width: 1000px;
+				min-width: 950px;
 			}
 			
 			.table-responsive-wrapper table th,
@@ -697,7 +697,6 @@ $page_title   = "Reward Codes";
 								<thead>
 									<tr>
 										<th style="width: 40px;"><input type="checkbox" id="selectAll" style="cursor:pointer;"></th>
-										<th>ID</th>
 										<th>Reward Code</th>
 										<th>Status</th>
 										<th>Customer</th>
@@ -713,7 +712,6 @@ $page_title   = "Reward Codes";
 									<td>
 										<input type="checkbox" class="row-checkbox" value="<?= $code['id'] ?>" style="width:16px;height:16px;cursor:pointer;">
 									</td>
-									<td><?= $code['id'] ?></td>
 									<td>
 										<strong style="font-family: monospace; color: var(--blue);">
 											<?= htmlspecialchars($code['reward_code']) ?>

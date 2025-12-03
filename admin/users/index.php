@@ -447,7 +447,6 @@ try {
 						<table>
 							<thead>
 								<tr>
-									<th>ID</th>
 									<th>Username</th>
 									<th>Email</th>
 									<th>Role</th>
@@ -458,7 +457,6 @@ try {
 							<tbody>
 								<?php foreach ($admins as $admin): ?>
 								<tr class="<?= $admin['admin_id'] == $current_admin_id ? 'current-user' : '' ?>">
-									<td><?= str_pad($admin['admin_id'], 2, '0', STR_PAD_LEFT) ?></td>
 									<td>
 										<strong><?= htmlspecialchars($admin['username']) ?></strong>
 										<?php if ($admin['admin_id'] == $current_admin_id): ?>

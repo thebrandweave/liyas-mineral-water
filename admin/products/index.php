@@ -230,7 +230,6 @@ try {
 						<table>
 							<thead>
 								<tr>
-									<th>ID</th>
 									<th>Product</th>
 									<th>Description</th>
 									<th>Price</th>
@@ -241,7 +240,6 @@ try {
 							<tbody>
 								<?php foreach ($products as $product): ?>
 									<tr>
-										<td><?= str_pad($product['product_id'], 2, '0', STR_PAD_LEFT) ?></td>
 										<td>
 											<?php if (!empty($product['image'])): ?>
 												<img src="../../<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="table-img">

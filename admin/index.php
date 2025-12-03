@@ -336,7 +336,6 @@ function getStatusBadgeClass($status) {
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Customer</th>
                                 <th>Email</th>
                                 <th>Amount</th>
@@ -348,14 +347,13 @@ function getStatusBadgeClass($status) {
                         <tbody>
                             <?php if (empty($recent_orders)): ?>
                                 <tr>
-                                    <td colspan="7" style="text-align: center; padding: 2rem;">
+                                    <td colspan="6" style="text-align: center; padding: 2rem;">
                                         No orders found. <a href="orders/index.php" style="color: var(--blue);">View all orders</a>
                                     </td>
                                 </tr>
                             <?php else: ?>
                                 <?php foreach ($recent_orders as $order): ?>
                                     <tr>
-                                        <td><strong>#<?= $order['order_id'] ?></strong></td>
                                         <td><strong><?= htmlspecialchars($order['customer_name'] ?? 'N/A') ?></strong></td>
                                         <td><?= htmlspecialchars($order['customer_email'] ?? 'N/A') ?></td>
                                         <td><strong><?= formatCurrency($order['total_amount']) ?></strong></td>

@@ -514,7 +514,6 @@ $page_title   = "Orders";
 						<table>
 							<thead>
 								<tr>
-									<th>ID</th>
 									<th>Customer</th>
 									<th>Contact</th>
 									<th>Address</th>
@@ -527,7 +526,6 @@ $page_title   = "Orders";
 							<tbody>
 								<?php foreach ($orders as $order): ?>
 								<tr>
-									<td><strong>#<?= $order['order_id'] ?></strong></td>
 									<td>
 										<strong><?= htmlspecialchars($order['customer_name']) ?></strong>
 										<?php if ($order['customer_email']): ?>
