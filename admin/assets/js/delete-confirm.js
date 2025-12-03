@@ -39,7 +39,8 @@
 	
 	// Handle confirm button click
 	function handleConfirm() {
-		if (deleteItemId !== null && deleteCallback) {
+		if (deleteCallback) {
+			// Always invoke the callback, passing along the current deleteItemId (may be null for form-based deletes)
 			deleteCallback(deleteItemId);
 		}
 	}

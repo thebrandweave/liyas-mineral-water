@@ -22,7 +22,7 @@ define('DB_NAME', 'u232955123_liyas_inter');
 define('DB_USER', 'u232955123_liyas');
 define('DB_PASS', 'Brandweave@24');
 
-// LOCAL DEVELOPMENT (XAMPP)
+// LOCAL DEVELOPMENT (XAMPP)    
 // define('DB_HOST', 'localhost');
 // define('DB_PORT', 3306);
 // define('DB_NAME', 'liyas_international');

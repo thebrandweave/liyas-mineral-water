@@ -747,13 +747,13 @@ $page_title   = "Reward Codes";
 											</span>
 										</button>
 										<?php endif; ?>
-										<form method="POST" action="" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this reward code?');">
+										<form method="POST" action="" style="display: inline;">
 											<input type="hidden" name="delete_code" value="1">
 											<input type="hidden" name="code_id" value="<?= $code['id'] ?>">
 											<input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
 											<input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
 											<input type="hidden" name="page" value="<?= $page ?>">
-											<button type="submit" class="btn-action btn-delete noselect">
+											<button type="button" class="btn-action btn-delete noselect" onclick="handleRewardDelete(this, '<?= htmlspecialchars(addslashes($code['reward_code'])) ?>')">
 												<span class="text">Delete</span>
 												<span class="icon">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
@@ -854,8 +854,35 @@ $page_title   = "Reward Codes";
 			</div>
 		</div>
 	</div>
+
+	<?php include '../includes/delete_confirm_modal.php'; ?>
+	<script src="../assets/js/delete-confirm.js"></script>
 	
 	<script>
+	// Single reward delete handler using shared confirmation modal
+	function handleRewardDelete(button, codeLabel) {
+		// Resolve the form from the button
+		var form = button.closest('form');
+		if (!form) return;
+
+		// Prefer shared blurred modal
+		if (typeof window.showDeleteConfirm === 'function') {
+			window.showDeleteConfirm(
+				null,
+				codeLabel,
+				function () {
+					form.submit();
+				},
+				`Are you sure you want to delete reward code "${codeLabel}"?\n\nThis action cannot be undone!`
+			);
+		} else {
+			// Fallback to native confirm
+			if (confirm('Are you sure you want to delete this reward code?\n\nThis action cannot be undone!')) {
+				form.submit();
+			}
+		}
+	}
+
 	function copyToClipboard(text) {
 		navigator.clipboard.writeText(text).then(function() {
 			const notification = document.querySelector('.notification');
