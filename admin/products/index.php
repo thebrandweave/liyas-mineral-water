@@ -1,6 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
+require_once '../includes/activity_logger.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_page = "products";
@@ -23,12 +24,14 @@ if (isset($_GET['page']) && $_GET['page'] === 'edit' && isset($_GET['id'])) {
 if (isset($_GET['delete']) && !empty($_GET['delete'])) {
     $product_id = (int)$_GET['delete'];
     try {
-        // Check if product exists and get image path
-        $checkStmt = $pdo->prepare("SELECT product_id, image FROM products WHERE product_id = ?");
+        // Check if product exists and get product details
+        $checkStmt = $pdo->prepare("SELECT product_id, name, image FROM products WHERE product_id = ?");
         $checkStmt->execute([$product_id]);
         $product_data = $checkStmt->fetch(PDO::FETCH_ASSOC);
         
         if ($product_data) {
+            $product_name = $product_data['name'];
+            
             // Delete product
             $deleteStmt = $pdo->prepare("DELETE FROM products WHERE product_id = ?");
             $deleteStmt->execute([$product_id]);
@@ -37,6 +40,9 @@ if (isset($_GET['delete']) && !empty($_GET['delete'])) {
             if (!empty($product_data['image']) && file_exists(__DIR__ . '/../' . $product_data['image'])) {
                 unlink(__DIR__ . '/../' . $product_data['image']);
             }
+            
+            // Log activity
+            quickLog($pdo, 'delete', 'product', $product_id, "Deleted product: {$product_name}");
             
             $success_message = "Product deleted successfully!";
         } else {

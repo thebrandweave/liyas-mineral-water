@@ -1,6 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
+require_once '../includes/activity_logger.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_page = "products";
@@ -138,6 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 }
                 
                 $success = "Product updated successfully!";
+                
+                // Log activity
+                quickLog($pdo, 'update', 'product', $product_id, "Updated product: {$name} (Price: ₹{$price})");
                 
                 // Refresh product data
                 $stmt = $pdo->prepare("SELECT * FROM products WHERE product_id = ?");

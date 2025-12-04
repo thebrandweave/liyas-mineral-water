@@ -1,6 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
+require_once '../includes/activity_logger.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_page = "products";
@@ -57,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 $product_id = $pdo->lastInsertId();
                 $success = "Product added successfully!";
+                
+                // Log activity
+                quickLog($pdo, 'create', 'product', $product_id, "Created product: {$name} (Price: ₹{$price})");
                 
                 // Redirect to products list
                 header("Location: index.php?added=1");

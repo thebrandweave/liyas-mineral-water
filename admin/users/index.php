@@ -1,6 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
+require_once '../includes/activity_logger.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_admin_id = $_SESSION['admin_id'] ?? 0;
@@ -28,9 +29,15 @@ if (isset($_GET['delete']) && !empty($_GET['delete'])) {
             $admin_data = $checkStmt->fetch(PDO::FETCH_ASSOC);
             
             if ($admin_data) {
+                $deleted_admin_name = $admin_data['username'];
+                
                 // Delete admin
                 $deleteStmt = $pdo->prepare("DELETE FROM admins WHERE admin_id = ?");
                 $deleteStmt->execute([$admin_id]);
+                
+                // Log activity
+                quickLog($pdo, 'delete', 'user', $admin_id, "Deleted admin user: {$deleted_admin_name}");
+                
                 $success_message = "Admin user deleted successfully!";
             } else {
                 $error_message = "Admin user not found!";
@@ -95,6 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin'])) {
                             $password_hash = password_hash($password, PASSWORD_DEFAULT);
                             $stmt = $pdo->prepare("UPDATE admins SET username = ?, email = ?, password_hash = ?, role = ? WHERE admin_id = ?");
                             $stmt->execute([$username, $email, $password_hash, $role, $admin_id]);
+                            
+                            // Log activity
+                            quickLog($pdo, 'update', 'user', $admin_id, "Updated admin user: {$username} (Role: {$role})");
+                            
                             $form_success = "Admin updated successfully!";
                             $editing_admin = null;
                             $edit_id = 0;
@@ -103,6 +114,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin'])) {
                         // Update without password
                         $stmt = $pdo->prepare("UPDATE admins SET username = ?, email = ?, role = ? WHERE admin_id = ?");
                         $stmt->execute([$username, $email, $role, $admin_id]);
+                        
+                        // Log activity
+                        quickLog($pdo, 'update', 'user', $admin_id, "Updated admin user: {$username} (Role: {$role})");
+                        
                         $form_success = "Admin updated successfully!";
                         $editing_admin = null;
                         $edit_id = 0;
@@ -126,6 +141,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin'])) {
                         $password_hash = password_hash($password, PASSWORD_DEFAULT);
                         $stmt = $pdo->prepare("INSERT INTO admins (username, email, password_hash, role) VALUES (?, ?, ?, ?)");
                         $stmt->execute([$username, $email, $password_hash, $role]);
+                        $new_admin_id = $pdo->lastInsertId();
+                        
+                        // Log activity
+                        quickLog($pdo, 'create', 'user', $new_admin_id, "Created admin user: {$username} (Role: {$role})");
+                        
                         $form_success = "Admin user added successfully!";
                     }
                 }

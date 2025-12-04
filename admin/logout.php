@@ -1,9 +1,19 @@
 <?php
 require_once '../config/config.php';
+require_once 'includes/activity_logger.php';
+
+// Get admin info before destroying session
+$admin_id = $_SESSION['admin_id'] ?? null;
+$admin_name = $_SESSION['admin_name'] ?? null;
 
 if (isset($_SESSION['jwt_token'])) {
     $stmt = $pdo->prepare("DELETE FROM admin_tokens WHERE token = ?");
     $stmt->execute([$_SESSION['jwt_token']]);
+}
+
+// Log activity before destroying session
+if ($admin_id && $admin_name) {
+    logActivity($pdo, $admin_id, $admin_name, 'logout', null, null, "Admin logged out");
 }
 
 // Kill session completely

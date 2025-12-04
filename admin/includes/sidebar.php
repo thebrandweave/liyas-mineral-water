@@ -1,8 +1,8 @@
 <?php
 // Determine base path: Check if we are in a subfolder
 $current_dir = basename(dirname($_SERVER['SCRIPT_FILENAME']));
-// Handle all admin subdirectories: users, orders, products, categories, qr-rewards
-$base_path = (in_array($current_dir, ['users', 'orders', 'products', 'categories', 'qr-rewards'])) ? '../' : './';
+// Handle all admin subdirectories: users, orders, products, categories, qr-rewards, activity-logs
+$base_path = (in_array($current_dir, ['users', 'orders', 'products', 'categories', 'qr-rewards', 'activity-logs'])) ? '../' : './';
 
 // Define the current page, defaulting to an empty string if not set
 $current_page = $current_page ?? '';
@@ -85,6 +85,11 @@ $current_dir = basename(dirname($_SERVER['PHP_SELF']));
         <a href="<?= $base_path ?>qr-rewards/index.php" class="nav-item <?= ($current_dir == 'qr-rewards' || $current_page === 'qr-rewards') ? 'active' : '' ?>">
             <i class='bx bx-qr'></i>
             <span>QR Rewards</span>
+        </a>
+        
+        <a href="<?= $base_path ?>activity-logs/index.php" class="nav-item <?= ($current_dir == 'activity-logs' || $current_page === 'activity-logs') ? 'active' : '' ?>">
+            <i class='bx bx-history'></i>
+            <span>Activity Logs</span>
         </a>
     </nav>
     

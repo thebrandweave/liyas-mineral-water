@@ -1,6 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
+require_once '../includes/activity_logger.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_page = "categories";
@@ -39,9 +40,18 @@ if (isset($_GET['delete']) && !empty($_GET['delete'])) {
             if ($product_count > 0) {
                 $error_message = "Cannot delete category. It is being used by $product_count product(s).";
             } else {
+                // Get category name before deletion
+                $categoryStmt = $pdo->prepare("SELECT name FROM categories WHERE category_id = ?");
+                $categoryStmt->execute([$category_id]);
+                $category_name = $categoryStmt->fetchColumn();
+                
                 // Delete category
                 $deleteStmt = $pdo->prepare("DELETE FROM categories WHERE category_id = ?");
                 $deleteStmt->execute([$category_id]);
+                
+                // Log activity
+                quickLog($pdo, 'delete', 'category', $category_id, "Deleted category: {$category_name}");
+                
                 $success_message = "Category deleted successfully!";
             }
         } else {
@@ -82,6 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
                 // Update existing category
                 $stmt = $pdo->prepare("UPDATE categories SET name = ?, description = ? WHERE category_id = ?");
                 $stmt->execute([$name, $description ?: null, $category_id]);
+                
+                // Log activity
+                quickLog($pdo, 'update', 'category', $category_id, "Updated category: {$name}");
+                
                 $form_success = "Category updated successfully!";
                 $editing_category = null;
                 $edit_id = 0;
@@ -89,6 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
                 // Insert new category
                 $stmt = $pdo->prepare("INSERT INTO categories (name, description) VALUES (?, ?)");
                 $stmt->execute([$name, $description ?: null]);
+                $new_category_id = $pdo->lastInsertId();
+                
+                // Log activity
+                quickLog($pdo, 'create', 'category', $new_category_id, "Created category: {$name}");
+                
                 $form_success = "Category added successfully!";
             }
         } catch (PDOException $e) {

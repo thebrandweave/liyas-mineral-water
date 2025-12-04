@@ -6,6 +6,7 @@
 
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
+require_once '../includes/activity_logger.php';
 
 $admin_name = htmlspecialchars($_SESSION['admin_name'] ?? 'Admin');
 $current_page = "qr-rewards";
@@ -55,6 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
             
             $pdo->commit();
             $generated_count = $generated;
+            
+            // Log activity
+            quickLog($pdo, 'generate', 'qr_reward', null, "Generated {$generated_count} reward code(s) with prefix: {$prefix}");
+            
             $message = "Successfully generated $generated reward codes!";
             $message_type = 'success';
             

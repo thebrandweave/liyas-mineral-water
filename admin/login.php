@@ -1,5 +1,6 @@
 <?php
 require_once '../config/config.php';
+require_once 'includes/activity_logger.php';
 
 // Import JWT classes
 use Firebase\JWT\JWT;
@@ -47,6 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['admin_name'] = $admin['username'];
             $_SESSION['admin_email'] = $admin['email'];
             $_SESSION['admin_role'] = $admin['role'];
+
+            // Log activity
+            logActivity($pdo, $admin['admin_id'], $admin['username'], 'login', null, null, "Admin logged in");
 
             // Redirect to dashboard
             header("Location: index.php");

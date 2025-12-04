@@ -1,6 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
+require_once '../includes/activity_logger.php';
 
 // Set timezone to Indian Standard Time
 date_default_timezone_set('Asia/Kolkata');
@@ -146,6 +147,12 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 	}
 
 	fclose($output);
+	
+	// Log activity before exit
+	$export_count = count($codes);
+	$filter_desc = $filter !== 'all' ? " ({$filter_name})" : '';
+	quickLog($pdo, 'export', 'qr_reward', null, "Exported {$export_count} reward code(s) to CSV{$filter_desc}");
+	
 	exit;
 }
 
@@ -160,9 +167,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		if ($code_id > 0) {
 			try {
+				// Get code before deletion
+				$codeStmt = $pdo->prepare("SELECT reward_code FROM codes WHERE id = ?");
+				$codeStmt->execute([$code_id]);
+				$reward_code = $codeStmt->fetchColumn();
+				
 				$deleteStmt = $pdo->prepare("DELETE FROM codes WHERE id = ?");
 				$deleteStmt->execute([$code_id]);
 				$deleted_count = $deleteStmt->rowCount();
+				
+				// Log activity
+				if ($deleted_count > 0 && $reward_code) {
+					quickLog($pdo, 'delete', 'qr_reward', $code_id, "Deleted reward code: {$reward_code}");
+				}
 
 				header("Location: " . buildRedirectUrl($filter, $search, $page, $deleted_count));
 				exit;
@@ -192,6 +209,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute($ids);
 				$deleted_count = $stmt->rowCount();
+				
+				// Log activity
+				if ($deleted_count > 0) {
+					quickLog($pdo, 'delete', 'qr_reward', null, "Bulk deleted {$deleted_count} reward code(s)");
+				}
 
 				header("Location: " . buildRedirectUrl($filter, $search, $page, $deleted_count));
 				exit;
@@ -215,6 +237,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			}
 			$stmt->execute();
 			$deleted_count = $stmt->rowCount();
+			
+			// Log activity
+			if ($deleted_count > 0) {
+				$filter_desc = $filter !== 'all' ? " ({$filter})" : '';
+				quickLog($pdo, 'delete', 'qr_reward', null, "Deleted all filtered reward codes{$filter_desc}: {$deleted_count} code(s)");
+			}
 
 			header("Location: " . buildRedirectUrl($filter, $search, 1, $deleted_count));
 			exit;

@@ -380,8 +380,18 @@ function getStatusBadgeClass($status) {
     
     <script>
         // Chart.js Configuration
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(ctx, {
+        function initRevenueChart() {
+            if (!window.Chart) {
+                console.warn('Chart.js not loaded yet, retrying...');
+                setTimeout(initRevenueChart, 100);
+                return;
+            }
+            
+            const canvas = document.getElementById('revenueChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const revenueChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: <?= json_encode($months) ?>,
@@ -452,7 +462,18 @@ function getStatusBadgeClass($status) {
                     intersect: false
                 }
             }
-        });
+            });
+            
+            // Store chart instance globally for refresh function
+            window.revenueChart = revenueChart;
+        }
+        
+        // Initialize chart when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initRevenueChart);
+        } else {
+            initRevenueChart();
+        }
         
         function refreshChart() {
             location.reload();
