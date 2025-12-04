@@ -164,6 +164,84 @@ try {
 	<link rel="icon" type="image/jpeg" sizes="16x16" href="../../assets/images/logo/logo-bg.jpg">
 	
     <title>Products - Liyas Admin</title>
+    <style>
+        .table-responsive-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+        
+        .table-responsive-wrapper table {
+            min-width: 750px;
+            width: 100%;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .table-responsive-wrapper {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+                scrollbar-color: var(--border-medium) transparent;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar-track {
+                background: var(--bg-main);
+                border-radius: 4px;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar-thumb {
+                background: var(--border-medium);
+                border-radius: 4px;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+                background: var(--text-secondary);
+            }
+            
+            .table-responsive-wrapper table {
+                min-width: 850px;
+            }
+            
+            .table-responsive-wrapper table th,
+            .table-responsive-wrapper table td {
+                padding: 0.75rem 1rem;
+                font-size: 13px;
+            }
+            
+            .table-responsive-wrapper table th:first-child,
+            .table-responsive-wrapper table td:first-child {
+                position: sticky;
+                left: 0;
+                background: var(--bg-white);
+                z-index: 10;
+                box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+            }
+            
+            .table-responsive-wrapper table th:last-child,
+            .table-responsive-wrapper table td:last-child {
+                min-width: 180px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .table-responsive-wrapper table {
+                min-width: 950px;
+            }
+            
+            .table-responsive-wrapper table th,
+            .table-responsive-wrapper table td {
+                padding: 0.5rem 0.75rem;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
 	<div class="container">
@@ -233,50 +311,52 @@ try {
 							<p style="color: var(--text-muted); font-size: 0.9rem;">Get started by <a href="add.php" style="color: var(--blue);">adding your first product</a></p>
 						</div>
 					<?php else: ?>
-						<table>
-							<thead>
-								<tr>
-									<th>Product</th>
-									<th>Description</th>
-									<th>Price</th>
-									<th>Created</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php foreach ($products as $product): ?>
+						<div class="table-responsive-wrapper">
+							<table>
+								<thead>
 									<tr>
-										<td>
-											<?php if (!empty($product['image'])): ?>
-												<img src="../../<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="table-img">
-											<?php endif; ?>
-											<strong><?= htmlspecialchars($product['name']) ?></strong>
-										</td>
-										<td>
-											<span style="color: var(--text-secondary); max-width: 300px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-												<?= htmlspecialchars($product['description'] ?? 'No description') ?>
-											</span>
-										</td>
-										<td><strong>₹<?= number_format($product['price'], 2) ?></strong></td>
-										<td><?= date('d-m-Y', strtotime($product['created_at'])) ?></td>
-										<td>
-											<a href="edit.php?id=<?= $product['product_id'] ?>" class="btn-action btn-edit noselect">
-												<span class="text">Edit</span>
-												<span class="icon">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-												</span>
-											</a>
-											<a href="javascript:void(0);" onclick="handleProductDelete(<?= $product['product_id'] ?>, '<?= htmlspecialchars(addslashes($product['name'])) ?>')" class="btn-action btn-delete noselect">
-												<span class="text">Delete</span>
-												<span class="icon">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
-												</span>
-											</a>
-										</td>
+										<th>Product</th>
+										<th>Description</th>
+										<th>Price</th>
+										<th>Created</th>
+										<th>Actions</th>
 									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									<?php foreach ($products as $product): ?>
+										<tr>
+											<td>
+												<?php if (!empty($product['image'])): ?>
+													<img src="../../<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="table-img">
+												<?php endif; ?>
+												<strong><?= htmlspecialchars($product['name']) ?></strong>
+											</td>
+											<td>
+												<span style="color: var(--text-secondary); max-width: 300px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+													<?= htmlspecialchars($product['description'] ?? 'No description') ?>
+												</span>
+											</td>
+											<td><strong>₹<?= number_format($product['price'], 2) ?></strong></td>
+											<td><?= date('d-m-Y', strtotime($product['created_at'])) ?></td>
+											<td>
+												<a href="edit.php?id=<?= $product['product_id'] ?>" class="btn-action btn-edit noselect">
+													<span class="text">Edit</span>
+													<span class="icon">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+													</span>
+												</a>
+												<a href="javascript:void(0);" onclick="handleProductDelete(<?= $product['product_id'] ?>, '<?= htmlspecialchars(addslashes($product['name'])) ?>')" class="btn-action btn-delete noselect">
+													<span class="text">Delete</span>
+													<span class="icon">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+													</span>
+												</a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
 						
 						<!-- Pagination -->
 						<?php if ($total_pages > 1): ?>

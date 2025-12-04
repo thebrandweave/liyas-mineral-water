@@ -437,6 +437,83 @@ $page_title   = "Orders";
 		.badge-completed { background: var(--green-light); color: #065f46; }
 		.status.cancelled,
 		.badge-cancelled { background: #fee2e2; color: #991b1b; }
+		
+		.table-responsive-wrapper {
+			width: 100%;
+			overflow-x: auto;
+			overflow-y: visible;
+			-webkit-overflow-scrolling: touch;
+			position: relative;
+		}
+		
+		.table-responsive-wrapper table {
+			min-width: 900px;
+			width: 100%;
+		}
+		
+		/* Mobile optimizations */
+		@media (max-width: 768px) {
+			.table-responsive-wrapper {
+				overflow-x: scroll;
+				-webkit-overflow-scrolling: touch;
+				scrollbar-width: thin;
+				scrollbar-color: var(--border-medium) transparent;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar {
+				height: 8px;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar-track {
+				background: var(--bg-main);
+				border-radius: 4px;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar-thumb {
+				background: var(--border-medium);
+				border-radius: 4px;
+			}
+			
+			.table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+				background: var(--text-secondary);
+			}
+			
+			.table-responsive-wrapper table {
+				min-width: 1000px;
+			}
+			
+			.table-responsive-wrapper table th,
+			.table-responsive-wrapper table td {
+				padding: 0.75rem 1rem;
+				font-size: 13px;
+			}
+			
+			.table-responsive-wrapper table th:first-child,
+			.table-responsive-wrapper table td:first-child {
+				position: sticky;
+				left: 0;
+				background: var(--bg-white);
+				z-index: 10;
+				box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+			}
+			
+			.table-responsive-wrapper table th:last-child,
+			.table-responsive-wrapper table td:last-child {
+				min-width: 180px;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.table-responsive-wrapper table {
+				min-width: 1100px;
+			}
+			
+			.table-responsive-wrapper table th,
+			.table-responsive-wrapper table td {
+				padding: 0.5rem 0.75rem;
+				font-size: 12px;
+			}
+		}
 	</style>
 </head>
 <body>
@@ -511,55 +588,57 @@ $page_title   = "Orders";
 							<p style="color: var(--text-secondary); font-size: 1.1rem;">No orders found</p>
 						</div>
 					<?php else: ?>
-						<table>
-							<thead>
-								<tr>
-									<th>Customer</th>
-									<th>Contact</th>
-									<th>Address</th>
-									<th>Amount</th>
-									<th>Status</th>
-									<th>Created</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php foreach ($orders as $order): ?>
-								<tr>
-									<td>
-										<strong><?= htmlspecialchars($order['customer_name']) ?></strong>
-										<?php if ($order['customer_email']): ?>
-											<br><span style="color: var(--text-muted); font-size: 12px;"><?= htmlspecialchars($order['customer_email']) ?></span>
-										<?php endif; ?>
-									</td>
-									<td><?= htmlspecialchars($order['customer_phone'] ?? '—') ?></td>
-									<td>
-										<span style="max-width: 250px; word-break: break-word; font-size: 13px; color: var(--text-secondary);">
-											<?= htmlspecialchars($order['shipping_address']) ?>
-										</span>
-									</td>
-									<td><strong><?= formatCurrency($order['total_amount']) ?></strong></td>
-									<td>
-										<span class="badge badge-<?= htmlspecialchars($order['status']) ?>">
-											<?= ucfirst($order['status']) ?>
-										</span>
-									</td>
-									<td>
-										<span style="font-size: 13px;"><?= formatIST($order['created_at']) ?></span>
-										<br><small style="color: var(--text-muted);">IST</small>
-									</td>
-									<td>
-										<a href="view.php?id=<?= $order['order_id'] ?>" class="btn-action btn-view">
-											<i class='bx bx-show'></i> View
-										</a>
-										<a href="javascript:void(0);" onclick="openStatusModal(<?= $order['order_id'] ?>, '<?= htmlspecialchars($order['status'], ENT_QUOTES) ?>')" class="btn-action btn-edit">
-											<i class='bx bx-edit'></i> Status
-										</a>
-									</td>
-								</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
+						<div class="table-responsive-wrapper">
+							<table>
+								<thead>
+									<tr>
+										<th>Customer</th>
+										<th>Contact</th>
+										<th>Address</th>
+										<th>Amount</th>
+										<th>Status</th>
+										<th>Created</th>
+										<th>Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ($orders as $order): ?>
+									<tr>
+										<td>
+											<strong><?= htmlspecialchars($order['customer_name']) ?></strong>
+											<?php if ($order['customer_email']): ?>
+												<br><span style="color: var(--text-muted); font-size: 12px;"><?= htmlspecialchars($order['customer_email']) ?></span>
+											<?php endif; ?>
+										</td>
+										<td><?= htmlspecialchars($order['customer_phone'] ?? '—') ?></td>
+										<td>
+											<span style="max-width: 250px; word-break: break-word; font-size: 13px; color: var(--text-secondary);">
+												<?= htmlspecialchars($order['shipping_address']) ?>
+											</span>
+										</td>
+										<td><strong><?= formatCurrency($order['total_amount']) ?></strong></td>
+										<td>
+											<span class="badge badge-<?= htmlspecialchars($order['status']) ?>">
+												<?= ucfirst($order['status']) ?>
+											</span>
+										</td>
+										<td>
+											<span style="font-size: 13px;"><?= formatIST($order['created_at']) ?></span>
+											<br><small style="color: var(--text-muted);">IST</small>
+										</td>
+										<td>
+											<a href="view.php?id=<?= $order['order_id'] ?>" class="btn-action btn-view">
+												<i class='bx bx-show'></i> View
+											</a>
+											<a href="javascript:void(0);" onclick="openStatusModal(<?= $order['order_id'] ?>, '<?= htmlspecialchars($order['status'], ENT_QUOTES) ?>')" class="btn-action btn-edit">
+												<i class='bx bx-edit'></i> Status
+											</a>
+										</td>
+									</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
 
 						<?php if ($total_pages > 1): ?>
 							<div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-light); display: flex; justify-content: center; gap: 0.75rem; align-items: center;">
