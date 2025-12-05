@@ -1,11 +1,5 @@
 <?php
 // ✅ Manual Firebase JWT include (correct order!)
-require_once __DIR__ . '/../admin/includes/php-jwt/JWTExceptionWithPayloadInterface.php';
-require_once __DIR__ . '/../admin/includes/php-jwt/BeforeValidException.php';
-require_once __DIR__ . '/../admin/includes/php-jwt/ExpiredException.php';
-require_once __DIR__ . '/../admin/includes/php-jwt/SignatureInvalidException.php';
-require_once __DIR__ . '/../admin/includes/php-jwt/Key.php';
-require_once __DIR__ . '/../admin/includes/php-jwt/JWT.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
