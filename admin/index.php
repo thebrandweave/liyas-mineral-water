@@ -213,6 +213,83 @@ function getStatusBadgeClass($status) {
             font-size: 14px;
             color: var(--text-secondary);
         }
+        
+        .table-responsive-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+        
+        .table-responsive-wrapper table {
+            min-width: 750px;
+            width: 100%;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .table-responsive-wrapper {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+                scrollbar-color: var(--border-medium) transparent;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar-track {
+                background: var(--bg-main);
+                border-radius: 4px;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar-thumb {
+                background: var(--border-medium);
+                border-radius: 4px;
+            }
+            
+            .table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+                background: var(--text-secondary);
+            }
+            
+            .table-responsive-wrapper table {
+                min-width: 850px;
+            }
+            
+            .table-responsive-wrapper table th,
+            .table-responsive-wrapper table td {
+                padding: 0.75rem 1rem;
+                font-size: 13px;
+            }
+            
+            .table-responsive-wrapper table th:first-child,
+            .table-responsive-wrapper table td:first-child {
+                position: sticky;
+                left: 0;
+                background: var(--bg-white);
+                z-index: 10;
+                box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+            }
+            
+            .table-responsive-wrapper table th:last-child,
+            .table-responsive-wrapper table td:last-child {
+                min-width: 180px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .table-responsive-wrapper table {
+                min-width: 950px;
+            }
+            
+            .table-responsive-wrapper table th,
+            .table-responsive-wrapper table td {
+                padding: 0.5rem 0.75rem;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -333,46 +410,48 @@ function getStatusBadgeClass($status) {
                         </div>
                     </div>
                     
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Customer</th>
-                                <th>Email</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($recent_orders)): ?>
+                    <div class="table-responsive-wrapper">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td colspan="6" style="text-align: center; padding: 2rem;">
-                                        No orders found. <a href="orders/index.php" style="color: var(--blue);">View all orders</a>
-                                    </td>
+                                    <th>Customer</th>
+                                    <th>Email</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
-                            <?php else: ?>
-                                <?php foreach ($recent_orders as $order): ?>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($recent_orders)): ?>
                                     <tr>
-                                        <td><strong><?= htmlspecialchars($order['customer_name'] ?? 'N/A') ?></strong></td>
-                                        <td><?= htmlspecialchars($order['customer_email'] ?? 'N/A') ?></td>
-                                        <td><strong><?= formatCurrency($order['total_amount']) ?></strong></td>
-                                        <td>
-                                            <span class="badge <?= getStatusBadgeClass($order['status']) ?>">
-                                                <?= ucfirst($order['status']) ?>
-                                            </span>
-                                        </td>
-                                        <td><?= date('d M Y', strtotime($order['created_at'])) ?></td>
-                                        <td>
-                                            <a href="orders/view.php?id=<?= $order['order_id'] ?>" class="btn-action btn-view">
-                                                <i class='bx bx-show'></i> View
-                                            </a>
+                                        <td colspan="6" style="text-align: center; padding: 2rem;">
+                                            No orders found. <a href="orders/index.php" style="color: var(--blue);">View all orders</a>
                                         </td>
                                     </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                                <?php else: ?>
+                                    <?php foreach ($recent_orders as $order): ?>
+                                        <tr>
+                                            <td><strong><?= htmlspecialchars($order['customer_name'] ?? 'N/A') ?></strong></td>
+                                            <td><?= htmlspecialchars($order['customer_email'] ?? 'N/A') ?></td>
+                                            <td><strong><?= formatCurrency($order['total_amount']) ?></strong></td>
+                                            <td>
+                                                <span class="badge <?= getStatusBadgeClass($order['status']) ?>">
+                                                    <?= ucfirst($order['status']) ?>
+                                                </span>
+                                            </td>
+                                            <td><?= date('d M Y', strtotime($order['created_at'])) ?></td>
+                                            <td>
+                                                <a href="orders/view.php?id=<?= $order['order_id'] ?>" class="btn-action btn-view">
+                                                    <i class='bx bx-show'></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
