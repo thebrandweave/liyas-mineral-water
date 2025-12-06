@@ -22,8 +22,8 @@
     <style>
         /* Base Styles */
         :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
+            --primary: #4ad2e2;
+            --primary-dark: #2cbac9;
             --dark: #0f172a;
             --white: #ffffff;
             --secondary: #64748b;
@@ -67,7 +67,7 @@
             border-top: 4px solid var(--primary);
             border-radius: 50%;
             animation: spin 1.2s linear infinite;
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 0 20px rgba(74, 210, 226, 0.3);
         }
 
         .loader-text {
@@ -160,7 +160,7 @@
             letter-spacing: 2px;
             margin-bottom: 1rem;
             color: var(--primary);
-            text-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+            text-shadow: 0 0 20px rgba(74, 210, 226, 0.3);
         }
 
         .coming-soon-text {
@@ -198,7 +198,7 @@
             background: var(--primary);
             border-color: var(--primary);
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 8px 20px rgba(74, 210, 226, 0.3);
         }
 
         @media (max-width: 576px) {

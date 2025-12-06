@@ -112,7 +112,7 @@
   }
 
   .footer-about h3 {
-    color: #00aaff;
+    color: #4ad2e2;
     font-weight: 700;
     margin: 0 0 12px;
   }
@@ -137,7 +137,7 @@
     margin: 0 6px 12px 0;
     border-radius: 50%;
     background: #fff;
-    color: #00aaff;
+    color: #4ad2e2;
     font-size: 18px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     transition: 0.18s;
@@ -145,7 +145,7 @@
   }
 
   .social-links a:hover {
-    background: #00aaff;
+    background: #4ad2e2;
     color: #fff;
   }
 
@@ -160,7 +160,7 @@
 
   .newsletter h2 {
     font-size: 22px;
-    color: #00aaff;
+    color: #4ad2e2;
     margin: 0 0 8px;
   }
 
@@ -178,7 +178,7 @@
   .newsletter-form input {
     flex: 1;
     padding: 12px 16px;
-    border: 2px solid #00aaff;
+    border: 2px solid #4ad2e2;
     border-radius: 28px;
     outline: none;
     font-size: 15px;
@@ -188,7 +188,7 @@
     padding: 10px 20px;
     border-radius: 28px;
     border: none;
-    background: #00aaff;
+    background: #4ad2e2;
     color: #fff;
     font-weight: 600;
     cursor: pointer;

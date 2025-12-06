@@ -22,7 +22,7 @@
 
 <style>
     :root {
-        --commitment-primary: #0ea5e9;
+        --commitment-primary: #4ad2e2;
         --commitment-secondary: #0b2e4e;
         --commitment-text: #5a6b7b;
         --commitment-bg: #f6fbff;
@@ -53,9 +53,9 @@
         background: rgba(255, 255, 255, 0.8);
         border-radius: 20px;
         padding: 60px 40px;
-        box-shadow: 0 8px 30px rgba(14, 165, 233, 0.1);
+        box-shadow: 0 8px 30px rgba(74, 210, 226, 0.1);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(14, 165, 233, 0.1);
+        border: 1px solid rgba(74, 210, 226, 0.1);
         transition: all 0.4s ease;
         position: relative;
         overflow: hidden;
@@ -68,13 +68,13 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.05), transparent);
+        background: linear-gradient(90deg, transparent, rgba(74, 210, 226, 0.05), transparent);
         transition: left 0.6s ease;
     }
 
     .commitment-content:hover {
         transform: translateY(-8px);
-        box-shadow: 0 15px 40px rgba(14, 165, 233, 0.15);
+        box-shadow: 0 15px 40px rgba(74, 210, 226, 0.15);
     }
 
     .commitment-content:hover::before {

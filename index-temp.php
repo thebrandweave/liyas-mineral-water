@@ -28,7 +28,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     
-    <meta name="theme-color" content="#0ea5e9">
+    <meta name="theme-color" content="#4ad2e2">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="LIYAS Water">
@@ -83,7 +83,7 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background:rgba(14, 164, 233, 0.22);
+            background:rgba(74, 210, 226, 0.22);
             will-change: width, height, transform;
             animation: circleDropExpand 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
@@ -97,7 +97,7 @@
             /* The initial centering (translate) is managed by GSAP.set() in JS */
             font-size: clamp(2rem, 8vw, 4rem);
             font-weight: 700;
-            color: rgba(14, 164, 233, 0.71);
+            color: rgba(74, 210, 226, 0.71);
             z-index: 10000; /* Increased z-index to ensure visibility during splash fade */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             pointer-events: none;
@@ -236,7 +236,7 @@
             font-family: "Poppins", sans-serif;
             font-weight: 700;
             text-transform: uppercase;
-            fill: rgba(14, 165, 233, 1);
+            fill: rgba(74, 210, 226, 1);
             animation: rotate 25s linear infinite;
             transform-origin: 250px 250px;
         }
@@ -358,8 +358,8 @@
             background: var(--primary);
             color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(14, 165, 233, 0.25);
-            border-color: rgba(14, 165, 233, 0.35);
+            box-shadow: 0 12px 28px rgba(74, 210, 226, 0.25);
+            border-color: rgba(74, 210, 226, 0.35);
         }
 
         @media (max-width: 767px) {
@@ -398,9 +398,9 @@
 
 .top-login-btn:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 6px 20px rgba(74, 210, 226, 0.25);
   background: rgba(255, 255, 255, 1);
-  border-color: rgba(14, 165, 233, 0.2);
+  border-color: rgba(74, 210, 226, 0.2);
 }
 
 .top-login-btn:active {
@@ -417,7 +417,7 @@
 }
 
 .top-login-btn:hover .login-svg {
-  stroke: rgba(14, 165, 233, 1);
+  stroke: rgba(74, 210, 226, 1);
 }
 
 /* Tablet adjustments */
@@ -573,7 +573,7 @@
                         <h1><span class="text-primary">REFRESH</span> YOUR SOUL</h1>
                         <div class="hero-image-mobile" aria-hidden="false">
                             <div class="hero-bottle-container">
-                                <img src="assets/images/LIYAS Website bottle (1).png" alt="Liyas Mineral Water Bottle" class="img-fluid animated-image">
+                                <img src="assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle" class="img-fluid animated-image">
                             </div>
                         </div>
                         <p>
@@ -590,7 +590,7 @@ Because great water isn't just a choice — it's a vibe.
                 <div class="col-lg-6">
                     <div class="hero-image hero-image-desktop" data-aos="fade-left" data-aos-delay="100">
                         <div class="hero-bottle-container">
-                            <img src="assets/images/LIYAS Website bottle (1).png" alt="Liyas Mineral Water Bottle" class="img-fluid animated-image">
+                            <img src="assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle" class="img-fluid animated-image">
                         </div>
                     </div>
                 </div>

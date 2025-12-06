@@ -159,14 +159,14 @@
         .bubble {
             position: absolute;
             bottom: -100px;
-            background: rgba(14, 165, 233, 0.1);
-            border: 2px solid rgba(14, 165, 233, 0.2);
+            background: rgba(74, 210, 226, 0.1);
+            border: 2px solid rgba(74, 210, 226, 0.2);
             border-radius: 50%;
             opacity: 0.6;
             animation: rise 15s infinite ease-in;
             box-shadow: 
-                inset 0 0 20px rgba(14, 165, 233, 0.1),
-                0 0 20px rgba(14, 165, 233, 0.1);
+                inset 0 0 20px rgba(74, 210, 226, 0.1),
+                0 0 20px rgba(74, 210, 226, 0.1);
         }
 
         .bubble:nth-child(1) {
@@ -340,7 +340,7 @@
         }
 
         .faq-item:hover {
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.1);
+            box-shadow: 0 4px 20px rgba(74, 210, 226, 0.1);
         }
 
         .faq-question {
@@ -354,7 +354,7 @@
         }
 
         .faq-question:hover {
-            background: rgba(14, 165, 233, 0.05);
+            background: rgba(74, 210, 226, 0.05);
         }
 
         .faq-question h3 {
@@ -373,17 +373,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #0ea5e9;
+            color: #4ad2e2;
             font-size: 14px;
             transition: transform 0.3s ease, color 0.3s ease;
             flex-shrink: 0;
-            background: rgba(14, 165, 233, 0.1);
+            background: rgba(74, 210, 226, 0.1);
             border-radius: 50%;
         }
 
         .faq-item.active .faq-icon {
             transform: rotate(180deg);
-            background: #0ea5e9;
+            background: #4ad2e2;
             color: white;
         }
 

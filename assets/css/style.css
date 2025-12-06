@@ -343,13 +343,13 @@ img {
 .btn-primary {
     background: var(--primary);
     color: var(--white);
-    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+    box-shadow: 0 4px 15px rgba(74, 210, 226, 0.3);
 }
 
 .btn-primary:hover {
     background: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
+    box-shadow: 0 8px 25px rgba(74, 210, 226, 0.4);
 }
 
 .btn-secondary {
@@ -419,7 +419,7 @@ img {
     transform: scale(1.1);
     color: var(--primary);
     background-color: var(--white);
-    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+    box-shadow: 0 4px 20px rgba(74, 210, 226, 0.3);
 }
 
 /* Hide social sidebar on mobile */
@@ -468,7 +468,7 @@ img {
     transform: scale(1.1);
     color: var(--primary);
     background-color: var(--white);
-    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+    box-shadow: 0 4px 20px rgba(74, 210, 226, 0.3);
 }
 
 @media (min-width: 768px) {
@@ -587,7 +587,7 @@ img {
 
 .floating-element {
     position: absolute;
-    background-color: rgba(14, 165, 233, 0.15);
+    background-color: rgba(74, 210, 226, 0.15);
     border-radius: 50%;
     opacity: 0.6;
 }
@@ -671,7 +671,7 @@ img {
         }
 
         .hero-subtitle {
-            color: #0ea5e9;
+            color: #4ad2e2;
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 20px;
@@ -690,7 +690,7 @@ img {
             transform: translateY(-50%);
             width: 50px;
             height: 2px;
-            background: #0ea5e9;
+            background: #4ad2e2;
         }
 
         .hero h1 {
@@ -702,7 +702,7 @@ img {
         }
 
         .hero h1 span {
-            color: #0ea5e9;
+            color: #4ad2e2;
         }
 
         .hero p {
@@ -721,7 +721,7 @@ img {
         .btn-primary {
             display: inline-block;
             padding: 18px 45px;
-            background: #0ea5e9;
+            background: #4ad2e2;
             color: white;
             text-decoration: none;
             border-radius: 50px;
@@ -772,8 +772,8 @@ img {
         }
 
         .btn-secondary:hover {
-            border-color: #0ea5e9;
-            color: #0ea5e9;
+            border-color: #4ad2e2;
+            color: #4ad2e2;
             transform: translateY(-3px);
         }
 
@@ -797,9 +797,10 @@ img {
         .hero-image img {
             width: 100%;
             height: auto;
-            max-height: 500px;
+            max-height: 650px;
             object-fit: contain;
             margin: 0% 0% -12% 60%;
+            transform: scale(1.15);
         }
 
         @keyframes fadeInRight {
@@ -818,8 +819,7 @@ img {
    =========================================== */
 .hero {
     min-height: 100vh;
-    background: linear-gradient(135deg, rgba(74, 210, 226, 0.05) 0%, rgba(240, 249, 255, 0.8) 100%),
-                url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1600&q=80') center/cover;
+    background: linear-gradient(135deg, rgba(74, 210, 226, 0.03) 0%, rgba(240, 249, 255, 0.5) 50%, rgba(255, 255, 255, 0.9) 100%);
     display: flex;
     align-items: center;
     position: relative;
@@ -834,7 +834,7 @@ img {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(240, 249, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(240, 249, 255, 0.4) 50%, rgba(255, 255, 255, 0.9) 100%);
     z-index: 1;
 }
 
@@ -864,40 +864,16 @@ img {
 .hero-image img {
     max-width: 100%;
     height: auto;
-    max-height: 400px;
+    max-height: 1000px !important;
+    width: auto;
     object-fit: contain;
+    transform: scale(1.1);
 }
 
-/* Hero Bottle Container with Glow Effect */
+/* Hero Bottle Container */
 .hero-bottle-container {
     position: relative;
     display: inline-block;
-}
-
-.hero-bottle-container::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120%;
-    height: 120%;
-    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-    opacity: 0.4;
-    filter: blur(40px);
-    z-index: -1;
-    animation: glowPulse 3s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-    0%, 100% {
-        opacity: 0.4;
-        transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-        opacity: 0.6;
-        transform: translate(-50%, -50%) scale(1.1);
-    }
 }
 
 .hero-bottle-container img {
@@ -953,7 +929,7 @@ img {
 }
 
 .hero h1 span.text-primary {
-    color: var(--primary);
+    color: #4ad2e2 !important;
 }
 
 .hero p {
@@ -1098,7 +1074,8 @@ img {
     }
     
     .hero-image img {
-        max-height: 300px;
+        max-height: 400px;
+        transform: scale(1.05);
     }
     
     .wave-svg {
@@ -1131,7 +1108,8 @@ img {
     }
     
     .hero-image img {
-        max-height: 400px;
+        max-height: 450px;
+        transform: scale(1.06);
     }
 }
 
@@ -1157,8 +1135,9 @@ img {
     }
     
     .hero-image img {
-        max-height: 500px;
+        max-height: 650px;
         margin: 0% 0% -12% 60%;
+        transform: scale(1.15);
     }
 }
 
@@ -1792,7 +1771,7 @@ img {
 .benefit-card:hover {
     background: var(--white);
     transform: translateY(-10px);
-    box-shadow: 0 20px 50px rgba(14, 165, 233, 0.15);
+    box-shadow: 0 20px 50px rgba(74, 210, 226, 0.15);
 }
 
 .benefit-icon {
@@ -1930,7 +1909,7 @@ img {
 
 .testimonial-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 50px rgba(14, 165, 233, 0.15);
+    box-shadow: 0 20px 50px rgba(74, 210, 226, 0.15);
 }
 
 .testimonial-quote {
@@ -2159,7 +2138,7 @@ img {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(2, 132, 199, 0.9));
+    background: linear-gradient(135deg, rgba(74, 210, 226, 0.9), rgba(44, 186, 201, 0.9));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2360,7 +2339,7 @@ footer::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(14, 165, 233, 0.10) 0%, rgba(14, 165, 233, 0) 60%);
+    background: linear-gradient(to top, rgba(74, 210, 226, 0.10) 0%, rgba(74, 210, 226, 0) 60%);
     pointer-events: none;
     z-index: 1;
 } */
@@ -2550,7 +2529,7 @@ footer::before {
 
 .footer-bottom {
     padding-top: var(--space-md);
-    border-top: 1px solid rgba(14, 165, 233, 0.2);
+    border-top: 1px solid rgba(74, 210, 226, 0.2);
     text-align: center;
     color: var(--secondary);
     font-size: var(--text-sm);
@@ -2673,7 +2652,7 @@ footer::before {
         
         .footer-floating-element {
             position: absolute;
-            background-color: rgba(14, 165, 233, 0.15);
+            background-color: rgba(74, 210, 226, 0.15);
             border-radius: 50%;
         }
         
@@ -2803,7 +2782,7 @@ footer::before {
             left: 10%;
             right: 10%;
             height: 2px;
-            background: linear-gradient(90deg, #0ea5e9 0%, #0ea5e9 75%, transparent 75%);
+            background: linear-gradient(90deg, #4ad2e2 0%, #4ad2e2 75%, transparent 75%);
             z-index: 0;
         }
 
@@ -2823,7 +2802,7 @@ footer::before {
         .step-number {
             width: 90px;
             height: 90px;
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            background: linear-gradient(135deg, #4ad2e2, #2cbac9);
             color: white;
             border-radius: 50%;
             display: flex;
@@ -2857,7 +2836,7 @@ footer::before {
         /* Stats Section */
         .stats-section {
             padding: 100px 80px;
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            background: linear-gradient(135deg, #4ad2e2 0%, #2cbac9 100%);
             color: white;
             position: relative;
             overflow: hidden;
@@ -3003,13 +2982,13 @@ footer::before {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #0ea5e9;
+            color: #4ad2e2;
             text-decoration: none;
             transition: all 0.3s;
         }
 
         .member-social a:hover {
-            background: #0ea5e9;
+            background: #4ad2e2;
             color: white;
         }
 
@@ -3063,7 +3042,7 @@ footer::before {
 
         .blog-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.15);
+            box-shadow: 0 20px 50px rgba(74, 210, 226, 0.15);
         }
 
         .blog-image {
@@ -3088,7 +3067,7 @@ footer::before {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: #0ea5e9;
+            background: #4ad2e2;
             color: white;
             padding: 8px 20px;
             border-radius: 20px;
@@ -3132,7 +3111,7 @@ footer::before {
         }
 
         .blog-link {
-            color: #0ea5e9;
+            color: #4ad2e2;
             text-decoration: none;
             font-weight: 600;
             display: inline-flex;
@@ -3185,13 +3164,13 @@ footer::before {
         }
 
         .newsletter-input:focus {
-            border-color: #0ea5e9;
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+            border-color: #4ad2e2;
+            box-shadow: 0 0 0 4px rgba(74, 210, 226, 0.1);
         }
 
         .newsletter-btn {
             padding: 18px 45px;
-            background: #0ea5e9;
+            background: #4ad2e2;
             color: white;
             border: none;
             border-radius: 50px;
@@ -3202,9 +3181,9 @@ footer::before {
         }
 
         .newsletter-btn:hover {
-            background: #0284c7;
+            background: #2cbac9;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 10px 25px rgba(74, 210, 226, 0.3);
         }
 
         @media (max-width: 991px) {
@@ -3306,7 +3285,7 @@ footer::before {
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.85), rgba(2, 132, 199, 0.85));
+            background: linear-gradient(135deg, rgba(74, 210, 226, 0.85), rgba(44, 186, 201, 0.85));
         }
 
         .parallax-content {
@@ -3390,7 +3369,7 @@ footer::before {
 
         .play-button:hover {
             transform: scale(1.1);
-            background: #0ea5e9;
+            background: #4ad2e2;
         }
 
         .play-button::before {
@@ -3399,7 +3378,7 @@ footer::before {
             height: 0;
             border-top: 20px solid transparent;
             border-bottom: 20px solid transparent;
-            border-left: 30px solid #0ea5e9;
+            border-left: 30px solid #4ad2e2;
             margin-left: 5px;
             transition: all 0.3s;
         }
@@ -3468,7 +3447,7 @@ footer::before {
         .content-number {
             font-size: 80px;
             font-weight: 800;
-            color: #0ea5e9;
+            color: #4ad2e2;
             opacity: 0.2;
             line-height: 1;
             margin-bottom: 20px;
@@ -3512,15 +3491,15 @@ footer::before {
         .pricing-card:nth-child(2) { 
             animation-delay: 0.2s;
             transform: scale(1.05);
-            border-color: #0ea5e9;
-            box-shadow: 0 20px 60px rgba(14, 165, 233, 0.2);
+            border-color: #4ad2e2;
+            box-shadow: 0 20px 60px rgba(74, 210, 226, 0.2);
         }
         .pricing-card:nth-child(3) { animation-delay: 0.3s; }
 
         .pricing-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(14, 165, 233, 0.15);
-            border-color: #0ea5e9;
+            box-shadow: 0 20px 60px rgba(74, 210, 226, 0.15);
+            border-color: #4ad2e2;
         }
 
         .pricing-badge {
@@ -3528,7 +3507,7 @@ footer::before {
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            background: linear-gradient(135deg, #4ad2e2, #2cbac9);
             color: white;
             padding: 8px 25px;
             border-radius: 20px;
@@ -3548,7 +3527,7 @@ footer::before {
         .pricing-card .price {
             font-size: 56px;
             font-weight: 800;
-            color: #0ea5e9;
+            color: #4ad2e2;
             margin-bottom: 10px;
         }
 
@@ -3582,7 +3561,7 @@ footer::before {
 
         .pricing-features li::before {
             content: '✓';
-            color: #0ea5e9;
+            color: #4ad2e2;
             font-weight: bold;
             margin-right: 10px;
         }
@@ -4443,7 +4422,7 @@ footer::before {
         .btn-secondary:focus,
         .btn-white:focus,
         .quantity-btn:focus {
-            outline: 2px solid #0ea5e9;
+            outline: 2px solid #4ad2e2;
             outline-offset: 2px;
         }
 

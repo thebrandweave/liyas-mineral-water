@@ -138,7 +138,7 @@
         
         .contact-form .form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+            box-shadow: 0 0 0 3px rgba(74, 210, 226, 0.1);
             outline: none;
         }
         
@@ -165,7 +165,7 @@
             background: var(--primary-dark); 
             border-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 5px 15px rgba(74, 210, 226, 0.3);
         }
         
         .contact-wave { 

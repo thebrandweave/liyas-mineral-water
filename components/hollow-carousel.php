@@ -53,7 +53,7 @@
 }
 
 .outline-letter:hover {
-  -webkit-text-stroke: 2px #0ea5e9; /* Changes outline color only */
+  -webkit-text-stroke: 2px #4ad2e2; /* Changes outline color only */
 }
 
 /* Continuous scroll animation */

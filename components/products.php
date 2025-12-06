@@ -5,7 +5,7 @@
 
     <div class="product-grid">
       <div class="product-card">
-        <img src="assets/images/bottle-1.jpg" alt="Mineral Water">
+        <img src="assets/images/liyas-bottle.png" alt="Mineral Water">
         <div class="product-info">
           <p class="category">Classic</p>
           <h4>Chobani Complete Vanilla Greek</h4>
@@ -20,7 +20,7 @@
       </div>
 
       <div class="product-card">
-        <img src="assets/images/bottle-1.jpg" alt="Ginger Ale">
+        <img src="assets/images/liyas-bottle.png" alt="Ginger Ale">
         <div class="product-info">
           <p class="category">Sparkling</p>
           <h4>Canada Dry Ginger Ale - 2 L Bottle</h4>
@@ -35,7 +35,7 @@
       </div>
 
       <div class="product-card">
-        <img src="assets/images/bottle-1.jpg" alt="Small Water Bottle">
+        <img src="assets/images/liyas-bottle.png" alt="Small Water Bottle">
         <div class="product-info">
           <p class="category">Mini Pack</p>
           <h4>PureLife Natural Spring Water - 1L</h4>

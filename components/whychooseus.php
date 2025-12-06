@@ -25,7 +25,7 @@
 
 			<div class="image-column" data-aos="zoom-in" data-aos-delay="50">
 				<div class="image-wrapper">
-					<img src="assets/images/bottle.png" alt="Liyas Mineral Water Bottle">
+					<img src="assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle">
 				</div>
 			</div>
 
@@ -46,7 +46,7 @@
 		:root {
 			--why-text-primary: #0b2e4e;
 			--why-text-secondary: #5a6b7b;
-			--why-accent: #0ea5e9; /* Site blue */
+			--why-accent: #4ad2e2; /* Site cyan */
 			--why-white: #ffffff;
 			--why-bg: #f6fbff;
 		}

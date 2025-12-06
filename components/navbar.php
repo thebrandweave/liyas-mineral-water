@@ -79,7 +79,7 @@
   }
 
   .nav-items-placeholder .nav-link:hover {
-    color: rgba(14, 165, 233, 1);
+    color: rgba(74, 210, 226, 1);
   }
 
   /* Tablet adjustments */
@@ -231,11 +231,11 @@
 
   .mobile-menu ul .nav-link:active {
     transform: scale(0.95);
-    background: rgba(14, 165, 233, 0.1);
+    background: rgba(74, 210, 226, 0.1);
   }
 
   .mobile-menu ul .nav-link:hover {
-    color: rgba(14, 165, 233, 1);
+    color: rgba(74, 210, 226, 1);
   }
 
   /* ======================

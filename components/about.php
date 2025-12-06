@@ -31,7 +31,7 @@
 
     .about-content .tag {
       display: inline-block;
-      background-color: rgba(14, 165, 233, 0.12);
+      background-color: rgba(74, 210, 226, 0.12);
       color: #0b2e4e;
       font-weight: 600;
       font-size: 0.9rem;
@@ -55,7 +55,7 @@
 
     .about-content .btn {
       display: inline-block;
-      background-color: #0ea5e9;
+      background-color: #4ad2e2;
       color: #fff;
       font-weight: 600;
       text-decoration: none;
@@ -65,7 +65,7 @@
     }
 
     .about-content .btn:hover {
-      background-color: #0284c7;
+      background-color: #2cbac9;
     }
 
     /* Badge Row */
@@ -108,7 +108,7 @@
   <!-- About Section -->
   <section class="about-section" id="about" data-aos="fade-up">
     <div class="about-image" data-aos="fade-right" data-aos-delay="50">
-      <img src="assets/images/bottle.png" alt="Liyas Mineral Water Bottle">
+      <img src="assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle">
     </div>
 
     <div class="about-content" data-aos="fade-left" data-aos-delay="100">
