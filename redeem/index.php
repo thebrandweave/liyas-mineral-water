@@ -209,8 +209,9 @@ $message_classes = [
                     },
                     colors: {
                         brand: {
-                            purple: '#6366F1',
-                            deep: '#8B5CF6',
+                            purple: '#4ad2e2',
+                            deep: '#2cbac9',
+                            accent: '#222222',
                         }
                     }
                 }
@@ -281,8 +282,8 @@ $message_classes = [
         .sweep-glow {
             position: absolute;
             inset: -40px;
-            background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15), transparent 55%),
-                        radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.15), transparent 55%);
+            background: radial-gradient(circle at 0% 0%, rgba(74, 210, 226, 0.15), transparent 55%),
+                        radial-gradient(circle at 100% 100%, rgba(44, 186, 201, 0.15), transparent 55%);
             filter: blur(2px);
             opacity: 0.9;
             pointer-events: none;
@@ -468,7 +469,7 @@ $message_classes = [
                     <!-- Submit -->
                     <button
                         type="submit"
-                        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-purple to-brand-deep px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-purple/30 transition hover:translate-y-[1px] hover:shadow-xl active:translate-y-[2px]"
+                        class="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-purple to-brand-deep px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-brand-purple/30 transition hover:translate-y-[1px] hover:shadow-xl active:translate-y-[2px]"
                         id="submitBtn"
                     >
                         Continue to Next Step

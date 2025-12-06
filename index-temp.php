@@ -570,14 +570,16 @@
                 <div class="col-lg-6">
                     <div class="hero-content" data-aos="fade-right" data-aos-delay="50">
                         <div class="hero-subtitle">PURE WATER</div>
-                        <h1>DRINK BETTER</h1>
+                        <h1><span class="text-primary">REFRESH</span> YOUR SOUL</h1>
                         <div class="hero-image-mobile" aria-hidden="false">
-                            <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
+                            <div class="hero-bottle-container">
+                                <img src="assets/images/LIYAS Website bottle (1).png" alt="Liyas Mineral Water Bottle" class="img-fluid animated-image">
+                            </div>
                         </div>
                         <p>
-                        Meet Liyas — hydration redefined for today’s lifestyle.
+                        Meet Liyas — hydration redefined for today's lifestyle.
 Crafted for clarity, freshness, and a touch of fun.
-Because great water isn’t just a choice — it’s a vibe.
+Because great water isn't just a choice — it's a vibe.
                         </p>
                         <div class="hero-buttons">
                             <a href="#" class="btn-primary">Shop Now</a>
@@ -587,7 +589,9 @@ Because great water isn’t just a choice — it’s a vibe.
                 </div>
                 <div class="col-lg-6">
                     <div class="hero-image hero-image-desktop" data-aos="fade-left" data-aos-delay="100">
-                        <img src="assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
+                        <div class="hero-bottle-container">
+                            <img src="assets/images/LIYAS Website bottle (1).png" alt="Liyas Mineral Water Bottle" class="img-fluid animated-image">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -612,7 +616,7 @@ Because great water isn’t just a choice — it’s a vibe.
                 <g class="center-arrow">
                     <path d="M250,200 L250,280 M250,280 L230,260 M250,280 L270,260" 
                             fill="none" 
-                            stroke="rgba(14, 165, 233, 1)" 
+                            stroke="rgba(74, 210, 226, 1)" 
                             stroke-width="3"
                             stroke-linecap="round"
                             stroke-linejoin="round"/>
