@@ -13,6 +13,14 @@ if (isset($_SESSION['error_message'])) {
     unset($_SESSION['error_message']);
 }
 
+// Check for success messages from redirect
+if (isset($_GET['added']) && $_GET['added'] == '1') {
+    $success_message = "Category added successfully!";
+}
+if (isset($_GET['updated']) && $_GET['updated'] == '1') {
+    $success_message = "Category updated successfully!";
+}
+
 // Handle delete action
 if (isset($_GET['delete']) && !empty($_GET['delete'])) {
     $category_id = (int)$_GET['delete'];
@@ -64,7 +72,7 @@ if (isset($_GET['delete']) && !empty($_GET['delete'])) {
 
 // Handle add/edit form submission
 $form_error = '';
-$form_success = '';
+// $form_success removed - we redirect immediately on success
 $editing_category = null;
 $edit_id = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
 
@@ -96,9 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
                 // Log activity
                 quickLog($pdo, 'update', 'category', $category_id, "Updated category: {$name}");
                 
-                $form_success = "Category updated successfully!";
-                $editing_category = null;
-                $edit_id = 0;
+                // Redirect to index page
+                header("Location: index.php?updated=1");
+                exit;
             } else {
                 // Insert new category
                 $stmt = $pdo->prepare("INSERT INTO categories (name, description) VALUES (?, ?)");
@@ -108,7 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
                 // Log activity
                 quickLog($pdo, 'create', 'category', $new_category_id, "Created category: {$name}");
                 
-                $form_success = "Category added successfully!";
+                // Redirect to index page
+                header("Location: index.php?added=1");
+                exit;
             }
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
@@ -121,7 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
 }
 
 // Determine if category modal should be visible on load
-$show_modal = ($editing_category || $form_error || $form_success);
+// Note: $form_success removed since we redirect immediately on success
+$show_modal = ($editing_category || $form_error);
 
 // Search functionality
 $search = $_GET['search'] ?? '';
@@ -237,22 +248,66 @@ try {
 			inset: 0;
 			background: rgba(15, 23, 42, 0.35);
 			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
 			display: none;
 			align-items: center;
 			justify-content: center;
-			z-index: 999;
+			z-index: 1001;
 			padding: 1.5rem;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
 		}
 
 		.modal-card {
 			max-width: 720px;
 			width: 100%;
+			max-height: 90vh;
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
+
+		.modal-card::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.modal-card::-webkit-scrollbar-track {
+			background: var(--bg-main);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb {
+			background: var(--border-medium);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb:hover {
+			background: var(--text-secondary);
+		}
+
+		/* Close button and form header styles are in prody-admin.css */
 
 		@media (max-width: 768px) {
 			.modal-overlay {
 				align-items: flex-start;
-				padding-top: 4rem;
+				padding: 1rem;
+				padding-top: 2rem;
+			}
+			
+			.modal-card {
+				max-height: 90vh;
+				max-width: 100%;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.modal-overlay {
+				padding: 0.5rem;
+				padding-top: 1rem;
+			}
+			
+			.modal-card {
+				max-height: 95vh;
+				border-radius: 12px;
 			}
 		}
 		
@@ -373,9 +428,9 @@ try {
 					style="<?= $show_modal ? 'display:flex;' : 'display:none;' ?>"
 				>
 					<div class="form-card modal-card" id="categoryForm">
-						<div class="form-header" style="display:flex;justify-content:space-between;align-items:center;">
+						<div class="form-header">
 							<h2><?= $editing_category ? 'Edit Category' : 'Add New Category' ?></h2>
-							<button type="button" class="btn btn-secondary" style="padding:0.25rem 0.75rem;font-size:12px;" onclick="closeCategoryModal()">
+							<button type="button" class="close-form-btn" onclick="closeCategoryModal()" aria-label="Close">
 								<i class='bx bx-x'></i>
 							</button>
 						</div>
@@ -386,11 +441,7 @@ try {
 							</div>
 						<?php endif; ?>
 
-						<?php if ($form_success): ?>
-							<div class="alert alert-success">
-								<?= htmlspecialchars($form_success) ?>
-							</div>
-						<?php endif; ?>
+						<?php /* Success messages are shown on index.php after redirect */ ?>
 
 						<form method="POST" action="" class="form-modern">
 							<?php if ($editing_category): ?>
@@ -575,14 +626,7 @@ try {
 	}
 
 	function closeCategoryModal() {
-		const modal = document.getElementById('categoryModal');
-		if (modal) {
-			modal.style.display = 'none';
-			// If we were editing, going back to list view
-			if (window.location.search.includes('edit=')) {
-				window.location.href = 'index.php';
-			}
-		}
+		window.location.href = 'index.php';
 	}
 	</script>
 </body>

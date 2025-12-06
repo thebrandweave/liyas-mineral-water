@@ -13,6 +13,14 @@ if (isset($_SESSION['error_message'])) {
     unset($_SESSION['error_message']);
 }
 
+// Check for success messages from redirect
+if (isset($_GET['added']) && $_GET['added'] == '1') {
+    $success_message = "Product added successfully!";
+}
+if (isset($_GET['updated']) && $_GET['updated'] == '1') {
+    $success_message = "Product updated successfully!";
+}
+
 // Handle edit action - if page=edit is requested, redirect to edit.php with proper query string
 if (isset($_GET['page']) && $_GET['page'] === 'edit' && isset($_GET['id'])) {
     $edit_id = (int)$_GET['id'];

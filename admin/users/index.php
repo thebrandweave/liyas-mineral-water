@@ -14,6 +14,14 @@ if (isset($_SESSION['error_message'])) {
     unset($_SESSION['error_message']);
 }
 
+// Check for success messages from redirect
+if (isset($_GET['added']) && $_GET['added'] == '1') {
+    $success_message = "Admin user added successfully!";
+}
+if (isset($_GET['updated']) && $_GET['updated'] == '1') {
+    $success_message = "Admin user updated successfully!";
+}
+
 // Handle delete action
 if (isset($_GET['delete']) && !empty($_GET['delete'])) {
     $admin_id = (int)$_GET['delete'];
@@ -50,7 +58,7 @@ if (isset($_GET['delete']) && !empty($_GET['delete'])) {
 
 // Handle add/edit form submission
 $form_error = '';
-$form_success = '';
+// $form_success removed - we redirect immediately on success
 $editing_admin = null;
 $edit_id = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
 
@@ -106,9 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin'])) {
                             // Log activity
                             quickLog($pdo, 'update', 'user', $admin_id, "Updated admin user: {$username} (Role: {$role})");
                             
-                            $form_success = "Admin updated successfully!";
-                            $editing_admin = null;
-                            $edit_id = 0;
+                            // Redirect to index page
+                            header("Location: index.php?updated=1");
+                            exit;
                         }
                     } else {
                         // Update without password
@@ -118,9 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin'])) {
                         // Log activity
                         quickLog($pdo, 'update', 'user', $admin_id, "Updated admin user: {$username} (Role: {$role})");
                         
-                        $form_success = "Admin updated successfully!";
-                        $editing_admin = null;
-                        $edit_id = 0;
+                        // Redirect to index page
+                        header("Location: index.php?updated=1");
+                        exit;
                     }
                 }
             } else {
@@ -146,7 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin'])) {
                         // Log activity
                         quickLog($pdo, 'create', 'user', $new_admin_id, "Created admin user: {$username} (Role: {$role})");
                         
-                        $form_success = "Admin user added successfully!";
+                        // Redirect to index page
+                        header("Location: index.php?added=1");
+                        exit;
                     }
                 }
             }
@@ -161,7 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_admin'])) {
 }
 
 // Determine if admin modal should be visible on load
-$show_modal = ($editing_admin || $form_error || $form_success);
+// Note: $form_success removed since we redirect immediately on success
+$show_modal = ($editing_admin || $form_error);
 
 // Search functionality
 $search = $_GET['search'] ?? '';
@@ -279,22 +290,66 @@ try {
 			inset: 0;
 			background: rgba(15, 23, 42, 0.35);
 			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
 			display: none;
 			align-items: center;
 			justify-content: center;
-			z-index: 999;
+			z-index: 1001;
 			padding: 1.5rem;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
 		}
 
 		.modal-card {
 			max-width: 720px;
 			width: 100%;
+			max-height: 90vh;
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
+
+		.modal-card::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.modal-card::-webkit-scrollbar-track {
+			background: var(--bg-main);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb {
+			background: var(--border-medium);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb:hover {
+			background: var(--text-secondary);
+		}
+
+		/* Close button and form header styles are in prody-admin.css */
 
 		@media (max-width: 768px) {
 			.modal-overlay {
 				align-items: flex-start;
-				padding-top: 4rem;
+				padding: 1rem;
+				padding-top: 2rem;
+			}
+			
+			.modal-card {
+				max-height: 90vh;
+				max-width: 100%;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.modal-overlay {
+				padding: 0.5rem;
+				padding-top: 1rem;
+			}
+			
+			.modal-card {
+				max-height: 95vh;
+				border-radius: 12px;
 			}
 		}
 		
@@ -415,9 +470,9 @@ try {
 					style="<?= $show_modal ? 'display:flex;' : 'display:none;' ?>"
 				>
 					<div class="form-card modal-card" id="adminForm">
-						<div class="form-header" style="display:flex;justify-content:space-between;align-items:center;">
+						<div class="form-header">
 							<h2><?= $editing_admin ? 'Edit Admin User' : 'Add New Admin User' ?></h2>
-							<button type="button" class="btn btn-secondary" style="padding:0.25rem 0.75rem;font-size:12px;" onclick="closeAdminModal()">
+							<button type="button" class="close-form-btn" onclick="closeAdminModal()" aria-label="Close">
 								<i class='bx bx-x'></i>
 							</button>
 						</div>
@@ -428,11 +483,7 @@ try {
 							</div>
 						<?php endif; ?>
 
-						<?php if ($form_success): ?>
-							<div class="alert alert-success">
-								<?= htmlspecialchars($form_success) ?>
-							</div>
-						<?php endif; ?>
+						<?php /* Success messages are shown on index.php after redirect */ ?>
 
 						<form method="POST" action="" class="form-modern">
 							<?php if ($editing_admin): ?>
@@ -645,13 +696,7 @@ try {
 	}
 
 	function closeAdminModal() {
-		const modal = document.getElementById('adminModal');
-		if (modal) {
-			modal.style.display = 'none';
-			if (window.location.search.includes('edit=')) {
-				window.location.href = 'index.php';
-			}
-		}
+		window.location.href = 'index.php';
 	}
 	</script>
 </body>

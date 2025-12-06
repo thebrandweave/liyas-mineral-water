@@ -57,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$name, $description ?: null, $price, $image_path]);
                 
                 $product_id = $pdo->lastInsertId();
-                $success = "Product added successfully!";
                 
                 // Log activity
                 quickLog($pdo, 'create', 'product', $product_id, "Created product: {$name} (Price: ₹{$price})");
@@ -103,22 +102,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			inset: 0;
 			background: rgba(15, 23, 42, 0.35);
 			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			z-index: 999;
+			z-index: 1001;
 			padding: 1.5rem;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
 		}
 
 		.modal-card {
 			max-width: 720px;
 			width: 100%;
+			max-height: 90vh;
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
+
+		.modal-card::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.modal-card::-webkit-scrollbar-track {
+			background: var(--bg-main);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb {
+			background: var(--border-medium);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb:hover {
+			background: var(--text-secondary);
+		}
+
+		/* Close button and form header styles are in prody-admin.css */
 
 		@media (max-width: 768px) {
 			.modal-overlay {
 				align-items: flex-start;
-				padding-top: 4rem;
+				padding: 1rem;
+				padding-top: 2rem;
+			}
+			
+			.modal-card {
+				max-height: 90vh;
+				max-width: 100%;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.modal-overlay {
+				padding: 0.5rem;
+				padding-top: 1rem;
+			}
+			
+			.modal-card {
+				max-height: 95vh;
+				border-radius: 12px;
 			}
 		}
 	</style>
@@ -148,6 +191,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					<div class="form-card modal-card">
 						<div class="form-header">
 							<h2>Add New Product</h2>
+							<button type="button" class="close-form-btn" onclick="window.location.href='index.php'" aria-label="Close">
+								<i class='bx bx-x'></i>
+							</button>
 						</div>
 
 						<?php if ($error): ?>
