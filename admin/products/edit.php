@@ -138,15 +138,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                     $stmt->execute([$name, $description ?: null, $price, $product_id]);
                 }
                 
-                $success = "Product updated successfully!";
-                
                 // Log activity
                 quickLog($pdo, 'update', 'product', $product_id, "Updated product: {$name} (Price: ₹{$price})");
                 
-                // Refresh product data
-                $stmt = $pdo->prepare("SELECT * FROM products WHERE product_id = ?");
-                $stmt->execute([$product_id]);
-                $product = $stmt->fetch(PDO::FETCH_ASSOC);
+                // Redirect to products list
+                header("Location: index.php?updated=1");
+                exit;
             } catch (PDOException $e) {
                 // Delete uploaded file if database update fails
                 if ($image_path && $image_path !== ($product['image'] ?? null) && file_exists(__DIR__ . '/../' . $image_path)) {
@@ -158,10 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     }
 }
 
-// Show success message if redirected from add page
-if (isset($_GET['added'])) {
-    $success = "Product added successfully! You can now edit it or add images.";
-}
+// Note: Success messages are now shown on index.php after redirect
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -194,19 +188,62 @@ if (isset($_GET['added'])) {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			z-index: 999;
+			z-index: 1001;
 			padding: 1.5rem;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
 		}
 
 		.modal-card {
 			max-width: 720px;
 			width: 100%;
+			max-height: 90vh;
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
+
+		.modal-card::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.modal-card::-webkit-scrollbar-track {
+			background: var(--bg-main);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb {
+			background: var(--border-medium);
+			border-radius: 4px;
+		}
+
+		.modal-card::-webkit-scrollbar-thumb:hover {
+			background: var(--text-secondary);
+		}
+
+		/* Close button and form header styles are in prody-admin.css */
 
 		@media (max-width: 768px) {
 			.modal-overlay {
 				align-items: flex-start;
-				padding-top: 4rem;
+				padding: 1rem;
+				padding-top: 2rem;
+			}
+			
+			.modal-card {
+				max-height: 90vh;
+				max-width: 100%;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.modal-overlay {
+				padding: 0.5rem;
+				padding-top: 1rem;
+			}
+			
+			.modal-card {
+				max-height: 95vh;
+				border-radius: 12px;
 			}
 		}
 	</style>
@@ -249,6 +286,9 @@ if (isset($_GET['added'])) {
 						<div class="form-card modal-card">
 						<div class="form-header">
 							<h2>Edit Product #<?= $product['product_id'] ?></h2>
+							<button type="button" class="close-form-btn" onclick="window.location.href='index.php'" aria-label="Close">
+								<i class='bx bx-x'></i>
+							</button>
 						</div>
 
 						<form method="POST" action="" enctype="multipart/form-data" class="form-modern">
