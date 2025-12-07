@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>LIYAS Mineral Water - Premium Quality Water</title>
+    <title>LIYAS Mineral Water Premium Quality Water</title>
     <meta name="description" content="LIYAS Mineral Water - Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
     <meta name="keywords" content="mineral water, premium water, healthy water, LIYAS, pure water">
     
