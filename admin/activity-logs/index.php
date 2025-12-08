@@ -176,7 +176,7 @@ try {
         .stat-card {
             background: var(--bg-white);
             border: 1px solid var(--border-light);
-            border-radius: 8px;
+            border-radius: 33px;
             padding: 1rem;
         }
         
