@@ -1,3 +1,11 @@
+<?php
+// Calculate base path for assets based on where this component is included from
+$script_path = $_SERVER['SCRIPT_NAME'];
+$script_dir = dirname($script_path);
+$path_segments = array_filter(explode('/', $script_dir));
+$is_subdirectory = (count($path_segments) > 1);
+$asset_base = $is_subdirectory ? '../' : '';
+?>
   <footer>
     <!-- content container (white layer INSIDE here) -->
     <div class="footer-container">
@@ -223,7 +231,7 @@
   z-index: 1;
 
   /* ✅ Full-width footer background, not global */
-  background: url('assets/images/bg1.jpg')
+  background: url('<?php echo $asset_base; ?>assets/images/bg1.jpg')
               bottom center no-repeat;
   background-size: cover;       /* fills width responsively */
   background-attachment: scroll; /* stays in footer, not global fixed */

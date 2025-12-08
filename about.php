@@ -53,11 +53,11 @@
 
   <!-- Badge Row -->
   <div class="badge-row">
-    <img src="assets/images//bottle.png" alt="ISO 14001">
-    <img src="assets/images//bottle.png" alt="ISO 9001">
-    <img src="assets/images//bottle.png" alt="ISO Certified">
-    <img src="assets/images//bottle.png" alt="ISO Quality">
-    <img src="assets/images//bottle.png" alt="ISO 22000">
+    <img src="assets/images/liyas-bottle.png" alt="ISO 14001">
+    <img src="assets/images/liyas-bottle.png" alt="ISO 9001">
+    <img src="assets/images/liyas-bottle.png" alt="ISO Certified">
+    <img src="assets/images/liyas-bottle.png" alt="ISO Quality">
+    <img src="assets/images/liyas-bottle.png" alt="ISO 22000">
   </div>
 
 </body>

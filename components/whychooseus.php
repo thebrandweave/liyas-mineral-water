@@ -2,6 +2,12 @@
 /**
  * Why Choose Us component (blue theme, water content, bottle image)
  */
+// Calculate base path for assets based on where this component is included from
+$script_path = $_SERVER['SCRIPT_NAME'];
+$script_dir = dirname($script_path);
+$path_segments = array_filter(explode('/', $script_dir));
+$is_subdirectory = (count($path_segments) > 1);
+$asset_base = $is_subdirectory ? '../' : '';
 ?>
 <section class="why-choose-section" id="why-choose" data-aos="fade-up">
 	<div class="container">
@@ -25,7 +31,7 @@
 
 			<div class="image-column" data-aos="zoom-in" data-aos-delay="50">
 				<div class="image-wrapper">
-					<img src="assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle">
+					<img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle">
 				</div>
 			</div>
 

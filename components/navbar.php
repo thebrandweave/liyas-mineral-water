@@ -1,18 +1,43 @@
 <!-- components/navbar.php -->
+<?php
+// Get the script path and determine base path
+$script_path = $_SERVER['SCRIPT_NAME'];
+$script_dir = dirname($script_path);
+
+// Get all path segments
+$path_segments = array_filter(explode('/', $script_dir));
+
+// If we're in a subdirectory (like contact/ or about/), remove the last segment
+if (count($path_segments) > 1) {
+    array_pop($path_segments);
+}
+
+// Build base path from remaining segments
+$base_path = '/' . implode('/', $path_segments);
+if ($base_path !== '/') {
+    $base_path .= '/';
+}
+
+// Set navigation links to actual pages
+$home_link = $base_path;
+$about_link = $base_path . 'about/';
+$products_link = $base_path . 'products/';
+$contact_link = $base_path . 'contact/';
+?>
 <nav class="navbar fixed-top liyas-navbar">
   <div class="container d-flex justify-content-between align-items-center">
 
     <!-- Logo (Left Side) -->
-    <!-- <a href="#home" class="navbar-brand logo-text d-flex align-items-center">
-      <img src="assets/images/logo/logo.png" alt="Liyas Logo" class="navbar-logo">
+    <!-- <a href="<?php echo $home_link; ?>" class="navbar-brand logo-text d-flex align-items-center">
+      <img src="<?php echo $base_path; ?>assets/images/logo/logo.png" alt="Liyas Logo" class="navbar-logo">
     </a> -->
 
     <!-- Center Nav Items -->
     <ul class="navbar-nav flex-row gap-4 nav-items-placeholder d-none d-md-flex mx-auto">
-      <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
-      <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-      <li class="nav-item"><a href="#products" class="nav-link">Products</a></li>
-      <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+      <li class="nav-item"><a href="<?php echo $home_link; ?>" class="nav-link">Home</a></li>
+      <li class="nav-item"><a href="<?php echo $about_link; ?>" class="nav-link">About</a></li>
+      <li class="nav-item"><a href="<?php echo $products_link; ?>" class="nav-link">Products</a></li>
+      <li class="nav-item"><a href="<?php echo $contact_link; ?>" class="nav-link">Contact</a></li>
     </ul>
 
     <!-- Login Icon (Right Side) -->
@@ -34,10 +59,10 @@
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu" id="mobileMenu">
     <ul>
-      <li><a href="#home" class="nav-link">Home</a></li>
-      <li><a href="#about" class="nav-link">About</a></li>
-      <li><a href="#products" class="nav-link">Products</a></li>
-      <li><a href="#contact" class="nav-link">Contact</a></li>
+      <li><a href="<?php echo $home_link; ?>" class="nav-link">Home</a></li>
+      <li><a href="<?php echo $about_link; ?>" class="nav-link">About</a></li>
+      <li><a href="<?php echo $products_link; ?>" class="nav-link">Products</a></li>
+      <li><a href="<?php echo $contact_link; ?>" class="nav-link">Contact</a></li>
     </ul>
   </div>
 </nav>
@@ -357,6 +382,46 @@
         
         lastScroll = currentScroll;
       });
+    }
+
+    // Handle smooth scrolling for anchor links (same page)
+    document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          const targetId = href.substring(1);
+          const targetElement = document.getElementById(targetId);
+          
+          if (targetElement) {
+            e.preventDefault();
+            targetElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            });
+            
+            // Close mobile menu if open
+            if (mobileMenu && mobileMenu.classList.contains('active')) {
+              mobileBtn.classList.remove('active');
+              mobileMenu.classList.remove('active');
+              document.body.classList.remove('no-scroll');
+            }
+          }
+        }
+      });
+    });
+
+    // Handle anchor scrolling after page load (for cross-page navigation)
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      setTimeout(() => {
+        const targetElement = document.getElementById(hash);
+        if (targetElement) {
+          targetElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 100);
     }
   });
 </script>

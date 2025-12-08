@@ -26,7 +26,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     
-    <meta name="theme-color" content="#0ea5e9">
+    <meta name="theme-color" content="#4ad2e2">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="LIYAS Water">
@@ -81,7 +81,7 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background:rgba(14, 164, 233, 0.22);
+            background:rgba(74, 210, 226, 0.22);
             will-change: width, height, transform;
             animation: circleDropExpand 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
@@ -95,7 +95,7 @@
             /* The initial centering (translate) is managed by GSAP.set() in JS */
             font-size: clamp(2rem, 8vw, 4rem);
             font-weight: 700;
-            color: rgba(14, 164, 233, 0.71);
+            color: rgba(74, 210, 226, 0.71);
             z-index: 10000; /* Increased z-index to ensure visibility during splash fade */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             pointer-events: none;
@@ -180,6 +180,90 @@
             padding-bottom: 120px; /* space reserved for scroll control */
         }
 
+        /* Page Header Design (About, Contact, Products) */
+        .page-header {
+            background: linear-gradient(135deg, rgba(74, 210, 226, 0.05) 0%, rgba(240, 249, 255, 0.3) 50%, rgba(255, 255, 255, 0.9) 100%);
+            padding: 140px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(240, 249, 255, 0.3) 50%, rgba(255, 255, 255, 0.95) 100%);
+            z-index: 1;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page-breadcrumb {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .page-breadcrumb a {
+            color: #4ad2e2;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .page-breadcrumb a:hover {
+            color: #2cbac9;
+        }
+
+        .page-breadcrumb span {
+            color: #94a3b8;
+        }
+
+        .page-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .page-title .text-primary {
+            color: #4ad2e2;
+        }
+
+        .page-subtitle {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            color: #64748b;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 767px) {
+            .page-header {
+                padding: 120px 0 60px;
+            }
+
+            .page-breadcrumb {
+                font-size: 0.8rem;
+            }
+        }
+
         @media (min-width: 768px) {
             .hero { padding-bottom: 140px; }
         }
@@ -234,7 +318,7 @@
             font-family: "Poppins", sans-serif;
             font-weight: 700;
             text-transform: uppercase;
-            fill: rgba(14, 165, 233, 1);
+            fill: rgba(74, 210, 226, 1);
             animation: rotate 25s linear infinite;
             transform-origin: 250px 250px;
         }
@@ -356,8 +440,8 @@
             background: var(--primary);
             color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(14, 165, 233, 0.25);
-            border-color: rgba(14, 165, 233, 0.35);
+            box-shadow: 0 12px 28px rgba(74, 210, 226, 0.25);
+            border-color: rgba(74, 210, 226, 0.35);
         }
 
         @media (max-width: 767px) {
@@ -396,9 +480,9 @@
 
 .top-login-btn:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 6px 20px rgba(74, 210, 226, 0.25);
   background: rgba(255, 255, 255, 1);
-  border-color: rgba(14, 165, 233, 0.2);
+  border-color: rgba(74, 210, 226, 0.2);
 }
 
 .top-login-btn:active {
@@ -415,7 +499,7 @@
 }
 
 .top-login-btn:hover .login-svg {
-  stroke: rgba(14, 165, 233, 1);
+  stroke: rgba(74, 210, 226, 1);
 }
 
 /* Tablet adjustments */
@@ -562,91 +646,20 @@
     
     <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
-    <section class="hero" id="home" data-aos="fade-up">
+    <section class="page-header" id="home">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="hero-content" data-aos="fade-right" data-aos-delay="50">
-                        <div class="hero-subtitle">PURE WATER</div>
-                        <h1>DRINK BETTER</h1>
-                        <div class="hero-image-mobile" aria-hidden="false">
-                            <img src="../assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
-                        </div>
-                        <p>
-                        Meet Liyas — hydration redefined for today’s lifestyle.
-                        Crafted for clarity, freshness, and a touch of fun.
-                        Because great water isn’t just a choice — it’s a vibe.
-                        </p>
-                        <div class="hero-buttons">
-                            <a href="#" class="btn-primary">Shop Now</a>
-                            <a href="#about" class="btn-secondary">Explore</a>
-                        </div>
-                    </div>
+            <div class="page-header-content">
+                <div class="page-breadcrumb">
+                    <a href="../">Home</a> <span>/</span> <span>About</span>
                 </div>
-                <div class="col-lg-6">
-                    <div class="hero-image hero-image-desktop" data-aos="fade-left" data-aos-delay="100">
-                        <img src="../assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
-                    </div>
-                </div>
+                <h1 class="page-title">About <span class="text-primary">Us</span></h1>
+                <p class="page-subtitle">
+                    Discover the story behind LIYAS — where purity meets passion. 
+                    We're committed to delivering the finest mineral water, sourced with care and crafted for your well-being.
+                </p>
             </div>
         </div>
-        
-        <div class="hero-scroll-down" id="heroScrollDown" title="Scroll to next section">
-            <svg xmlns="http://www.w3.org/2000/svg" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
-                <defs>
-                    <path id="textcirclenew" d="M250,400 a150,150 0 0,1 0,-300a150,150 0 0,1 0,300Z" 
-                            transform="rotate(12,250,250)"/>
-                </defs>
-                <g class="textcircle">
-                    <text style="font-size: 55px;">
-                        <textPath 
-                                     xlink:href="#textcirclenew" 
-                                     aria-label="Scroll Down" 
-                                     textLength="880">
-                            Scroll Down
-                        </textPath>
-                    </text>
-                </g>
-                <g class="center-arrow">
-                    <path d="M250,200 L250,280 M250,280 L230,260 M250,280 L270,260" 
-                            fill="none" 
-                            stroke="rgba(14, 165, 233, 1)" 
-                            stroke-width="3"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"/>
-                </g>
-            </svg>
-        </div>
-        
-        <svg class="wave-svg" width="100%" height="100%" id="svg" viewBox="0 0 1440 390" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150">
-            <style>
-                .path-0{
-                    animation:pathAnim-0 4s;
-                    animation-timing-function: linear;
-                    animation-iteration-count: infinite;
-                }
-                @keyframes pathAnim-0{
-                    0%{
-                        d: path("M 0,400 L 0,150 C 94.73076923076925,117.93589743589743 189.4615384615385,85.87179487179488 277,76 C 364.5384615384615,66.12820512820512 444.88461538461536,78.44871794871794 507,92 C 569.1153846153846,105.55128205128206 613.0000000000001,120.33333333333333 694,122 C 774.9999999999999,123.66666666666667 893.1153846153843,112.21794871794873 986,128 C 1078.8846153846157,143.78205128205127 1146.5384615384617,186.7948717948718 1218,195 C 1289.4615384615383,203.2051282051282 1364.730769230769,176.6025641025641 1440,150 L 1440,400 L 0,400 Z");
-                    }
-                    25%{
-                        d: path("M 0,400 L 0,150 C 75.4897435897436,175.26666666666665 150.9794871794872,200.53333333333333 243,182 C 335.0205128205128,163.46666666666667 443.57179487179485,101.13333333333334 521,90 C 598.4282051282051,78.86666666666666 644.7333333333333,118.93333333333334 714,139 C 783.2666666666667,159.06666666666666 875.4948717948719,159.13333333333333 955,153 C 1034.5051282051281,146.86666666666667 1101.2871794871794,134.53333333333333 1180,133 C 1258.7128205128206,131.46666666666667 1349.3564102564103,140.73333333333335 1440,150 L 1440,400 L 0,400 Z");
-                    }
-                    50%{
-                        d: path("M 0,400 L 0,150 C 62.51794871794871,169.57179487179485 125.03589743589743,189.14358974358973 204,184 C 282.9641025641026,178.85641025641027 378.374358974359,148.99743589743588 461,152 C 543.625641025641,155.00256410256412 613.4666666666667,190.8666666666667 695,172 C 776.5333333333333,153.1333333333333 869.7589743589742,79.53589743589743 947,78 C 1024.2410256410258,76.46410256410257 1085.497435897436,146.9897435897436 1165,171 C 1244.502564102564,195.0102564102564 1342.251282051282,172.5051282051282 1440,150 L 1440,400 L 0,400 Z");
-                    }
-                    75%{
-                        d: path("M 0,400 L 0,150 C 65.39743589743588,127.30000000000001 130.79487179487177,104.60000000000001 219,110 C 307.20512820512823,115.39999999999999 418.2179487179486,148.9 502,166 C 585.7820512820514,183.1 642.3333333333335,183.79999999999998 725,186 C 807.6666666666665,188.20000000000002 916.448717948718,191.9 991,199 C 1065.551282051282,206.1 1105.871794871795,216.6 1175,209 C 1244.128205128205,201.4 1342.0641025641025,175.7 1440,150 L 1440,400 L 0,400 Z");
-                    }
-                    100%{
-                        d: path("M 0,400 L 0,150 C 94.73076923076925,117.93589743589743 189.4615384615385,85.87179487179488 277,76 C 364.5384615384615,66.12820512820512 444.88461538461536,78.44871794871794 507,92 C 569.1153846153846,105.55128205128206 613.0000000000001,120.33333333333333 694,122 C 774.9999999999999,123.66666666666667 893.1153846153843,112.21794871794873 986,128 C 1078.8846153846157,143.78205128205127 1146.5384615384617,186.7948717948718 1218,195 C 1289.4615384615383,203.2051282051282 1364.730769230769,176.6025641025641 1440,150 L 1440,400 L 0,400 Z");
-                    }
-                }
-            </style>
-            <path d="M 0,400 L 0,150 C 94.73076923076925,117.93589743589743 189.4615384615385,85.87179487179488 277,76 C 364.5384615384615,66.12820512820512 444.88461538461536,78.44871794871794 507,92 C 569.1153846153846,105.55128205128206 613.0000000000001,120.33333333333333 694,122 C 774.9999999999999,123.66666666666667 893.1153846153843,112.21794871794873 986,128 C 1078.8846153846157,143.78205128205127 1146.5384615384617,186.7948717948718 1218,195 C 1289.4615384615383,203.2051282051282 1364.730769230769,176.6025641025641 1440,150 L 1440,400 L 0,400 Z" stroke="none" stroke-width="0" fill="#ffffff" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-0"></path>
-        </svg>
     </section>
-
 
     <?php include '../components/about.php'; ?>
 
@@ -816,12 +829,6 @@ function finishSplash() {
     });
     backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-    // Hero Scroll Down Button
-    const heroScrollDown = document.getElementById("heroScrollDown");
-    heroScrollDown.addEventListener("click", () => {
-        const aboutSection = document.getElementById("about");
-        aboutSection.scrollIntoView({ behavior: "smooth" });
-    });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

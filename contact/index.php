@@ -26,7 +26,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     
-    <meta name="theme-color" content="#0ea5e9">
+    <meta name="theme-color" content="#4ad2e2">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="LIYAS Water">
@@ -81,7 +81,7 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background:rgba(14, 164, 233, 0.22);
+            background:rgba(74, 210, 226, 0.22);
             will-change: width, height, transform;
             animation: circleDropExpand 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
@@ -95,7 +95,7 @@
             /* The initial centering (translate) is managed by GSAP.set() in JS */
             font-size: clamp(2rem, 8vw, 4rem);
             font-weight: 700;
-            color: rgba(14, 164, 233, 0.71);
+            color: rgba(74, 210, 226, 0.71);
             z-index: 10000; /* Increased z-index to ensure visibility during splash fade */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             pointer-events: none;
@@ -180,6 +180,83 @@
             padding-bottom: 120px; /* space reserved for scroll control */
         }
 
+        /* Page Header Design (About, Contact, Products) */
+        .page-header {
+            background: linear-gradient(135deg, rgba(74, 210, 226, 0.05) 0%, rgba(240, 249, 255, 0.3) 50%, rgba(255, 255, 255, 0.9) 100%);
+            padding: 140px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(240, 249, 255, 0.3) 50%, rgba(255, 255, 255, 0.95) 100%);
+            z-index: 1;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page-breadcrumb {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .page-breadcrumb a {
+            color: #4ad2e2;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .page-breadcrumb a:hover {
+            color: #2cbac9;
+        }
+
+        .page-breadcrumb span {
+            color: #94a3b8;
+        }
+
+        .page-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .page-title .text-primary {
+            color: #4ad2e2 !important;
+        }
+
+
+        @media (max-width: 767px) {
+            .page-header {
+                padding: 120px 0 60px;
+            }
+
+            .page-breadcrumb {
+                font-size: 0.8rem;
+            }
+        }
+
         @media (min-width: 768px) {
             .hero { padding-bottom: 140px; }
         }
@@ -234,7 +311,7 @@
             font-family: "Poppins", sans-serif;
             font-weight: 700;
             text-transform: uppercase;
-            fill: rgba(14, 165, 233, 1);
+            fill: rgba(74, 210, 226, 1);
             animation: rotate 25s linear infinite;
             transform-origin: 250px 250px;
         }
@@ -354,8 +431,8 @@
             background: var(--primary);
             color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(14, 165, 233, 0.25);
-            border-color: rgba(14, 165, 233, 0.35);
+            box-shadow: 0 12px 28px rgba(74, 210, 226, 0.25);
+            border-color: rgba(74, 210, 226, 0.35);
         }
 
         @media (max-width: 767px) {
@@ -394,9 +471,9 @@
 
 .top-login-btn:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 6px 20px rgba(74, 210, 226, 0.25);
   background: rgba(255, 255, 255, 1);
-  border-color: rgba(14, 165, 233, 0.2);
+  border-color: rgba(74, 210, 226, 0.2);
 }
 
 .top-login-btn:active {
@@ -413,7 +490,7 @@
 }
 
 .top-login-btn:hover .login-svg {
-  stroke: rgba(14, 165, 233, 1);
+  stroke: rgba(74, 210, 226, 1);
 }
 
 /* Tablet adjustments */
@@ -560,63 +637,16 @@
     
     <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
-    <section class="hero" id="home" data-aos="fade-up">
+    <section class="page-header" id="home">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="hero-content" data-aos="fade-right" data-aos-delay="50">
-                        <div class="hero-subtitle">PURE WATER</div>
-                        <h1>DRINK BETTER</h1>
-                        <div class="hero-image-mobile" aria-hidden="false">
-                            <img src="../assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
-                        </div>
-                        <p>
-                        Meet Liyas — hydration redefined for today’s lifestyle.
-                        Crafted for clarity, freshness, and a touch of fun.
-                        Because great water isn’t just a choice — it’s a vibe.
-                        </p>
-                        <div class="hero-buttons">
-                            <a href="#" class="btn-primary">Shop Now</a>
-                            <a href="#about" class="btn-secondary">Explore</a>
-                        </div>
-                    </div>
+            <div class="page-header-content">
+                <div class="page-breadcrumb">
+                    <a href="../">Home</a> <span>/</span> <span>Contact</span>
                 </div>
-                <div class="col-lg-6">
-                    <div class="hero-image hero-image-desktop" data-aos="fade-left" data-aos-delay="100">
-                        <img src="../assets/images/water.png" alt="Pure Water" class="img-fluid animated-image">
-                    </div>
-                </div>
+                <h1 class="page-title">Contact <span class="text-primary">Us</span></h1>
             </div>
         </div>
-        
-        <div class="hero-scroll-down" id="heroScrollDown" title="Scroll to next section">
-            <svg xmlns="http://www.w3.org/2000/svg" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
-                <defs>
-                    <path id="textcirclenew" d="M250,400 a150,150 0 0,1 0,-300a150,150 0 0,1 0,300Z" 
-                            transform="rotate(12,250,250)"/>
-                </defs>
-                <g class="textcircle">
-                    <text style="font-size: 55px;">
-                        <textPath 
-                                     xlink:href="#textcirclenew" 
-                                     aria-label="Scroll Down" 
-                                     textLength="880">
-                            Scroll Down
-                        </textPath>
-                    </text>
-                </g>
-                <g class="center-arrow">
-                    <path d="M250,200 L250,280 M250,280 L230,260 M250,280 L270,260" 
-                            fill="none" 
-                            stroke="rgba(14, 165, 233, 1)" 
-                            stroke-width="3"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"/>
-                </g>
-            </svg>
-        </div>
-        
-        <svg class="wave-svg" width="100%" height="100%" id="svg" viewBox="0 0 1440 390" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150">
+    </section>
             <style>
                 .path-0{
                     animation:pathAnim-0 4s;
@@ -814,12 +844,6 @@ function finishSplash() {
     });
     backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-    // Hero Scroll Down Button
-    const heroScrollDown = document.getElementById("heroScrollDown");
-    heroScrollDown.addEventListener("click", () => {
-        const aboutSection = document.getElementById("about");
-        aboutSection.scrollIntoView({ behavior: "smooth" });
-    });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

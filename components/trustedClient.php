@@ -1,4 +1,11 @@
-
+<?php
+// Calculate base path for assets based on where this component is included from
+$script_path = $_SERVER['SCRIPT_NAME'];
+$script_dir = dirname($script_path);
+$path_segments = array_filter(explode('/', $script_dir));
+$is_subdirectory = (count($path_segments) > 1);
+$asset_base = $is_subdirectory ? '../' : '';
+?>
   <style>
     * {
       margin: 0;
@@ -36,9 +43,9 @@
 
   <!-- Badge Row -->
   <div class="badge-row">
-    <img src="assets/images/liyas-bottle.png" alt="ISO 14001">
-    <img src="assets/images/liyas-bottle.png" alt="ISO 9001">
-    <img src="assets/images/liyas-bottle.png" alt="ISO Certified">
-    <img src="assets/images/liyas-bottle.png" alt="ISO Quality">
-    <img src="assets/images/liyas-bottle.png" alt="ISO 22000">
+    <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="ISO 14001">
+    <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="ISO 9001">
+    <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="ISO Certified">
+    <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="ISO Quality">
+    <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="ISO 22000">
   </div>

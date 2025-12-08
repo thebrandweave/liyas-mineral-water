@@ -1,3 +1,14 @@
+<?php
+// Calculate base path for assets based on where this component is included from
+$script_path = $_SERVER['SCRIPT_NAME'];
+$script_dir = dirname($script_path);
+
+// Count directory depth - if more than 1 segment (excluding root), we're in a subdirectory
+$path_segments = array_filter(explode('/', $script_dir));
+$is_subdirectory = (count($path_segments) > 1);
+
+$asset_base = $is_subdirectory ? '../' : '';
+?>
 <style>
     * {
       margin: 0;
@@ -108,7 +119,7 @@
   <!-- About Section -->
   <section class="about-section" id="about" data-aos="fade-up">
     <div class="about-image" data-aos="fade-right" data-aos-delay="50">
-      <img src="assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle">
+      <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="Liyas Mineral Water Bottle">
     </div>
 
     <div class="about-content" data-aos="fade-left" data-aos-delay="100">
@@ -120,4 +131,7 @@
       <a href="#" class="btn">About Company</a>
     </div>
   </section>
-    <?php include 'components/trustedClient.php' ?>
+    <?php 
+    // Include trustedClient - use __DIR__ to get the component's directory
+    include __DIR__ . '/trustedClient.php';
+    ?>
