@@ -16,18 +16,18 @@ use Firebase\JWT\Key;
 // Switch between LOCAL and LIVE by commenting/uncommenting
 
 // LIVE PRODUCTION
-// define('DB_HOST', 'localhost');
-// define('DB_PORT', 3306);
-// define('DB_NAME', 'u232955123_liyas_inter');
-// define('DB_USER', 'u232955123_liyas');
-// define('DB_PASS', 'Brandweave@24');
-
-// LOCAL DEVELOPMENT (XAMPP)    
 define('DB_HOST', 'localhost');
 define('DB_PORT', 3306);
-define('DB_NAME', 'liyas_international');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_NAME', 'u232955123_liyas_inter');
+define('DB_USER', 'u232955123_liyas');
+define('DB_PASS', 'Brandweave@24');
+
+// LOCAL DEVELOPMENT (XAMPP)    
+// define('DB_HOST', 'localhost');
+// define('DB_PORT', 3306);
+// define('DB_NAME', 'liyas_international');
+// define('DB_USER', 'root');
+// define('DB_PASS', '');
 
 // ============================================
 // PDO CONNECTION (for existing codebase)
