@@ -60,6 +60,8 @@
 <body>
     <style>
         /* Splash Screen Styles */
+        /* ================= SPLASH SCREEN ================= */
+
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -173,6 +175,7 @@
             from { opacity: 1; transform: scale(1); }
             to { opacity: 0; visibility: hidden; transform: scale(1.05); }
         }
+
 
         /* Hero layout padding to avoid overlap with scroll control */
         .hero { 
@@ -637,6 +640,16 @@
     
     <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
+    <!-- <section class="page-header" id="home">
+        <div class="container">
+            <div class="page-header-content">
+                <div class="page-breadcrumb">
+                    <a href="../">Home</a> <span>/</span> <span>Contact</span>
+                </div>
+                <h1 class="page-title">Contact <span class="text-primary">Us</span></h1>
+            </div>
+        </div>
+    </section> -->
     <section class="page-header" id="home">
         <div class="container">
             <div class="page-header-content">
@@ -644,6 +657,7 @@
                     <a href="../">Home</a> <span>/</span> <span>Contact</span>
                 </div>
                 <h1 class="page-title">Contact <span class="text-primary">Us</span></h1>
+
             </div>
         </div>
     </section>
@@ -676,13 +690,9 @@
     </section>
 
 
-    <?php include '../components/about.php'; ?>
 
-    <?php include '../components/whychooseus.php'; ?>
+    <?php include '../components/contact.php'; ?>
 
-    <?php include '../components/cta.php'; ?>
-
-    <?php include '../components/faq.php'; ?>
 
 
 
@@ -775,6 +785,9 @@ function finishSplash() {
 
 
     });
+
+
+
     
     // AOS init with custom premium easing and responsive settings
     document.addEventListener("DOMContentLoaded", function() {

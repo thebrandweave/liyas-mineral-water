@@ -243,7 +243,7 @@
         }
 
         .page-title .text-primary {
-            color: #4ad2e2;
+            color: #4ad2e2 !important;
         }
 
         .page-subtitle {
@@ -416,6 +416,8 @@
             flex-direction: column;
             gap: 18px;
             z-index: 1000;
+            pointer-events: none;
+            width: 52px;
         }
 
         .social-sidebar .social-icon {
@@ -646,20 +648,8 @@
     
     <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
-    <section class="page-header" id="home">
-        <div class="container">
-            <div class="page-header-content">
-                <div class="page-breadcrumb">
-                    <a href="../">Home</a> <span>/</span> <span>About</span>
-                </div>
-                <h1 class="page-title">About <span class="text-primary">Us</span></h1>
-                <p class="page-subtitle">
-                    Discover the story behind LIYAS — where purity meets passion. 
-                    We're committed to delivering the finest mineral water, sourced with care and crafted for your well-being.
-                </p>
-            </div>
-        </div>
-    </section>
+
+ 
 
     <?php include '../components/about.php'; ?>
 

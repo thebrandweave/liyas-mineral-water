@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			</div>
 			<div style="text-align: center; margin-top: 1rem;">
 				<p style="color: var(--text-secondary); font-size: 14px;">
-					<!-- New user? <a href="signup.php" style="color: var(--blue); text-decoration: none;">Create an account</a> -->
+					New user? <a href="signup.php" style="color: var(--blue); text-decoration: none;">Create an account</a>
 				</p>
 			</div>
 		</form>

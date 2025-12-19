@@ -385,6 +385,8 @@
 
     <?php include '../components/cta.php'; ?>
 
+    <?php include '../components/faq.php'; ?>
+
     <?php include '../components/footer.php'; ?>
 
     <script src="../assets/js/script.js"></script>
@@ -392,82 +394,159 @@
     <script>
         // Splash screen functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const splash = document.getElementById('splash-screen');
-            const mathParticles = document.getElementById('mathParticles');
-            const logo = document.querySelector('.logo-text'); 
+        const splash = document.getElementById('splash-screen');
+        const mathParticles = document.getElementById('mathParticles');
+        const logo = document.querySelector('.logo-text'); 
 
-            gsap.set(logo, { x: '-50%', y: '-50%' });
+        // 1. GSAP Initialization: Set the initial state for the logo (Centered)
+        // This ensures GSAP knows the starting point, applying the CSS transform.
+        gsap.set(logo, { x: '-50%', y: '-50%' });
 
-            createMathParticles();
+        createMathParticles();
 
-            function createMathParticles() {
-                const particleCount = 24;
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'math-particle';
-                    const x = Math.random() * 100;
-                    const y = Math.random() * 100;
-                    const delay = Math.random() * 2;
-                    particle.style.left = x + '%';
-                    particle.style.top = y + '%';
-                    particle.style.animationDelay = delay + 's';
-                    mathParticles.appendChild(particle);
-                }
+        function createMathParticles() {
+            const particleCount = 24;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'math-particle';
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 2;
+                const xOffset = Math.random() * 200 - 100;
+                const zOffset = Math.random() * 300;
+                particle.style.left = `${x}%`;
+                particle.style.top = `${y}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.setProperty('--x-offset', `${xOffset}px`);
+                particle.style.setProperty('--z-offset', `${zOffset}px`);
+                mathParticles.appendChild(particle);
             }
+        }
 
+        document.body.style.overflow = 'hidden';
+        const layer = document.querySelector('.splash-layer');
+        const fallbackTimeout = setTimeout(finishSplash, 500); 
+        layer.addEventListener('animationend', finishSplash);
+
+function finishSplash() {
+    clearTimeout(fallbackTimeout);
+    layer.removeEventListener('animationend', finishSplash);
+
+    // Time after the circle animation ends (2.8s total duration for circleDropExpand)
+    const delayBeforeLogoMove = 0.5; // Start moving 0.5s after the main splash circle effect
+
+    // Ensure the logo is outside the splash so it won't be hidden when splash disappears
+    if (splash.contains(logo)) {
+        document.body.appendChild(logo);
+    }
+
+    // Animate logo to top-left corner with responsive positioning
+    const isMobile = window.innerWidth <= 767;
+    const isSmallMobile = window.innerWidth <= 375;
+    
+    const logoTop = isSmallMobile ? 12 : (isMobile ? 14 : 20);
+    const logoLeft = isSmallMobile ? 12 : (isMobile ? 14 : 20);
+    
+    gsap.to(logo, {
+        duration: 1.2,
+        delay: delayBeforeLogoMove,
+        top: logoTop,       // Responsive distance from top
+        left: logoLeft,    // Responsive distance from left
+        x: 0,               // Reset transforms
+        y: 0,
+        scale: isMobile ? 0.75 : 0.85,  // Smaller scale on mobile
+        ease: "power2.inOut",
+        onStart: () => {
+            // Fade out splash concurrently
+            splash.classList.add('splash-fadeout');
             setTimeout(() => {
-                splash.classList.add('splash-fadeout');
-                gsap.to(logo, {
-                    x: '-50%',
-                    y: '-50%',
-                    top: '20px',
-                    left: '20px',
-                    duration: 1.2,
-                    ease: 'power2.out',
-                    onComplete: () => {
-                        logo.classList.add('move-top-left');
-                        setTimeout(() => {
-                            splash.style.display = 'none';
-                        }, 300);
-                    }
-                });
-            }, 2800);
-        });
+                splash.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 850);
+        },
+        onComplete: () => {
+            // Lock final responsive position
+            logo.classList.add('move-top-left');
+            gsap.set(logo, { clearProps: "left, top, x, y, scale" });
+        }
+    });
+}
 
-        // Back to top button
-        const backToTop = document.getElementById("backToTop");
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 300) {
-                backToTop.style.display = "flex";
-            } else {
-                backToTop.style.display = "none";
-            }
+
+    });
+    
+    // AOS init with custom premium easing and responsive settings
+    document.addEventListener("DOMContentLoaded", function() {
+        const isMobile = window.innerWidth <= 768;
+
+        // Define a custom premium easing curve for smooth deceleration
+        const premiumEasing = 'cubic-bezier(0.23, 1, 0.320, 1)'; 
+
+        if (isMobile) {
+            // Mobile: faster, simpler animations for performance
+            AOS.init({ 
+                duration: 800, 
+                easing: 'ease-out', 
+                once: true, 
+                offset: 50 
+            });
+        } else {
+            // Tablet/Desktop: longer duration and custom easing for a premium feel
+            AOS.init({ 
+                duration: 1200, 
+                easing: premiumEasing, 
+                once: true, 
+                offset: 120, // Wait slightly longer for elements to enter view
+            });
+        }
+        
+        // Performance optimization for mobile
+        if (isMobile) {
+            // Disable some animations on mobile for better performance
+            document.querySelectorAll('.floating-element').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Reduce particle count on mobile
+            document.querySelectorAll('.particle').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+        
+        // Touch-friendly interactions
+        if ('ontouchstart' in window) {
+            // Add touch-friendly classes
+            document.body.classList.add('touch-device');
+            
+            // Improve touch scrolling
+            document.body.style.webkitOverflowScrolling = 'touch';
+        }
+        
+        // Responsive form handling
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                // Ensure touch-friendly input sizes
+                if (input.type === 'text' || input.type === 'email' || input.type === 'tel') {
+                    input.style.minHeight = '44px';
+                    input.style.fontSize = '16px'; // Prevents zoom on iOS
+                }
+            });
         });
-        backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    });
+
+    // Back to Top Button
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+        backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
+    });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // AOS init
-        document.addEventListener("DOMContentLoaded", function() {
-            const isMobile = window.innerWidth <= 768;
-            if (isMobile) {
-                AOS.init({ 
-                    duration: 800, 
-                    easing: 'ease-out', 
-                    once: true, 
-                    offset: 50 
-                });
-            } else {
-                AOS.init({ 
-                    duration: 1200, 
-                    easing: 'ease-out-cubic', 
-                    once: true, 
-                    offset: 100 
-                });
-            }
-        });
-    </script>
 </body>
 </html>
+
 

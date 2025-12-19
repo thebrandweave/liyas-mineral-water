@@ -32,7 +32,7 @@
             </div>
             <div class="col-lg-8">
                 <div class="faq-content" data-aos="fade-left">
-                    <div class="faq-item active">
+                    <div class="faq-item ">
                         <div class="faq-question">
                             <h3>What makes Liyas water different from regular bottled water?</h3>
                             <div class="faq-icon">
@@ -395,8 +395,8 @@
         }
 
         .faq-item.active .faq-answer {
-            max-height: 300px;
-            padding: 0 30px 24px 30px;
+            /* padding: 0 30px 24px 30px; */
+            max-height: 500px;
         }
 
         .faq-answer p {
@@ -437,24 +437,39 @@
 
     <!-- FAQ Accordion functionality -->
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const faqItems = document.querySelectorAll('.faq-item');
+document.addEventListener("DOMContentLoaded", () => {
+    const faqItems = document.querySelectorAll(".faq-item");
 
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            
-            question.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                
-                faqItems.forEach(otherItem => {
-                    otherItem.classList.remove('active');
-                });
-                
-                if (!isActive) {
-                    item.classList.add('active');
-                }
+    faqItems.forEach(item => {
+        const question = item.querySelector(".faq-question");
+        const answer = item.querySelector(".faq-answer");
+
+        // Ensure all start closed
+        item.classList.remove("active");
+        answer.style.maxHeight = "0px";
+
+        question.addEventListener("click", () => {
+            const isOpen = item.classList.contains("active");
+
+            // Close all
+            faqItems.forEach(i => {
+                i.classList.remove("active");
+                i.querySelector(".faq-answer").style.maxHeight = "0px";
             });
+
+            // Open clicked
+            if (!isOpen) {
+                item.classList.add("active");
+
+                // wait for padding transition
+                requestAnimationFrame(() => {
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                });
+            }
         });
     });
-    </script>
+});
+</script>
+
+
 </section>

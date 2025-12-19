@@ -33,6 +33,21 @@ CREATE TABLE IF NOT EXISTS products (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
+CREATE TABLE IF NOT EXISTS product_attributes (
+  attribute_id INT AUTO_INCREMENT PRIMARY KEY,
+  product_id INT NOT NULL,
+  attribute VARCHAR(100) NOT NULL,
+  value VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT fk_product_attributes_product
+    FOREIGN KEY (product_id)
+    REFERENCES products(product_id)
+    ON DELETE CASCADE
+);
+
+
 CREATE TABLE IF NOT EXISTS products_media (
   media_id INT AUTO_INCREMENT PRIMARY KEY,
   product_id INT,
@@ -83,3 +98,12 @@ CREATE TABLE IF NOT EXISTS codes (
     INDEX idx_is_used (is_used)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  phone VARCHAR(20) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  is_verified TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
