@@ -31,11 +31,16 @@ CREATE TABLE IF NOT EXISTS products (
   price DECIMAL(10,2) NOT NULL,
   discount DECIMAL(5,2) DEFAULT 0.00,
   stock INT DEFAULT 0,
-  status ENUM('active', 'inactive') DEFAULT 'active'
+  status ENUM('active', 'inactive') DEFAULT 'active',
   image VARCHAR(255) NULL,
   category_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+  CONSTRAINT fk_product_category
+        FOREIGN KEY (category_id)
+        REFERENCES categories(category_id)
+        ON DELETE SET NULL
 );
 
 
