@@ -26,9 +26,14 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS products (
   product_id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
+  url_slug VARCHAR(180) UNIQUE,
   description TEXT,
   price DECIMAL(10,2) NOT NULL,
+  discount DECIMAL(5,2) DEFAULT 0.00,
+  stock INT DEFAULT 0,
+  status ENUM('active', 'inactive') DEFAULT 'active'
   image VARCHAR(255) NULL,
+  category_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -58,6 +63,8 @@ CREATE TABLE IF NOT EXISTS products_media (
   uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 );
+
+
 CREATE TABLE IF NOT EXISTS orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_name VARCHAR(150) NOT NULL,

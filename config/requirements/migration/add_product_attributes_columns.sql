@@ -10,3 +10,4 @@ CREATE TABLE IF NOT EXISTS product_attributes (
     REFERENCES products(product_id)
     ON DELETE CASCADE
 );
+  
