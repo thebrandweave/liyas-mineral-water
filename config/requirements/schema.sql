@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS products (
   image VARCHAR(255) NULL,
   category_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   CONSTRAINT fk_product_category
         FOREIGN KEY (category_id)
@@ -119,3 +119,86 @@ CREATE TABLE IF NOT EXISTS users (
   is_verified TINYINT(1) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS advertisements (
+  ad_id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(150) NOT NULL,
+  image VARCHAR(255) NOT NULL,
+  redirect_url VARCHAR(255) NULL,
+  position ENUM('home_top','home_middle','home_bottom','popup','sidebar') DEFAULT 'home_top',
+  start_date DATE NULL,
+  end_date DATE NULL,
+  status ENUM('active','inactive') DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS newsletter_subscriptions (
+  newsletter_id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  user_id INT NULL,
+  status ENUM('subscribed','unsubscribed') DEFAULT 'subscribed',
+  subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  unsubscribed_at TIMESTAMP NULL,
+
+  CONSTRAINT fk_newsletter_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ 
+CREATE TABLE IF NOT EXISTS reviews (
+  review_id INT AUTO_INCREMENT PRIMARY KEY,
+  product_id INT NOT NULL,
+  user_id INT NOT NULL,
+  rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  review_text TEXT,
+  status ENUM('pending','approved','rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT fk_review_product
+    FOREIGN KEY (product_id)
+    REFERENCES products(product_id)
+    ON DELETE CASCADE,
+
+  CONSTRAINT fk_review_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS notifications (
+  notification_id INT AUTO_INCREMENT PRIMARY KEY,
+
+  recipient_type ENUM('user','admin') NOT NULL,
+  user_id INT NULL,
+  admin_id INT NULL,
+
+  title VARCHAR(150) NOT NULL,
+  message TEXT NOT NULL,
+
+  type ENUM('order','subscription','promotion','system') DEFAULT 'system',
+  is_read TINYINT(1) DEFAULT 0,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT fk_notification_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE CASCADE,
+
+  CONSTRAINT fk_notification_admin
+    FOREIGN KEY (admin_id)
+    REFERENCES admins(admin_id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS social_links (
+  social_id INT AUTO_INCREMENT PRIMARY KEY,
+  platform VARCHAR(50) NOT NULL,              -- instagram, facebook, etc
+  icon_class VARCHAR(100) NOT NULL,            -- fontawesome / boxicons class
+  url VARCHAR(255) NOT NULL,
+  is_active TINYINT(1) DEFAULT 1,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
