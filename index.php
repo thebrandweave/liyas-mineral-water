@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+/*
+ If USER is logged in, send to user panel
+*/
+if (isset($_SESSION['user_id'])) {
+    header("Location: user/index.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -4,152 +4,153 @@ require_once '../includes/auth_check.php';
 require_once '../includes/activity_logger.php';
 
 $current_page = "social-links";
-$page_title   = "Add Social Media";
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$platforms = [
+    'Instagram' => [
+        'icon'=>'bx bxl-instagram',
+        'base'=>'https://instagram.com/',
+        'color'=>'linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4)'
+    ],
+    'Facebook'  => ['icon'=>'bx bxl-facebook','base'=>'https://facebook.com/','color'=>'#1877F2'],
+    'Twitter'   => ['icon'=>'bx bxl-twitter','base'=>'https://twitter.com/','color'=>'#1DA1F2'],
+    'LinkedIn'  => ['icon'=>'bx bxl-linkedin','base'=>'https://linkedin.com/in/','color'=>'#0A66C2'],
+    'YouTube'   => ['icon'=>'bx bxl-youtube','base'=>'https://youtube.com/','color'=>'#FF0000'],
+    'WhatsApp'  => ['icon'=>'bx bxl-whatsapp','base'=>'https://wa.me/','color'=>'#25D366']
+];
 
-    $platform   = trim($_POST['platform']);
-    $icon_class = trim($_POST['icon_class']);
-    $url        = trim($_POST['url']);
-    $sort_order = (int)($_POST['sort_order'] ?? 0);
-    $is_active  = $_POST['is_active'] ?? 1;
+if ($_SERVER['REQUEST_METHOD']==='POST') {
 
-    if ($platform === '' || $icon_class === '' || $url === '') {
+    $platform = $_POST['platform'] ?? '';
+    $status   = $_POST['status'] ?? 'active';
+    $input    = trim($_POST['url'] ?? '');
+    $sort     = ($_POST['sort_order'] === '') ? 999 : (int)$_POST['sort_order'];
+
+    if (!$platform || !$input) {
         $error = "Please fill all required fields.";
     } else {
-        $stmt = $pdo->prepare("
-            INSERT INTO social_links (platform, icon_class, url, sort_order, is_active)
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-            $platform,
-            $icon_class,
-            $url,
-            $sort_order,
-            $is_active
-        ]);
+        $icon = $platforms[$platform]['icon'];
+        $base = $platforms[$platform]['base'];
 
-        quickLog($pdo, 'create', 'social_link', $pdo->lastInsertId(), "Added social link: {$platform}");
-        header("Location: index.php");
-        exit;
+        $url = preg_match('#^https?://#',$input)
+             ? $input
+             : rtrim($base,'/').'/'.ltrim($input,'/');
+
+        $pdo->prepare("
+            INSERT INTO social_links (platform, icon_class, url, sort_order, status)
+            VALUES (?,?,?,?,?)
+        ")->execute([$platform,$icon,$url,$sort,$status]);
+
+        quickLog($pdo,'create','social_link',$pdo->lastInsertId(),"Added $platform");
+        header("Location: index.php"); exit;
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Add Social Media</title>
+<meta charset="UTF-8">
+<title>Add Social Media</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="../assets/css/prody-admin.css">
+<link rel="stylesheet" href="../assets/css/prody-admin.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <style>
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1.5rem;
-        }
-    </style>
+<style>
+.social-preview{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-top:10px;
+}
+.social-icon-lg{
+    width:64px;height:64px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:30px;
+}
+</style>
 </head>
-
 <body>
+
 <div class="container">
+<?php include '../includes/sidebar.php'; ?>
 
-    <?php include '../includes/sidebar.php'; ?>
+<div class="main-content">
+<div class="content-area">
 
-    <div class="main-content">
-        <div class="content-area">
+<?php if($error): ?><div class="alert alert-error"><?= $error ?></div><?php endif; ?>
 
-            <?php if ($error): ?>
-                <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
-            <?php endif; ?>
+<div class="table-card">
+<div class="table-header"><div class="table-title">Add Social Media</div></div>
 
-            <div class="table-card">
+<div style="padding:2rem">
+<form method="POST" class="form-modern">
 
-                <div class="table-header">
-                    <div class="table-title">Add Social Media Link</div>
-                </div>
-
-                <div style="padding:2rem">
-
-                    <form method="POST" class="form-modern">
-
-                        <!-- PLATFORM -->
-                        <div class="form-group">
-                            <label>Platform Name *</label>
-                            <input type="text"
-                                   name="platform"
-                                   class="form-input"
-                                   placeholder="Instagram, Facebook, WhatsApp"
-                                   required>
-                        </div>
-
-                        <!-- ICON + ORDER + STATUS -->
-                        <div class="grid-3">
-
-                            <div class="form-group">
-                                <label>Icon Class *</label>
-                                <input type="text"
-                                       name="icon_class"
-                                       class="form-input"
-                                       placeholder="bx bxl-instagram"
-                                       required>
-                                <small class="text-muted-custom">
-                                    Use Boxicons / FontAwesome class
-                                </small>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Sort Order</label>
-                                <input type="number"
-                                       name="sort_order"
-                                       class="form-input"
-                                       value="0">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select name="is_active" class="form-select">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <!-- URL -->
-                        <div class="form-group" style="margin-top:1.5rem">
-                            <label>Profile URL *</label>
-                            <input type="url"
-                                   name="url"
-                                   class="form-input"
-                                   placeholder="https://instagram.com/yourpage"
-                                   required>
-                        </div>
-
-                        <!-- ACTIONS -->
-                        <div class="form-actions" style="margin-top:2rem">
-                            <button type="submit" class="btn-action btn-add">
-                                Save Social Media
-                            </button>
-
-                            <a href="index.php"
-                               class="btn-action"
-                               style="background:#6c757d;color:white;text-decoration:none">
-                                Cancel
-                            </a>
-                        </div>
-
-                    </form>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
+<div class="grid-3">
+<div class="form-group">
+<label>Platform *</label>
+<select name="platform" id="platform" class="form-select" onchange="updatePreview()" required>
+<?php foreach($platforms as $k=>$v): ?>
+<option value="<?= $k ?>"><?= $k ?></option>
+<?php endforeach; ?>
+</select>
 </div>
+
+<div class="form-group">
+<label>Status</label>
+<select name="status" class="form-select">
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Sort Order</label>
+<input type="number" name="sort_order" class="form-input" placeholder="Auto">
+</div>
+</div>
+
+<div class="form-group">
+<label>Username or URL *</label>
+<input type="text" id="urlInput" name="url" class="form-input" required>
+<small class="text-muted-custom">Type only username. URL auto builds.</small>
+</div>
+
+<div class="form-group">
+<label>Preview</label>
+<div class="social-preview">
+<div id="iconBox" class="social-icon-lg"></div>
+<strong id="namePreview"></strong>
+</div>
+</div>
+
+<div class="form-actions">
+<button class="btn-action btn-add">Save Social</button>
+<a href="index.php" class="btn-action" style="background:#6b7280;color:#fff">Cancel</a>
+</div>
+
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const platforms = <?= json_encode($platforms) ?>;
+
+function updatePreview(){
+    const p = document.getElementById('platform').value;
+    document.getElementById('iconBox').innerHTML =
+        `<i class="${platforms[p].icon}"></i>`;
+    document.getElementById('iconBox').style.background = platforms[p].color;
+    document.getElementById('namePreview').innerText = p;
+    document.getElementById('urlInput').value = platforms[p].base;
+}
+document.addEventListener('DOMContentLoaded',updatePreview);
+</script>
+
 </body>
 </html>
