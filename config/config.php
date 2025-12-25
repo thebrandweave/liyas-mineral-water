@@ -1,5 +1,5 @@
 <?php
-// ✅ Manual Firebase JWT include (correct order!)
+// ✅ Manual Firebase JWT include
 require_once __DIR__ . '/../admin/includes/php-jwt/JWTExceptionWithPayloadInterface.php';
 require_once __DIR__ . '/../admin/includes/php-jwt/BeforeValidException.php';
 require_once __DIR__ . '/../admin/includes/php-jwt/ExpiredException.php';
@@ -11,26 +11,32 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 // ============================================
-// DATABASE CONFIGURATION
+// 1. DATABASE CONFIGURATION
 // ============================================
-// Switch between LOCAL and LIVE by commenting/uncommenting
 
-// LIVE PRODUCTION
-define('DB_HOST', 'localhost');
-define('DB_PORT', 3306);
-define('DB_NAME', 'u232955123_liyas_inter');
-define('DB_USER', 'u232955123_liyas');
-define('DB_PASS', 'Brandweave@24');
+// Toggle this variable to switch environments
+$is_live = false; 
 
-// LOCAL DEVELOPMENT (XAMPP)    
-// define('DB_HOST', 'localhost');
-// define('DB_PORT', 3306);
-// define('DB_NAME', 'liyas_international');
-// define('DB_USER', 'root');
-// define('DB_PASS', '');
+if ($is_live) {
+    // LIVE PRODUCTION
+    define('DB_HOST', 'localhost');
+    define('DB_PORT', 3306);
+    define('DB_USER', 'u232955123_liyas');
+    define('DB_PASS', 'Brandweave@24');
+    define('DB_NAME_MAIN', 'u232955123_liyas_inter');
+    define('DB_NAME_CAMPAIGN', 'u232955123_liyas_campaign'); // Adjust to your live campaign DB name
+} else {
+    // LOCAL DEVELOPMENT (XAMPP)
+    define('DB_HOST', 'localhost');
+    define('DB_PORT', 3306);
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+    define('DB_NAME_MAIN', 'liyas_international');
+    define('DB_NAME_CAMPAIGN', 'liyas_campaigns');
+}
 
 // ============================================
-// PDO CONNECTION (for existing codebase)
+// 2. PDO CONNECTION LOGIC
 // ============================================
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -40,127 +46,79 @@ $options = [
 ];
 
 try {
-    $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+    // Connect to Main Website Database (Admins, Products, Users)
+    $dsn_main = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME_MAIN . ";charset=utf8mb4";
+    $pdo = new PDO($dsn_main, DB_USER, DB_PASS, $options);
     
-    // Set timezone to Indian Standard Time (IST) for PHP
+    // Connect to Campaign Database (Contests, Submissions)
+    $dsn_campaign = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME_CAMPAIGN . ";charset=utf8mb4";
+    $pdo_campaign = new PDO($dsn_campaign, DB_USER, DB_PASS, $options);
+    
+    // Global Timezone Settings
     date_default_timezone_set('Asia/Kolkata');
-    
-    // Set MySQL timezone to IST as well
     $pdo->exec("SET time_zone = '+05:30'");
-    
-    // Verify connection by running a simple query
-    $pdo->query("SELECT 1");
+    $pdo_campaign->exec("SET time_zone = '+05:30'");
+
 } catch (PDOException $e) {
-    error_log("PDO Database connection failed: " . $e->getMessage());
-    
-    // More detailed error message for debugging
-    $error_msg = "Database connection failed. ";
-    if (strpos($e->getMessage(), 'Unknown database') !== false) {
-        $error_msg .= "Database '" . DB_NAME . "' does not exist. Please create it first.";
-    } elseif (strpos($e->getMessage(), 'Access denied') !== false) {
-        $error_msg .= "Access denied. Please check your database username and password.";
-    } elseif (strpos($e->getMessage(), 'Connection refused') !== false) {
-        $error_msg .= "Cannot connect to database server. Please make sure MySQL is running.";
-    } else {
-        $error_msg .= "Error: " . $e->getMessage();
-    }
-    
-    die($error_msg);
+    error_log("Connection failed: " . $e->getMessage());
+    die("Database Error: " . $e->getMessage());
 }
 
 // ============================================
-// MYSQLI CONNECTION (alternative)
-// ============================================
-function getMysqliConnection() {
-    try {
-        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
-        
-        if ($mysqli->connect_error) {
-            throw new Exception("Connection failed: " . $mysqli->connect_error);
-        }
-        
-        // Set charset
-        $mysqli->set_charset("utf8mb4");
-        
-        return $mysqli;
-    } catch (Exception $e) {
-        error_log("MySQLi Database connection failed: " . $e->getMessage());
-        die("Database connection failed. Please try again later.");
-    }
-}
-
-// ============================================
-// TEST CONNECTION FUNCTION
-// ============================================
-function testDatabaseConnection() {
-    try {
-        $mysqli = getMysqliConnection();
-        echo "Database connection successful!";
-        $mysqli->close();
-        return true;
-    } catch (Exception $e) {
-        echo "Database connection failed: " . $e->getMessage();
-        return false;
-    }
-}
-
-// ============================================
-// JWT CONFIGURATION
+// 3. JWT & PATH CONFIGURATION
 // ============================================
 $JWT_SECRET = "super_secure_secret_987654321";
 $JWT_EXPIRE = 3600;
 
-// ============================================
-// PATH CONFIGURATION
-// ============================================
-// Root path detection (project root)
-$ROOT_PATH = dirname(__DIR__);  // e.g. C:\xampp\htdocs\liyas-mineral-water
-
+$ROOT_PATH = dirname(__DIR__); 
 define('UPLOAD_DIR', '/uploads/');
 define('UPLOAD_DIR_SERVER', $ROOT_PATH . '/uploads/');
 
-// ============================================
-// SESSION START
-// ============================================
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 // ============================================
-// HELPER FUNCTIONS
+// 4. HELPER FUNCTIONS
 // ============================================
-// Get PDO connection (for backward compatibility)
+
+/**
+ * Returns the Main Website PDO Instance
+ */
 function getDB() {
     global $pdo;
     return $pdo;
 }
 
-// Get current environment
-function getEnvironment() {
-    // Determine environment based on database name
-    if (defined('DB_NAME')) {
-        if (DB_NAME === 'u232955123_liyas_inter') {
-            return 'live';
-        } elseif (DB_NAME === 'liyas_international') {
-            return 'local';
-        }
-    }
-    return 'unknown';
+/**
+ * Returns the Campaign/Contest PDO Instance
+ */
+function getCampaignDB() {
+    global $pdo_campaign;
+    return $pdo_campaign;
 }
 
-// ============================================
-// VERIFY DATABASE CONNECTION
-// ============================================
-function verifyDatabaseConnection() {
-    global $pdo;
-    try {
-        $stmt = $pdo->query("SELECT 1");
-        return true;
-    } catch (PDOException $e) {
+/**
+ * Verification helper for Admin Authentication
+ * Checks if the Admin exists in the MAIN DB
+ */
+function verifyAdminSession() {
+    if (!isset($_SESSION['admin_id'])) {
         return false;
     }
+    $db = getDB();
+    $stmt = $db->prepare("SELECT admin_id FROM admins WHERE admin_id = ?");
+    $stmt->execute([$_SESSION['admin_id']]);
+    return $stmt->fetch() ? true : false;
 }
 
-// Uncomment to test database connection
-// testDatabaseConnection();
+/**
+ * MYSQLI Fallback (Main DB only)
+ */
+function getMysqliConnection() {
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME_MAIN, DB_PORT);
+    if ($mysqli->connect_error) { die("Connection failed: " . $mysqli->connect_error); }
+    $mysqli->set_charset("utf8mb4");
+    return $mysqli;
+}
+?>

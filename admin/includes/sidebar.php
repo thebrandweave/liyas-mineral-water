@@ -2,6 +2,7 @@
 // Detect base path (admin subfolders)
 $current_dir_name = basename(dirname($_SERVER['SCRIPT_FILENAME']));
 
+// Added 'campaigns' to the list of subfolders for correct pathing
 $base_path = (in_array($current_dir_name, [
     'users',
     'orders',
@@ -13,11 +14,14 @@ $base_path = (in_array($current_dir_name, [
     'subscriptions',
     'advertisements',
     'reviews',
-    'social-links'
+    'social-links',
+    'campaigns'
 ])) ? '../' : './';
 
-// Current page (passed from each page)
+// Current page logic
 $current_page = $current_page ?? '';
+$current_file = basename($_SERVER['PHP_SELF']);
+$current_dir  = basename(dirname($_SERVER['PHP_SELF']));
 
 // Badge counts
 $products_count = 0;
@@ -29,50 +33,32 @@ $subs_count = 0;
 $ads_count = 0;
 $reviews_pending_count = 0;
 $social_count = 0;
+$campaign_submissions_count = 0; // New count for Campaign DB
 
 try {
+    // --- MAIN DB COUNTS ---
     if (isset($pdo)) {
         $products_count = $pdo->query("SELECT COUNT(*) FROM products")->fetchColumn();
         $categories_count = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
         $orders_count = $pdo->query("SELECT COUNT(*) FROM orders WHERE status='pending'")->fetchColumn();
         $users_count = $pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();
-
-        // Newsletter subscribers
-        $subs_count = $pdo->query("
-            SELECT COUNT(*) FROM newsletter_subscriptions WHERE status='subscribed'
-        ")->fetchColumn();
-
-        // Advertisements
+        $subs_count = $pdo->query("SELECT COUNT(*) FROM newsletter_subscriptions WHERE status='subscribed'")->fetchColumn();
         $ads_count = $pdo->query("SELECT COUNT(*) FROM advertisements")->fetchColumn();
+        $reviews_pending_count = $pdo->query("SELECT COUNT(*) FROM reviews WHERE status='pending'")->fetchColumn();
+        $social_count = $pdo->query("SELECT COUNT(*) FROM social_links")->fetchColumn();
 
-        // Pending reviews
-        $reviews_pending_count = $pdo->query("
-            SELECT COUNT(*) FROM reviews WHERE status='pending'
-        ")->fetchColumn();
-
-        // Social links
-        $social_count = $pdo->query("
-            SELECT COUNT(*) FROM social_links
-        ")->fetchColumn();
-
-        // Unread admin notifications
-        $stmtNotif = $pdo->prepare("
-            SELECT COUNT(*)
-            FROM notifications
-            WHERE recipient_type='admin'
-              AND is_read=0
-              AND admin_id = ?
-        ");
+        $stmtNotif = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE recipient_type='admin' AND is_read=0 AND admin_id = ?");
         $stmtNotif->execute([$_SESSION['admin_id'] ?? 0]);
         $notifications_count = $stmtNotif->fetchColumn();
+    }
+
+    // --- CAMPAIGN DB COUNTS (Using pdo_campaign) ---
+    if (isset($pdo_campaign)) {
+        $campaign_submissions_count = $pdo_campaign->query("SELECT COUNT(*) FROM submissions")->fetchColumn();
     }
 } catch (PDOException $e) {
     // silent fail
 }
-
-// Current file/dir
-$current_file = basename($_SERVER['PHP_SELF']);
-$current_dir  = basename(dirname($_SERVER['PHP_SELF']));
 ?>
 
 <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle sidebar">
@@ -80,8 +66,23 @@ $current_dir  = basename(dirname($_SERVER['PHP_SELF']));
 </button>
 
 <div class="sidebar">
-    <div class="logo" style="justify-content:center;">
+    <div class="logo" style="justify-content:center; padding-bottom: 0;">
         <span class="logo-text">Liyas</span>
+    </div>
+
+    <div class="app-switcher" style="padding: 15px; margin-bottom: 5px;">
+        <div style="display: flex; gap: 4px; background: rgba(0,0,0,0.05); padding: 4px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.03);">
+            <a href="<?= $base_path ?>index.php" 
+               style="flex: 1; text-align: center; padding: 8px 4px; border-radius: 7px; font-size: 11px; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: 0.2s; <?= ($current_dir != 'campaigns') ? 'background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.08); color: #2563eb; font-weight: 600;' : 'color: #94a3b8;' ?>">
+                <i class='bx bx-store-alt' style="font-size: 18px; margin-bottom: 2px;"></i>
+                Store
+            </a>
+            <a href="<?= $base_path ?>campaigns/index.php" 
+               style="flex: 1; text-align: center; padding: 8px 4px; border-radius: 7px; font-size: 11px; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: 0.2s; <?= ($current_dir == 'campaigns') ? 'background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.08); color: #0369a1; font-weight: 600;' : 'color: #94a3b8;' ?>">
+                <i class='bx bx-qr-scan' style="font-size: 18px; margin-bottom: 2px;"></i>
+                Campaigns
+            </a>
+        </div>
     </div>
 
     <div class="search-box">
@@ -93,116 +94,125 @@ $current_dir  = basename(dirname($_SERVER['PHP_SELF']));
 
     <nav class="nav-menu">
 
-        <!-- DASHBOARD -->
-        <a href="<?= $base_path ?>index.php"
-           class="nav-item <?= ($current_file=='index.php' && $current_dir=='admin')?'active':'' ?>">
-            <i class='bx bx-home'></i>
-            <span>Dashboard</span>
-        </a>
+        <?php if ($current_dir == 'campaigns'): ?>
+            <div style="padding: 10px 25px; font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Campaign Engine</div>
+            
+            <a href="<?= $base_path ?>campaigns/index.php" class="nav-item <?= ($current_file=='index.php')?'active':'' ?>">
+                <i class='bx bx-list-ul'></i>
+                <span>Manage Contests</span>
+            </a>
+            <a href="<?= $base_path ?>campaigns/submissions.php" class="nav-item <?= ($current_file=='submissions.php')?'active':'' ?>">
+                <i class='bx bx-group'></i>
+                <span>Entries / Leads</span>
+                <?php if ($campaign_submissions_count > 0): ?>
+                    <span class="badge-count"><?= $campaign_submissions_count ?></span>
+                <?php endif; ?>
+            </a>
+            <a href="<?= $base_path ?>campaigns/analytics.php" class="nav-item <?= ($current_file=='analytics.php')?'active':'' ?>">
+                <i class='bx bx-stats'></i>
+                <span>Analytics</span>
+            </a>
 
-        <!-- PRODUCTS -->
-        <a href="<?= $base_path ?>products/index.php"
-           class="nav-item <?= ($current_dir=='products'||$current_page==='products')?'active':'' ?>">
-            <i class='bx bx-shopping-bag'></i>
-            <span>Products</span>
-            <?php if ($products_count>0): ?>
-                <span class="nav-badge"><?= $products_count ?></span>
-            <?php endif; ?>
-        </a>
+        <?php else: ?>
+            <a href="<?= $base_path ?>index.php"
+               class="nav-item <?= ($current_file=='index.php' && $current_dir=='admin')?'active':'' ?>">
+                <i class='bx bx-home'></i>
+                <span>Dashboard</span>
+            </a>
 
-        <!-- CATEGORIES -->
-        <a href="<?= $base_path ?>categories/index.php"
-           class="nav-item <?= ($current_dir=='categories'||$current_page==='categories')?'active':'' ?>">
-            <i class='bx bx-category'></i>
-            <span>Categories</span>
-            <?php if ($categories_count>0): ?>
-                <span class="nav-badge"><?= $categories_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>products/index.php"
+               class="nav-item <?= ($current_dir=='products'||$current_page==='products')?'active':'' ?>">
+                <i class='bx bx-shopping-bag'></i>
+                <span>Products</span>
+                <?php if ($products_count>0): ?>
+                    <span class="nav-badge"><?= $products_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- ORDERS -->
-        <a href="<?= $base_path ?>orders/index.php"
-           class="nav-item <?= ($current_dir=='orders'||$current_page==='orders')?'active':'' ?>">
-            <i class='bx bx-cart'></i>
-            <span>Orders</span>
-            <?php if ($orders_count>0): ?>
-                <span class="badge-count"><?= $orders_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>categories/index.php"
+               class="nav-item <?= ($current_dir=='categories'||$current_page==='categories')?'active':'' ?>">
+                <i class='bx bx-category'></i>
+                <span>Categories</span>
+                <?php if ($categories_count>0): ?>
+                    <span class="nav-badge"><?= $categories_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- ADVERTISEMENTS -->
-        <a href="<?= $base_path ?>advertisements/index.php"
-           class="nav-item <?= ($current_dir=='advertisements'||$current_page==='advertisements')?'active':'' ?>">
-            <i class='bx bx-image'></i>
-            <span>Advertisements</span>
-            <?php if ($ads_count>0): ?>
-                <span class="nav-badge"><?= $ads_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>orders/index.php"
+               class="nav-item <?= ($current_dir=='orders'||$current_page==='orders')?'active':'' ?>">
+                <i class='bx bx-cart'></i>
+                <span>Orders</span>
+                <?php if ($orders_count>0): ?>
+                    <span class="badge-count"><?= $orders_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- REVIEWS -->
-        <a href="<?= $base_path ?>reviews/index.php"
-           class="nav-item <?= ($current_dir=='reviews'||$current_page==='reviews')?'active':'' ?>">
-            <i class='bx bx-star'></i>
-            <span>Reviews</span>
-            <?php if ($reviews_pending_count>0): ?>
-                <span class="badge-count"><?= $reviews_pending_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>advertisements/index.php"
+               class="nav-item <?= ($current_dir=='advertisements'||$current_page==='advertisements')?'active':'' ?>">
+                <i class='bx bx-image'></i>
+                <span>Advertisements</span>
+                <?php if ($ads_count>0): ?>
+                    <span class="nav-badge"><?= $ads_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- SOCIAL MEDIA -->
-        <a href="<?= $base_path ?>social-links/index.php"
-           class="nav-item <?= ($current_dir=='social-links'||$current_page==='social-links')?'active':'' ?>">
-            <i class='bx bx-share-alt'></i>
-            <span>Social Media</span>
-            <?php if ($social_count>0): ?>
-                <span class="nav-badge"><?= $social_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>reviews/index.php"
+               class="nav-item <?= ($current_dir=='reviews'||$current_page==='reviews')?'active':'' ?>">
+                <i class='bx bx-star'></i>
+                <span>Reviews</span>
+                <?php if ($reviews_pending_count>0): ?>
+                    <span class="badge-count"><?= $reviews_pending_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- NEWSLETTER -->
-        <a href="<?= $base_path ?>subscriptions/index.php"
-           class="nav-item <?= ($current_dir=='subscriptions'||$current_page==='subscriptions')?'active':'' ?>">
-            <i class='bx bx-envelope'></i>
-            <span>Newsletter</span>
-            <?php if ($subs_count>0): ?>
-                <span class="nav-badge"><?= $subs_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>social-links/index.php"
+               class="nav-item <?= ($current_dir=='social-links'||$current_page==='social-links')?'active':'' ?>">
+                <i class='bx bx-share-alt'></i>
+                <span>Social Media</span>
+                <?php if ($social_count>0): ?>
+                    <span class="nav-badge"><?= $social_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- NOTIFICATIONS -->
-        <a href="<?= $base_path ?>notifications/index.php"
-           class="nav-item <?= ($current_dir=='notifications'||$current_page==='notifications')?'active':'' ?>">
-            <i class='bx bx-bell'></i>
-            <span>Notifications</span>
-            <?php if ($notifications_count>0): ?>
-                <span class="badge-count"><?= $notifications_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>subscriptions/index.php"
+               class="nav-item <?= ($current_dir=='subscriptions'||$current_page==='subscriptions')?'active':'' ?>">
+                <i class='bx bx-envelope'></i>
+                <span>Newsletter</span>
+                <?php if ($subs_count>0): ?>
+                    <span class="nav-badge"><?= $subs_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- USERS -->
-        <a href="<?= $base_path ?>users/index.php"
-           class="nav-item <?= ($current_dir=='users'||$current_page==='users')?'active':'' ?>">
-            <i class='bx bx-group'></i>
-            <span>Users</span>
-            <?php if ($users_count>0): ?>
-                <span class="nav-badge"><?= $users_count ?></span>
-            <?php endif; ?>
-        </a>
+            <a href="<?= $base_path ?>notifications/index.php"
+               class="nav-item <?= ($current_dir=='notifications'||$current_page==='notifications')?'active':'' ?>">
+                <i class='bx bx-bell'></i>
+                <span>Notifications</span>
+                <?php if ($notifications_count>0): ?>
+                    <span class="badge-count"><?= $notifications_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- QR REWARDS -->
-        <a href="<?= $base_path ?>qr-rewards/index.php"
-           class="nav-item <?= ($current_dir=='qr-rewards'||$current_page==='qr-rewards')?'active':'' ?>">
-            <i class='bx bx-qr'></i>
-            <span>QR Rewards</span>
-        </a>
+            <a href="<?= $base_path ?>users/index.php"
+               class="nav-item <?= ($current_dir=='users'||$current_page==='users')?'active':'' ?>">
+                <i class='bx bx-group'></i>
+                <span>Users</span>
+                <?php if ($users_count>0): ?>
+                    <span class="nav-badge"><?= $users_count ?></span>
+                <?php endif; ?>
+            </a>
 
-        <!-- ACTIVITY LOGS -->
-        <a href="<?= $base_path ?>activity-logs/index.php"
-           class="nav-item <?= ($current_dir=='activity-logs'||$current_page==='activity-logs')?'active':'' ?>">
-            <i class='bx bx-history'></i>
-            <span>Activity Logs</span>
-        </a>
+            <a href="<?= $base_path ?>qr-rewards/index.php"
+               class="nav-item <?= ($current_dir=='qr-rewards'||$current_page==='qr-rewards')?'active':'' ?>">
+                <i class='bx bx-qr'></i>
+                <span>QR Rewards</span>
+            </a>
+
+            <a href="<?= $base_path ?>activity-logs/index.php"
+               class="nav-item <?= ($current_dir=='activity-logs'||$current_page==='activity-logs')?'active':'' ?>">
+                <i class='bx bx-history'></i>
+                <span>Activity Logs</span>
+            </a>
+        <?php endif; ?>
 
     </nav>
 
