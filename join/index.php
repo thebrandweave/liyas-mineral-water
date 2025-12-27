@@ -56,22 +56,34 @@ body{font-family:'Outfit',sans-serif;background:#fff;overflow-x:hidden}
     overflow:hidden;
 }
 
+/* LOGO → TOP LEFT */
 .logo{
+    position:absolute;
+    top:30px;
+    left:30px;
     width:42px;
-    margin-bottom:70px;
     filter:brightness(0);
+    margin:0; /* remove flow spacing */
+    z-index:5;
 }
 
-.left h1{
+/* CAMPAIGN TITLE → TOP CENTER */
+.left-header{
+    text-align:center;
+    margin-top:20px;
+}
+
+.left-header h1{
     font-size:5.5rem;
     font-weight:900;
     letter-spacing:2px;
     margin-bottom:20px;
 }
 
-.left p{
+.left-header p{
     font-size:1.1rem;
     max-width:420px;
+    margin:0 auto;
     line-height:1.6;
     opacity:.9;
 }
@@ -118,8 +130,6 @@ body{font-family:'Outfit',sans-serif;background:#fff;overflow-x:hidden}
     display:flex;
     align-items:center;
     justify-content:center;
-
-    /* Soft sea-blue layered background */
     background:
         radial-gradient(circle at 100% 0%, rgba(57,198,230,0.25), transparent 55%),
         radial-gradient(circle at 0% 100%, rgba(31,182,255,0.18), transparent 60%),
@@ -204,7 +214,7 @@ body{font-family:'Outfit',sans-serif;background:#fff;overflow-x:hidden}
     .container{flex-direction:column}
     .left{padding:40px}
     .right{padding:50px 30px}
-    .left h1{font-size:3.5rem}
+    .left-header h1{font-size:3.5rem}
 }
 </style>
 </head>
@@ -214,10 +224,12 @@ body{font-family:'Outfit',sans-serif;background:#fff;overflow-x:hidden}
 
 <!-- LEFT -->
 <div class="left">
-    <img src="../assets/images/logo/logo.png" class="logo">
+    <img src="../assets/images/logo/logo.png" class="logo" alt="LIYAS">
 
-    <h1><?= htmlspecialchars($campaign['title']) ?></h1>
-    <p><?= nl2br(htmlspecialchars($campaign['description'] ?? 'Pure hydration, crafted for everyday freshness. Join the LIYAS experience and win exclusive rewards.')) ?></p>
+    <div class="left-header">
+        <h1><?= htmlspecialchars($campaign['title']) ?></h1>
+        <p><?= nl2br(htmlspecialchars($campaign['description'] ?? 'Pure hydration, crafted for everyday freshness. Join the LIYAS experience and win exclusive rewards.')) ?></p>
+    </div>
 
     <?php if($campaign['file_path']): ?>
     <div class="product">
@@ -225,7 +237,6 @@ body{font-family:'Outfit',sans-serif;background:#fff;overflow-x:hidden}
     </div>
     <?php endif; ?>
 
-    <!-- WAVES -->
     <svg class="waves" viewBox="0 24 150 28" preserveAspectRatio="none">
         <defs>
             <path id="gentle-wave"
