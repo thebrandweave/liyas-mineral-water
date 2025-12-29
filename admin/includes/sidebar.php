@@ -101,7 +101,7 @@ try {
                 <i class='bx bx-list-ul'></i>
                 <span>Manage Contests</span>
             </a>
-            <a href="<?= $base_path ?>campaigns/submissions.php" class="nav-item <?= ($current_file=='submissions.php')?'active':'' ?>">
+            <a href="<?= $base_path ?>campaigns/entries.php" class="nav-item <?= ($current_file=='entries.php')?'active':'' ?>">
                 <i class='bx bx-group'></i>
                 <span>Entries / Leads</span>
                 <?php if ($campaign_submissions_count > 0): ?>
