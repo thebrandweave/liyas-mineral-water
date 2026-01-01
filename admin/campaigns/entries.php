@@ -2,10 +2,10 @@
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
 
-$current_page = "entries";
 $db = getCampaignDB();
+$current_page = "entries";
 
-/* Fetch entries */
+/* Fetch entries with basic info */
 $stmt = $db->query("
     SELECT 
         s.id,
@@ -25,237 +25,114 @@ $totalEntries = count($entries);
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Entries / Leads</title>
-
+<title>Entries / Leads - Liyas Admin</title>
 <link rel="stylesheet" href="../assets/css/prody-admin.css">
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
 <style>
-/* ===== TOP CONTEXT BAR ===== */
-.top-context{
-    background:linear-gradient(135deg,#f8fafc,#ffffff);
-    border:1px solid #e5e7eb;
-    border-radius:18px;
-    padding:18px 24px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:22px;
-    box-shadow:0 8px 22px rgba(15,23,42,.05);
-}
-.context-left{
-    display:flex;
-    align-items:center;
-    gap:16px;
-}
-.context-icon{
-    width:46px;
-    height:46px;
-    border-radius:14px;
-    background:#e0f2fe;
-    color:#0369a1;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-}
-.context-left h1{
-    font-size:20px;
-    font-weight:700;
-    margin:0;
-    color:#0f172a;
-}
-.context-left p{
-    font-size:13px;
-    margin-top:3px;
-    color:#64748b;
-}
-.context-right{
-    display:flex;
-    align-items:center;
-    gap:14px;
-}
-.context-stat{
-    background:#f8fafc;
-    padding:10px 16px;
-    border-radius:12px;
-    text-align:center;
-    min-width:110px;
-}
-.context-stat span{
-    font-size:12px;
-    color:#64748b;
-}
-.context-stat strong{
-    font-size:20px;
-    color:#0f172a;
-}
-.context-btn{
-    background:#0ea5e9;
-    border:none;
-    color:#fff;
-    padding:10px 16px;
-    border-radius:12px;
-    font-size:13px;
-    font-weight:600;
-    opacity:.6;
-    cursor:not-allowed;
-}
+    /* ... Your existing styles ... */
+    body { background:#f8fafc; margin:0; font-family: 'Inter', sans-serif; }
+    .container { display:flex; min-height:100vh; }
+    .main-content { flex:1; padding:32px 40px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:18px; padding:28px; }
+    table { width:100%; border-collapse:collapse; margin-top:16px; }
+    thead th { font-size:12px; text-transform:uppercase; color:#64748b; background:#f8fafc; padding:14px; text-align:left; }
+    tbody td { padding:16px 14px; font-size:14px; color:#0f172a; border-top:1px solid #e5e7eb; }
+    .btn-view { padding:8px 14px; font-size:13px; border-radius:8px; background:#10b981; color:#fff; border:none; cursor:pointer; }
 
-/* ===== TABLE CARD ===== */
-.table-card{
-    background:#ffffff;
-    border-radius:18px;
-    box-shadow:0 10px 30px rgba(15,23,42,.06);
-    border:1px solid #e5e7eb;
-    overflow:hidden;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-thead{
-    background:#f8fafc;
-}
-th{
-    padding:14px 16px;
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    color:#64748b;
-    font-weight:600;
-    border-bottom:1px solid #e5e7eb;
-}
-td{
-    padding:16px;
-    font-size:14px;
-    color:#0f172a;
-    border-bottom:1px solid #f1f5f9;
-}
-tbody tr:hover{
-    background:#f8fafc;
-}
-
-/* BADGE */
-.campaign-badge{
-    padding:4px 10px;
-    background:#e0f2fe;
-    color:#0369a1;
-    font-size:12px;
-    font-weight:600;
-    border-radius:999px;
-}
-
-/* BUTTON */
-.view-btn{
-    background:#0ea5e9;
-    color:#fff;
-    padding:6px 14px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:600;
-    text-decoration:none;
-}
-.view-btn:hover{
-    background:#0284c7;
-}
-
-/* EMPTY STATE */
-.empty-state{
-    padding:60px;
-    text-align:center;
-    color:#94a3b8;
-}
-.empty-state i{
-    font-size:36px;
-    margin-bottom:10px;
-    display:block;
-}
+    /* MODAL STYLES */
+    .modal-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+        display: none; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .modal-content {
+        background: #fff; width: 600px; max-width: 90%; border-radius: 20px;
+        padding: 30px; position: relative; max-height: 80vh; overflow-y: auto;
+    }
+    .modal-close { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #64748b; }
+    .detail-group { margin-bottom: 20px; }
+    .detail-label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+    .detail-value { font-size: 16px; color: #1a1f36; font-weight: 500; }
+    .media-preview { width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #e5e7eb; }
 </style>
 </head>
-
 <body>
 
-<?php include '../includes/sidebar.php'; ?>
-
-<div class="main-content">
-
-    <!-- CONTEXT HEADER -->
-    <div class="top-context">
-        <div class="context-left">
-            <div class="context-icon">
-                <i class='bx bx-group'></i>
+<div class="container">
+    <?php include '../includes/sidebar.php'; ?>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-top">
+                <div>
+                    <h2>Entries / Leads</h2>
+                    <div class="meta">Total <?= $totalEntries ?> Submissions</div>
+                </div>
             </div>
-            <div>
-                <h1>Entries / Leads</h1>
-                <p>Campaign Engine → User Submissions</p>
-            </div>
-        </div>
 
-        <div class="context-right">
-            <div class="context-stat">
-                <span>Total Entries</span>
-                <strong><?= $totalEntries ?></strong>
-            </div>
-            <button class="context-btn">Export CSV</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Campaign</th>
+                        <th>Submitted</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($entries as $i => $e): ?>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td>
+                            <strong><?= htmlspecialchars($e['full_name']) ?></strong><br>
+                            <small><?= htmlspecialchars($e['email']) ?></small>
+                        </td>
+                        <td><?= htmlspecialchars($e['campaign_title']) ?></td>
+                        <td><?= date('d M Y', strtotime($e['submitted_at'])) ?></td>
+                        <td>
+                            <button class="btn-view" onclick="viewEntry(<?= $e['id'] ?>)">View Details</button>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <!-- TABLE -->
-    <div class="table-card">
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Campaign</th>
-                    <th>Submitted On</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            <?php if(!$entries): ?>
-                <tr>
-                    <td colspan="7">
-                        <div class="empty-state">
-                            <i class='bx bx-inbox'></i>
-                            <strong>No entries yet</strong><br>
-                            <span style="font-size:13px">
-                                Submissions will appear here once users participate
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-            <?php endif; ?>
-
-            <?php foreach($entries as $i=>$e): ?>
-                <tr>
-                    <td><?= $i+1 ?></td>
-                    <td><strong><?= htmlspecialchars($e['full_name']) ?></strong></td>
-                    <td><?= htmlspecialchars($e['email']) ?></td>
-                    <td><?= htmlspecialchars($e['phone_number']) ?></td>
-                    <td>
-                        <span class="campaign-badge">
-                            <?= htmlspecialchars($e['campaign_title']) ?>
-                        </span>
-                    </td>
-                    <td><?= date('d M Y, h:i A', strtotime($e['submitted_at'])) ?></td>
-                    <td>
-                        <a href="view-entry.php?id=<?= $e['id'] ?>" class="view-btn">
-                            View
-                        </a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-
-            </tbody>
-        </table>
-    </div>
-
 </div>
 
+<div class="modal-overlay" id="entryModal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <h2 style="margin-bottom:25px;">Entry Details</h2>
+        <div id="modalBody">
+            <p>Loading details...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+async function viewEntry(id) {
+    const modal = document.getElementById('entryModal');
+    const body = document.getElementById('modalBody');
+    modal.style.display = 'flex';
+    body.innerHTML = '<p>Loading...</p>';
+
+    try {
+        const response = await fetch(`get_entry_details.php?id=${id}`);
+        const data = await response.text();
+        body.innerHTML = data;
+    } catch (err) {
+        body.innerHTML = '<p style="color:red">Error loading details.</p>';
+    }
+}
+
+function closeModal() {
+    document.getElementById('entryModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('entryModal')) closeModal();
+}
+</script>
 </body>
 </html>

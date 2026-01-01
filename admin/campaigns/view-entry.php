@@ -29,7 +29,7 @@ $answers = $answers->fetchAll(PDO::FETCH_ASSOC);
 
 /* Media */
 $media = $db->prepare("
-    SELECT media_url, media_type
+    SELECT media_url
     FROM submission_media
     WHERE submission_id=?
 ");
@@ -40,82 +40,133 @@ $media = $media->fetchAll(PDO::FETCH_ASSOC);
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>View Entry</title>
+<title>Entry Details</title>
+
 <link rel="stylesheet" href="../assets/css/prody-admin.css">
 
 <style>
-.card{
+.section{
     background:#fff;
-    padding:25px;
     border-radius:18px;
-    margin-bottom:25px;
+    padding:24px;
+    margin-bottom:22px;
+    border:1px solid #e5e7eb;
+}
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.header h2{
+    margin:0;
+}
+.meta{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-top:18px;
 }
 .label{
-    font-size:13px;
+    font-size:12px;
     color:#64748b;
 }
 .value{
+    font-size:15px;
     font-weight:600;
-    margin-bottom:12px;
+}
+.answer{
+    margin-bottom:18px;
 }
 .media img{
-    width:160px;
-    border-radius:12px;
+    width:180px;
+    border-radius:14px;
     margin-right:10px;
     margin-bottom:10px;
+}
+.back-btn{
+    display:inline-block;
+    margin-top:10px;
+    color:#0ea5e9;
+    font-weight:600;
+    text-decoration:none;
 }
 </style>
 </head>
 
 <body>
+
 <?php include '../includes/sidebar.php'; ?>
 
 <div class="main-content">
 
-<h2>Entry Details</h2>
+    <!-- HEADER -->
+    <div class="section header">
+        <div>
+            <h2><?= htmlspecialchars($entry['full_name']) ?></h2>
+            <p style="color:#64748b;font-size:13px;margin-top:4px">
+                <?= htmlspecialchars($entry['campaign_title']) ?>
+            </p>
+        </div>
+    </div>
 
-<div class="card">
-    <div class="label">Campaign</div>
-    <div class="value"><?= htmlspecialchars($entry['campaign_title']) ?></div>
+    <!-- META -->
+    <div class="section">
+        <div class="meta">
+            <div>
+                <div class="label">Email</div>
+                <div class="value"><?= htmlspecialchars($entry['email']) ?></div>
+            </div>
+            <div>
+                <div class="label">Phone</div>
+                <div class="value"><?= htmlspecialchars($entry['phone_number']) ?></div>
+            </div>
+            <div>
+                <div class="label">Submitted On</div>
+                <div class="value"><?= date('d M Y, h:i A', strtotime($entry['submitted_at'])) ?></div>
+            </div>
+        </div>
+    </div>
 
-    <div class="label">Full Name</div>
-    <div class="value"><?= htmlspecialchars($entry['full_name']) ?></div>
+    <!-- ANSWERS -->
+    <div class="section">
+        <h3>Responses</h3>
+        <?php if(!$answers): ?>
+            <p>No answers submitted.</p>
+        <?php endif; ?>
+        <?php foreach($answers as $a): ?>
+            <div class="answer">
+                <div class="label"><?= htmlspecialchars($a['question_label']) ?></div>
+                <div class="value"><?= nl2br(htmlspecialchars($a['answer_value'])) ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-    <div class="label">Email</div>
-    <div class="value"><?= htmlspecialchars($entry['email']) ?></div>
-
-    <div class="label">Phone</div>
-    <div class="value"><?= htmlspecialchars($entry['phone_number']) ?></div>
-
-    <div class="label">Submitted On</div>
-    <div class="value"><?= date('d M Y, h:i A', strtotime($entry['submitted_at'])) ?></div>
-</div>
-
-<div class="card">
-    <h3>Answers</h3>
-    <?php if(!$answers): ?>
-        <p>No answers</p>
-    <?php endif; ?>
-
-    <?php foreach($answers as $a): ?>
-        <div class="label"><?= htmlspecialchars($a['question_label']) ?></div>
-        <div class="value"><?= nl2br(htmlspecialchars($a['answer_value'])) ?></div>
-    <?php endforeach; ?>
-</div>
-
+    <!-- MEDIA -->
+<!-- MEDIA -->
 <?php if($media): ?>
-<div class="card">
+<div class="section">
     <h3>Uploaded Media</h3>
     <div class="media">
         <?php foreach($media as $m): ?>
-            <img src="../../<?= htmlspecialchars($m['media_url']) ?>">
+            <?php if(str_ends_with(strtolower($m['media_url']), '.mp4')): ?>
+                <video controls width="220" style="border-radius:14px;margin:10px;display:block">
+                    <source src="../../<?= htmlspecialchars($m['media_url']) ?>">
+                    Your browser does not support video.
+                </video>
+            <?php else: ?>
+                <img src="../../<?= htmlspecialchars($m['media_url']) ?>" 
+                     style="width:180px;border-radius:14px;margin:10px;display:block" 
+                     alt="Media">
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 </div>
 <?php endif; ?>
 
-<a href="entries.php" class="btn">← Back to Entries</a>
+
+    <a href="entries.php" class="back-btn">← Back to Entries</a>
 
 </div>
+
 </body>
 </html>
