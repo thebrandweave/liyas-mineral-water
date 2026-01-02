@@ -47,14 +47,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Delete old questions and re-insert
-        $db->prepare("DELETE FROM campaign_questions WHERE campaign_id = ?")->execute([$id]);
-        if (!empty($_POST['questions'])) {
-            $stmtInsertQ = $db->prepare("INSERT INTO campaign_questions (campaign_id, question_label, field_type, is_required, sort_order) VALUES (?, ?, ?, ?, ?)");
-            foreach ($_POST['questions'] as $i => $q) {
-                $stmtInsertQ->execute([$id, $q['label'], $q['type'], isset($q['required'])?1:0, $i]);
-            }
-        }
+// Delete old questions and re-insert
+$db->prepare("DELETE FROM campaign_questions WHERE campaign_id = ?")->execute([$id]);
+
+if (!empty($_POST['questions'])) {
+
+    // 🔒 allowed field types
+    $allowedTypes = [
+        'text',
+        'number',
+        'dropdown',
+        'image_upload',
+        'video_upload'
+    ];
+
+    $stmtInsertQ = $db->prepare("
+        INSERT INTO campaign_questions
+        (campaign_id, question_label, field_type, is_required, sort_order)
+        VALUES (?, ?, ?, ?, ?)
+    ");
+
+    foreach ($_POST['questions'] as $i => $q) {
+
+        // ✅ safe field type handling
+        $type = isset($q['type']) && in_array($q['type'], $allowedTypes)
+            ? $q['type']
+            : 'text';
+
+        $stmtInsertQ->execute([
+            $id,
+            trim($q['label']),
+            $type,
+            isset($q['required']) ? 1 : 0,
+            $i
+        ]);
+    }
+}
+
 
         $db->commit();
         header("Location: index.php?updated=1"); exit();
@@ -121,13 +150,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="question-row" id="row_<?= $index ?>">
                                 <div style="display:flex; gap:10px; align-items:center;">
                                     <input type="text" name="questions[<?= $index ?>][label]" value="<?= htmlspecialchars($q['question_label']) ?>" required style="flex:2; padding:8px; border-radius:6px; border:1px solid #ddd;">
-                                    <select name="questions[<?= $index ?>][type]" style="flex:1; padding:8px; border-radius:6px; border:1px solid #ddd;">
-                                        <option value="text" <?= $q['field_type']=='text'?'selected':'' ?>>Text Input</option>
-                                        <option value="number" <?= $q['field_type']=='number'?'selected':'' ?>>Number</option>
-                                        <option value="dropdown" <?= $q['field_type']=='dropdown'?'selected':'' ?>>Dropdown Menu</option>
-                                        <option value="image_upload" <?= $q['field_type']=='image_upload'?'selected':'' ?>>Image (Drag & Drop)</option>
-                                        <option value="video_upload" <?= $q['field_type']=='video_upload'?'selected':'' ?>>Video (Drag & Drop)</option>
-                                    </select>
+                                    <select name="questions[<?= $index ?>][type]"
+        style="flex:1; padding:8px; border-radius:6px; border:1px solid #ddd;">
+
+    <option value="text"
+        <?= $q['field_type'] === 'text' ? 'selected' : '' ?>>
+        Text Input
+    </option>
+
+    <option value="number"
+        <?= $q['field_type'] === 'number' ? 'selected' : '' ?>>
+        Number
+    </option>
+
+    <option value="dropdown"
+        <?= $q['field_type'] === 'dropdown' ? 'selected' : '' ?>>
+        Dropdown Menu
+    </option>
+
+    <option value="image_upload"
+        <?= $q['field_type'] === 'image_upload' ? 'selected' : '' ?>>
+        Image (Drag & Drop)
+    </option>
+
+    <option value="video_upload"
+        <?= $q['field_type'] === 'video_upload' ? 'selected' : '' ?>>
+        Video (Drag & Drop)
+    </option>
+
+</select>
+
                                     <label style="font-size:12px;"><input type="checkbox" name="questions[<?= $index ?>][required]" <?= $q['is_required']?'checked':'' ?>> Required</label>
                                     <button type="button" class="trash-btn" onclick="document.getElementById('row_<?= $index ?>').remove()"><i class='bx bx-trash'></i></button>
                                 </div>

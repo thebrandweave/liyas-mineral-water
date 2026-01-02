@@ -143,8 +143,8 @@ function addQ() {
             <option value="text">Text</option>
             <option value="number">Number</option>
             <option value="dropdown">Dropdown</option>
-            <option value="image_upload">Image</option>
-            <option value="video_upload">Video</option>
+            <option value="image_upload">Image Upload</option>
+            <option value="video_upload">Video Upload</option>
         </select>
         <label style="font-size:12px;">
             <input type="checkbox" name="questions[${count}][required]"> Required
