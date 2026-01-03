@@ -108,10 +108,10 @@ try {
                     <span class="badge-count"><?= $campaign_submissions_count ?></span>
                 <?php endif; ?>
             </a>
-            <a href="<?= $base_path ?>campaigns/analytics.php" class="nav-item <?= ($current_file=='analytics.php')?'active':'' ?>">
+            <!-- <a href="<?= $base_path ?>campaigns/analytics.php" class="nav-item <?= ($current_file=='analytics.php')?'active':'' ?>">
                 <i class='bx bx-stats'></i>
                 <span>Analytics</span>
-            </a>
+            </a> -->
 
         <?php else: ?>
             <a href="<?= $base_path ?>index.php"

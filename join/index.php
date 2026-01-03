@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/config.php';
 
 $db = getCampaignDB();
@@ -246,12 +247,6 @@ body{
 }
 </style>
 </head>
-<?php if (isset($_GET['success'])): ?>
-<div style="position:fixed; top:20px; right:20px; background:#10b981; color:white; padding:20px; border-radius:12px; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
-    <strong>Success!</strong> Your entry has been submitted.
-</div>
-<script>setTimeout(() => { window.location.href='index.php'; }, 4000);</script>
-<?php endif; ?>
 <body>
 
 <div class="container">
@@ -290,7 +285,10 @@ body{
 <!-- RIGHT -->
 <div class="right">
 <div class="form">
-<form method="POST" action="submit.php" enctype="multipart/form-data">
+<form method="POST"
+      action="/liyas-mineral-water/join/submit.php"
+      enctype="multipart/form-data">
+
 <input type="hidden" name="campaign_id" value="<?= $campaign['id'] ?>">
 
 <div class="step-card active">
@@ -459,6 +457,26 @@ document.querySelectorAll('.upload-box').forEach(box => {
     });
 });
 </script>
+<?php if (!empty($_SESSION['submission_success'])): ?>
+<?php unset($_SESSION['submission_success']); ?>
+
+<div id="successOverlay" style="
+    position:fixed; inset:0;
+    background:#ffffff;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; z-index:99999;
+">
+    <h1 style="color:#10b981;font-size:2.5rem;">🎉 Submitted Successfully!</h1>
+    <p>Thank you for participating.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+confetti({ particleCount: 200, spread: 100 });
+setTimeout(() => window.location.href = "index.php", 4000);
+</script>
+<?php endif; ?>
+
 
 </body>
 </html>
