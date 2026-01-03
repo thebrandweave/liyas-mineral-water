@@ -140,7 +140,7 @@ body{
 .product{
     margin:46px auto 0;
     width:220px;
-    background:rgba(255,255,255,.6);
+    /* background:rgba(255,255,255,.6); */
     padding:22px;
     border-radius:18px;
     backdrop-filter:blur(12px);
