@@ -1,3 +1,11 @@
+# Allow POST requests to submit.php to pass through
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} POST
+    RewriteCond %{REQUEST_URI} ^/liyas-mineral-water/join/submit\.php$ [NC]
+    RewriteRule .* - [L]
+</IfModule>
+
 # Root .htaccess - Security and Redirects
 <IfModule mod_rewrite.c>
     RewriteEngine On
@@ -27,6 +35,7 @@
     
     # Redirect root to public directory
     RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_URI} !^/join/
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/$1 [L]

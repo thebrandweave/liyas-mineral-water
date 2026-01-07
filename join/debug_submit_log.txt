@@ -1,0 +1,21 @@
+Execution Log for 2026-01-03 10:05:58
+
+Script start (submit.php).
+Attempting to include config.php...
+config.php included successfully.
+Attempting to call getCampaignDB()...
+getCampaignDB() successful. $db is an object.
+Request method is POST.
+POST data: {"campaign_id":"4","full_name":"hisham","email":"hisham@gmail.com","phone_number":"7424233456","answers":{"19":"Yes"}}
+FILES data: []
+Inside try block. Preparing to begin transaction.
+Transaction started.
+Preparing to insert into submissions table.
+Submission INSERT executed.
+New submission ID: 2
+Answers found in POST data. Preparing to insert answers.
+Inserting answer for question ID 19 with value: Yes
+Finished inserting answers.
+No files to upload.
+Preparing to commit transaction.
+Transaction committed successfully!
