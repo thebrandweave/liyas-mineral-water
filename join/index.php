@@ -296,15 +296,15 @@ body{
 <div class="step-card active">
     <div class="step">STEP 01</div>
     <h2>May we have your<br><span>full name?</span></h2>
-    <div class="input"><input type="text" name="full_name" required></div>
+    <div class="input"><input type="text" name="full_name" required placeholder="Your Full Name"></div>
 </div>
 
 <div class="step-card">
     <div class="step">STEP 02</div>
     <h2>How can we<br><span>contact you?</span></h2>
     <div class="input">
-        <input type="email" name="email" required>
-        <input type="tel" name="phone_number" required>
+        <input type="email" name="email" required placeholder="Your Email Address">
+        <input type="tel" name="phone_number" required placeholder="Your Phone Number">
     </div>
 </div>
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>

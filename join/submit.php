@@ -96,9 +96,9 @@ try {
     if (!empty($_FILES['media']) && !empty($_FILES['media']['name']) && is_array($_FILES['media']['name'])) {
         write_log("File uploads found. Preparing to process files.");
         $stmtF = $db->prepare("
-            INSERT INTO submission_answers
-            (submission_id, question_id, answer_file)
-            VALUES (?, ?, ?)
+            INSERT INTO submission_media
+            (submission_id, question_id, media_url, media_type)
+            VALUES (?, ?, ?, ?)
         ");
 
         foreach ($_FILES['media']['name'] as $qid => $name) {
@@ -115,7 +115,9 @@ try {
 
             if (move_uploaded_file($_FILES['media']['tmp_name'][$qid], $path)) {
                 $storedPath = "uploads/submissions/" . $fileName;
-                $stmtF->execute([$submission_id, $qid, $storedPath]);
+                // Determine media type (e.g., from MIME type)
+                $mediaType = $_FILES['media']['type'][$qid]; // Or derive from $ext if preferred
+                $stmtF->execute([$submission_id, $qid, $storedPath, $mediaType]);
             } else {
                 write_log("ERROR: move_uploaded_file failed for question ID " . $qid);
             }

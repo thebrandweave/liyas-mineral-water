@@ -57,7 +57,6 @@ try {
 <head>
     <title>Entry #<?= $id ?></title>
     <style>
-        body { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
         .header { display: grid; grid-template-columns: 1fr auto; gap: 24px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #e5e7eb; }
         .name { font-size: 24px; font-weight: 700; color: #111; }
         .campaign { color: #666; font-size: 14px; }

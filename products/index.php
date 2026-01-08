@@ -248,6 +248,8 @@
             flex-direction: column;
             gap: 18px;
             z-index: 1000;
+            pointer-events: none;
+            width: 52px;
         }
 
         .social-sidebar .social-icon {
