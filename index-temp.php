@@ -584,8 +584,8 @@ Crafted for clarity, freshness, and a touch of fun.
 Because great water isn't just a choice — it's a vibe.
                         </p>
                         <div class="hero-buttons">
-                            <a href="#" class="btn-primary">Shop Now</a>
-                            <a href="#about" class="btn-secondary">Explore</a>
+                            <a href="products.php" class="btn-primary">Shop Now</a>
+                            <a href="about.php" class="btn-secondary">Explore</a>
                         </div>
                     </div>
                 </div>
