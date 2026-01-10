@@ -40,14 +40,12 @@ $contact_link = $base_path . 'contact/';
       <li class="nav-item"><a href="<?php echo $contact_link; ?>" class="nav-link">Contact</a></li>
     </ul>
 
-    <!-- Login Icon (Right Side) -->
-    <!-- <a href="login.php" class="login-icon" title="Login">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-           stroke-width="2.2" stroke="currentColor" class="login-svg">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-      </svg>
-    </a> -->
+    <!-- Cart Icon -->
+    <a href="#" id="cart-icon" class="cart-icon" title="View Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c.51 0 .962-.343 1.087-.835l1.823-6.423a.75.75 0 00-.67-1.03H6.088l-.523-1.974M16.5 21a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM8.25 21a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+        </svg>
+    </a>
 
     <!-- Hamburger Menu (Mobile) -->
     <button class="navbar-toggler d-md-none" type="button" id="mobileMenuBtn" aria-label="Toggle navigation">
@@ -65,6 +63,25 @@ $contact_link = $base_path . 'contact/';
       <li><a href="<?php echo $contact_link; ?>" class="nav-link">Contact</a></li>
     </ul>
   </div>
+
+  <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <button id="close-cart-btn" class="close-cart-btn">&times;</button>
+            <h4>Your Cart</h4>
+        </div>
+        <div class="cart-body">
+            <!-- Cart items will be dynamically inserted here -->
+            <p class="cart-empty-message">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-subtotal">
+                <span>Subtotal</span>
+                <span id="subtotal-price">₹0.00</span>
+            </div>
+            <a href="#" class="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
 </nav>
 
 <style>
@@ -82,7 +99,6 @@ $contact_link = $base_path . 'contact/';
   /* Navbar with background on scroll */
   .liyas-navbar.scrolled {
     backdrop-filter: blur(10px);
-    padding: 1.2rem 2rem;
   }
 
   /* Center Nav Links */
