@@ -1,3 +1,15 @@
+<?php
+require_once 'config/config.php';
+
+// Prevent browser caching
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
+// Fetch social links
+$social_links_stmt = $pdo->query("SELECT * FROM social_links WHERE status = 'active' ORDER BY sort_order ASC");
+$social_links = $social_links_stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +34,7 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
@@ -61,7 +73,11 @@
         }
     }
     </script>
+    <script>
+        const BASE_URL = '<?php echo BASE_URL; ?>';
+    </script>
 <body>
+
     <style>
         /* Splash Screen Styles */
         #splash-screen {
@@ -171,6 +187,7 @@
 
         .splash-fadeout {
             animation: splashFadeOut 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+            pointer-events: none;
         }
         
         @keyframes splashFadeOut {
@@ -548,22 +565,28 @@
     </div>
 
 <!-- Top-right Login Icon (aligned with Back to Top button) -->
-<a href="login.php" class="top-login-btn" title="Login">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-       stroke-width="1.5" stroke="currentColor" class="login-svg">
-    <path stroke-linecap="round" stroke-linejoin="round"
-          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-  </svg>
-</a>
+<?php if (isset($_SESSION['user_id'])): ?>
+    <a href="logout.php" class="top-login-btn" title="Logout">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="login-svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m-3 0l-3 3m0 0l3 3m-3-3h12.75" />
+        </svg>
+    </a>
+<?php else: ?>
+    <a href="login.php" class="top-login-btn" title="Login">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="login-svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+        </svg>
+    </a>
+<?php endif; ?>
 
 
 
     <div class="social-sidebar">
-        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+        <?php foreach ($social_links as $link): ?>
+            <a href="<?= htmlspecialchars($link['url']) ?>" class="social-icon" target="_blank" aria-label="<?= htmlspecialchars($link['platform']) ?>">
+                <i class="<?= htmlspecialchars($link['icon_class']) ?>"></i>
+            </a>
+        <?php endforeach; ?>
     </div>
     
     <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
@@ -674,7 +697,7 @@ Because great water isn't just a choice — it's a vibe.
 
     <?php include 'components/footer.php'; ?>
 
-    <script src="assets/js/script.js"></script>
+
     
 
     <script>
@@ -839,6 +862,5 @@ function finishSplash() {
     </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/cart.js"></script>
 </body>
 </html>

@@ -1,3 +1,15 @@
+<?php
+require_once '../config/config.php';
+
+// Prevent browser caching
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
+// Fetch social links
+$social_links_stmt = $pdo->query("SELECT * FROM social_links WHERE status = 'active' ORDER BY sort_order ASC");
+$social_links = $social_links_stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,11 +32,12 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    
     
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     
@@ -53,6 +66,130 @@
         "url": "https://liyas-water.com/products"
     }
     </script>
+    <script>
+        const BASE_URL = '<?php echo BASE_URL; ?>';
+    </script>
+    <style>
+    .modal-backdrop {
+        z-index: 1090 !important;
+    }
+    #productDetailModal {
+        z-index: 1100 !important; /* Ensure it is above everything */
+    }
+
+    /* Product Modal Customizations */
+    #productDetailModal .modal-content {
+        border-radius: 24px;
+        border: none;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    #productDetailModal .modal-header {
+        border-bottom: none;
+        padding: 1.5rem 2rem 0;
+    }
+
+    #productDetailModal .modal-title {
+        font-family: 'Oswald', sans-serif;
+        font-weight: 700;
+        font-size: 2rem;
+        color: #0f172a;
+    }
+
+    #productDetailModal .modal-body {
+        padding: 1rem 2rem 2rem;
+    }
+
+    #productDetailModal .modal-body img {
+        border-radius: 16px;
+        max-height: 400px;
+        object-fit: contain;
+        width: 100%;
+    }
+
+    #productDetailModal .modal-body h3 {
+        font-family: 'Oswald', sans-serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #0f172a;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+    }
+
+    #productDetailModal .modal-body .price {
+        color: #4ad2e2;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    #productDetailModal .modal-body p {
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+    #productDetailModal .modal-body h5 {
+        font-family: 'Oswald', sans-serif;
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin-top: 1.5rem;
+        color: #0f172a;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Reviews List */
+    #productDetailModal .reviews-list li {
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    #productDetailModal .reviews-list li:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    #productDetailModal .reviews-list .stars {
+        color: #facc15;
+    }
+    #productDetailModal .reviews-list strong {
+        color: #1e293b;
+    }
+
+    /* Review Form */
+    #productDetailModal #reviewForm .form-control,
+    #productDetailModal #reviewForm .form-select {
+        border-radius: 12px;
+        padding: 12px 18px;
+        border: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+    }
+    #productDetailModal #reviewForm .form-control:focus,
+    #productDetailModal #reviewForm .form-select:focus {
+        border-color: #4ad2e2;
+        box-shadow: 0 0 0 3px rgba(74, 210, 226, 0.2);
+        background-color: #fff;
+    }
+    #productDetailModal #reviewForm .btn-primary {
+      background: #4ad2e2;
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    #productDetailModal #reviewForm .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(74, 210, 226, 0.2);
+    }
+    </style>
+
+</head>
 <body>
     <style>
         /* Splash Screen Styles */
@@ -154,6 +291,7 @@
 
         .splash-fadeout {
             animation: splashFadeOut 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+            pointer-events: none;
         }
         
         @keyframes splashFadeOut {
@@ -352,20 +490,28 @@
         <div class="math-particles" aria-hidden="true" id="mathParticles"></div>
     </div>
 
-    <a href="../login.php" class="top-login-btn" title="Login">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke-width="1.5" stroke="currentColor" class="login-svg">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-        </svg>
-    </a>
+
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="../logout.php" class="top-login-btn" title="Logout">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="login-svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m-3 0l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg>
+        </a>
+    <?php else: ?>
+        <a href="../login.php" class="top-login-btn" title="Login">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="login-svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+            </svg>
+        </a>
+    <?php endif; ?>
 
     <div class="social-sidebar">
-        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+        <?php foreach ($social_links as $link): ?>
+            <a href="<?= htmlspecialchars($link['url']) ?>" class="social-icon" target="_blank" aria-label="<?= htmlspecialchars($link['platform']) ?>">
+                <i class="<?= htmlspecialchars($link['icon_class']) ?>"></i>
+            </a>
+        <?php endforeach; ?>
     </div>
     
     <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
@@ -392,7 +538,26 @@
 
     <?php include '../components/footer.php'; ?>
 
-    <script src="../assets/js/script.js"></script>
+    <!-- Product Detail Modal -->
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="productDetailModalLabel">Product Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Content will be loaded here dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="../assets/js/product-modal.js"></script>
+
+
+
     
     <script>
         // Splash screen functionality

@@ -139,6 +139,11 @@ $current_page = "campaigns";
             <div class="readonly"><?= number_format($campaign['entry_count']) ?></div>
         </div>
 
+        <div>
+            <div class="label">Description</div>
+            <div class="readonly"><?= htmlspecialchars($campaign['description']) ?></div>
+        </div>
+
         <div style="grid-column:1/-1;">
             <div class="label">Promotional Asset</div>
             <?php if($campaign['file_path']): ?>

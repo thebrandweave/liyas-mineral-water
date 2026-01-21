@@ -1,4 +1,7 @@
 <?php
+// Define ROOT_PATH at the very beginning to ensure it's always available
+define('ROOT_PATH', dirname(__DIR__)); 
+
 // ✅ Manual Firebase JWT include
 require_once __DIR__ . '/../admin/includes/php-jwt/JWTExceptionWithPayloadInterface.php';
 require_once __DIR__ . '/../admin/includes/php-jwt/BeforeValidException.php';
@@ -69,6 +72,8 @@ try {
 // ============================================
 $JWT_SECRET = "super_secure_secret_987654321";
 $JWT_EXPIRE = 3600;
+
+define('BASE_URL', 'http://localhost/liyas-mineral-water');
 
 $ROOT_PATH = dirname(__DIR__); 
 define('UPLOAD_DIR', '/uploads/');

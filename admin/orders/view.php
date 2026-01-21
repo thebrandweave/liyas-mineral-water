@@ -1,30 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
-
-// Set timezone to Indian Standard Time
-date_default_timezone_set('Asia/Kolkata');
-
-/**
- * Convert database timestamp to IST format
- */
-function formatIST($dbTimestamp) {
-	if (empty($dbTimestamp)) return '';
-	try {
-		$dt = new DateTime($dbTimestamp);
-		$dt->setTimezone(new DateTimeZone('Asia/Kolkata'));
-		return $dt->format('d-m-Y H:i:s');
-	} catch (Exception $e) {
-		return date('d-m-Y H:i:s', strtotime($dbTimestamp));
-	}
-}
-
-/**
- * Format currency
- */
-function formatCurrency($amount) {
-	return '₹' . number_format((float)$amount, 2);
-}
+require_once '../includes/functions.php'; // Include the new functions file
 
 // Get order ID
 $order_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -36,10 +13,29 @@ if ($order_id <= 0) {
 
 // Fetch order details
 try {
-	$order_query = "SELECT order_id, customer_name, customer_email, customer_phone, 
-						   shipping_address, total_amount, status, created_at, updated_at
-					FROM orders
-					WHERE order_id = ?";
+	$order_query = "SELECT 
+			o.order_id, 
+			o.total_amount, 
+			o.status, 
+			o.order_date,
+			o.payment_method,
+			o.payment_status,
+			o.created_at, 
+			o.updated_at,
+			u.name AS customer_name, 
+			u.email AS customer_email,
+			sa.full_name AS shipping_full_name,
+			sa.address_line_1,
+			sa.address_line_2,
+			sa.city,
+			sa.state,
+			sa.zip_code,
+			sa.country,
+			sa.phone_number AS shipping_phone_number
+			FROM orders o
+			JOIN users u ON o.user_id = u.user_id
+			JOIN shipping_addresses sa ON o.shipping_address_id = sa.address_id
+			WHERE o.order_id = ?";
 	$order_stmt = $pdo->prepare($order_query);
 	$order_stmt->execute([$order_id]);
 	$order = $order_stmt->fetch(PDO::FETCH_ASSOC);
@@ -56,12 +52,12 @@ try {
 
 // Fetch order items
 try {
-	$items_query = "SELECT oi.item_id, oi.quantity, oi.price_at_purchase,
-						   p.product_id, p.name as product_name, p.image as product_image
-					FROM order_items oi
-					LEFT JOIN products p ON oi.product_id = p.product_id
-					WHERE oi.order_id = ?
-					ORDER BY oi.item_id";
+	$items_query = "SELECT oi.order_item_id, oi.quantity, oi.price_at_purchase,
+				   p.product_id, p.name AS product_name, p.image AS product_image
+				FROM order_items oi
+				LEFT JOIN products p ON oi.product_id = p.product_id
+				WHERE oi.order_id = ?
+				ORDER BY oi.order_item_id";
 	$items_stmt = $pdo->prepare($items_query);
 	$items_stmt->execute([$order_id]);
 	$order_items = $items_stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -428,15 +424,23 @@ $page_title   = "Order #" . $order['order_id'];
 						<div><?= htmlspecialchars($order['customer_email']) ?></div>
 					</div>
 					<?php endif; ?>
-					<?php if ($order['customer_phone']): ?>
+					<?php if ($order['shipping_phone_number']): ?>
 					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light);">
 						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Phone:</div>
-						<div><?= htmlspecialchars($order['customer_phone']) ?></div>
+						<div><?= htmlspecialchars($order['shipping_phone_number']) ?></div>
 					</div>
 					<?php endif; ?>
 					<div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; padding: 0.75rem 0;">
 						<div style="font-weight: 600; color: var(--text-secondary); font-size: 14px;">Shipping Address:</div>
-						<div style="white-space: pre-line;"><?= htmlspecialchars($order['shipping_address']) ?></div>
+						<div style="white-space: pre-line;">
+							<?= htmlspecialchars($order['shipping_full_name']) ?><br>
+							<?= htmlspecialchars($order['address_line_1']) ?><br>
+							<?php if (!empty($order['address_line_2'])): ?>
+								<?= htmlspecialchars($order['address_line_2']) ?><br>
+							<?php endif; ?>
+							<?= htmlspecialchars($order['city']) ?>, <?= htmlspecialchars($order['state']) ?> - <?= htmlspecialchars($order['zip_code']) ?><br>
+							<?= htmlspecialchars($order['country']) ?>
+						</div>
 					</div>
 				</div>
 
@@ -465,7 +469,7 @@ $page_title   = "Order #" . $order['order_id'];
 										<img src="../../<?= htmlspecialchars($item['product_image']) ?>" 
 											 alt="<?= htmlspecialchars($item['product_name'] ?? 'Product') ?>" 
 											 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; background: var(--bg-main);"
-											 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Crect fill=\'%23e5e7eb\' width=\'60\' height=\'60\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%239ca3af\' font-size=\'12\'%3ENo Image%3C/text%3E%3C/svg%3E';">
+											 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Crect fill=\'%23e5e7eb\' width=\'60\' height=\'60\'%2F%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'%23em\' fill=\'%239ca3af\' font-size=\'12\'%3ENo Image%3C/text%3E%3C/svg%3E';">
 									<?php else: ?>
 										<div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); background: var(--bg-main); border-radius: 8px;">
 											<i class='bx bx-image' style="font-size: 1.5rem;"></i>
@@ -476,7 +480,7 @@ $page_title   = "Order #" . $order['order_id'];
 											<?= htmlspecialchars($item['product_name'] ?? 'Product #' . ($item['product_id'] ?? 'N/A')) ?>
 										</div>
 										<div style="font-size: 13px; color: var(--text-muted);">
-											Quantity: <?= $item['quantity'] ?> × <?= formatCurrency($item['price_at_purchase']) ?>
+											Quantity: <?= $item['quantity'] ?> x <?= formatCurrency($item['price_at_purchase']) ?>
 										</div>
 									</div>
 									<div style="font-weight: 600; color: var(--green); text-align: right;">
@@ -583,4 +587,3 @@ $page_title   = "Order #" . $order['order_id'];
 	</script>
 </body>
 </html>
-

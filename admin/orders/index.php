@@ -1,79 +1,7 @@
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
-
-// Set timezone to Indian Standard Time
-date_default_timezone_set('Asia/Kolkata');
-
-/**
- * Convert database timestamp to IST format
- */
-function formatIST($dbTimestamp) {
-	if (empty($dbTimestamp)) return '';
-	try {
-		$dt = new DateTime($dbTimestamp);
-		$dt->setTimezone(new DateTimeZone('Asia/Kolkata'));
-		return $dt->format('d-m-Y H:i:s');
-	} catch (Exception $e) {
-		return date('d-m-Y H:i:s', strtotime($dbTimestamp));
-	}
-}
-
-/**
- * Format currency
- */
-function formatCurrency($amount) {
-	return '₹' . number_format((float)$amount, 2);
-}
-
-/**
- * Build WHERE clause + params based on filter/search
- */
-function buildFilterWhereClause($filter, $search, &$params) {
-	$where_conditions = [];
-	$params = [];
-
-	if ($filter !== 'all' && in_array($filter, ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])) {
-		$where_conditions[] = "status = :status";
-		$params[':status'] = $filter;
-	}
-
-	if (!empty($search)) {
-		$where_conditions[] = "(customer_name LIKE :search OR customer_email LIKE :search OR customer_phone LIKE :search OR order_id = :order_id)";
-		$params[':search'] = "%$search%";
-		$params[':order_id'] = is_numeric($search) ? (int)$search : -1;
-	}
-
-	return !empty($where_conditions)
-		? "WHERE " . implode(" AND ", $where_conditions)
-		: "";
-}
-
-/**
- * Bind params to prepared statement
- */
-function bindFilterParams(PDOStatement $stmt, array $params) {
-	foreach ($params as $key => $value) {
-		$stmt->bindValue($key, $value);
-	}
-}
-
-/**
- * Build redirect URL preserving filter/search/page
- */
-function buildRedirectUrl($filter, $search, $page = 1, $updated = null) {
-	$redirect_url = "index.php?filter=" . urlencode($filter);
-	if (!empty($search)) {
-		$redirect_url .= "&search=" . urlencode($search);
-	}
-	if ($page > 1) {
-		$redirect_url .= "&page=" . (int)$page;
-	}
-	if ($updated !== null) {
-		$redirect_url .= "&updated=" . (int)$updated;
-	}
-	return $redirect_url;
-}
+require_once '../includes/functions.php'; // Include the new functions file
 
 // Read filter/search/page from request
 $filter = $_GET['filter'] ?? $_POST['filter'] ?? 'all';
@@ -84,20 +12,30 @@ $offset   = ($page - 1) * $per_page;
 
 // Build where + params once and reuse everywhere
 $params = [];
-$where_clause = buildFilterWhereClause($filter, $search, $params);
+$where_clause = buildOrderFilterWhereClause($filter, $search, $params); // Use the function from includes/functions.php
 
 // CSV EXPORT
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 	try {
-		$query = "SELECT order_id, customer_name, customer_email, customer_phone, 
-						 shipping_address, total_amount, status, created_at, updated_at
-				  FROM orders
+		$query = "SELECT 
+					o.order_id, 
+					u.name AS customer_name, 
+					u.email AS customer_email, 
+					sa.phone_number AS customer_phone,
+					CONCAT(sa.address_line_1, ', ', sa.city, ', ', sa.state, ' - ', sa.zip_code) AS shipping_address_full,
+					o.total_amount, 
+					o.status, 
+					o.created_at, 
+					o.updated_at
+				  FROM orders o
+				  JOIN users u ON o.user_id = u.user_id
+				  JOIN shipping_addresses sa ON o.shipping_address_id = sa.address_id
 				  $where_clause
-				  ORDER BY created_at DESC";
+				  ORDER BY o.created_at DESC";
 
 		$stmt = $pdo->prepare($query);
 		if (!empty($params)) {
-			bindFilterParams($stmt, $params);
+			bindFilterParams($stmt, $params); // Use the function from includes/functions.php
 		}
 		$stmt->execute();
 		$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -139,11 +77,11 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 			$order['customer_name'],
 			$order['customer_email'] ?? '',
 			$order['customer_phone'] ?? '',
-			$order['shipping_address'],
+			$order['shipping_address_full'],
 			$order['total_amount'],
 			ucfirst($order['status']),
-			formatIST($order['created_at']),
-			formatIST($order['updated_at'])
+			formatIST($order['created_at']), // Use the function from includes/functions.php
+			formatIST($order['updated_at'])  // Use the function from includes/functions.php
 		];
 		fputcsv($output, $row);
 	}
@@ -167,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
 			$updated_count = $updateStmt->rowCount();
 
 			if ($updated_count > 0) {
-				header("Location: " . buildRedirectUrl($filter, $search, $page, $order_id));
+				header("Location: " . buildOrderRedirectUrl($filter, $search, $page, $order_id)); // Use the function from includes/functions.php
 				exit;
 			} else {
 				$update_message = "Order not found or already has this status.";
@@ -194,13 +132,13 @@ if (isset($_GET['updated'])) {
 try {
 	$stats_query = "SELECT 
 		COUNT(*) as total_orders,
-		SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending_orders,
-		SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing_orders,
-		SUM(CASE WHEN status = 'shipped' THEN 1 ELSE 0 END) as shipped_orders,
-		SUM(CASE WHEN status = 'delivered' THEN 1 ELSE 0 END) as delivered_orders,
-		SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_orders,
-		SUM(total_amount) as total_revenue
-	FROM orders";
+		SUM(CASE WHEN o.status = 'pending' THEN 1 ELSE 0 END) as pending_orders,
+		SUM(CASE WHEN o.status = 'processing' THEN 1 ELSE 0 END) as processing_orders,
+		SUM(CASE WHEN o.status = 'shipped' THEN 1 ELSE 0 END) as shipped_orders,
+		SUM(CASE WHEN o.status = 'delivered' THEN 1 ELSE 0 END) as delivered_orders,
+		SUM(CASE WHEN o.status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_orders,
+		SUM(o.total_amount) as total_revenue
+	FROM orders o"; // Added alias 'o' for consistency with joined queries
 	$stats_result = $pdo->query($stats_query)->fetch(PDO::FETCH_ASSOC);
 	$total_orders = (int)($stats_result['total_orders'] ?? 0);
 	$pending_orders = (int)($stats_result['pending_orders'] ?? 0);
@@ -217,10 +155,13 @@ try {
 
 // Count filtered records (for pagination)
 try {
-	$count_query = "SELECT COUNT(*) FROM orders $where_clause";
+	$count_query = "SELECT COUNT(o.order_id) FROM orders o
+					JOIN users u ON o.user_id = u.user_id
+					JOIN shipping_addresses sa ON o.shipping_address_id = sa.address_id
+					$where_clause";
 	$count_stmt = $pdo->prepare($count_query);
 	if (!empty($params)) {
-		bindFilterParams($count_stmt, $params);
+		bindFilterParams($count_stmt, $params); // Use the function from includes/functions.php
 	}
 	$count_stmt->execute();
 	$total_records = (int)$count_stmt->fetchColumn();
@@ -233,15 +174,25 @@ try {
 
 // Fetch paginated orders
 try {
-	$query = "SELECT order_id, customer_name, customer_email, customer_phone, 
-					 shipping_address, total_amount, status, created_at, updated_at
-			  FROM orders
+	$query = "SELECT 
+					o.order_id, 
+					u.name AS customer_name, 
+					u.email AS customer_email, 
+					sa.phone_number AS customer_phone,
+					CONCAT(sa.address_line_1, ', ', sa.city, ', ', sa.state, ' - ', sa.zip_code) AS shipping_address_full,
+					o.total_amount, 
+					o.status, 
+					o.created_at, 
+					o.updated_at
+			  FROM orders o
+			  JOIN users u ON o.user_id = u.user_id
+			  JOIN shipping_addresses sa ON o.shipping_address_id = sa.address_id
 			  $where_clause
-			  ORDER BY created_at DESC
+			  ORDER BY o.created_at DESC
 			  LIMIT :limit OFFSET :offset";
 	$stmt = $pdo->prepare($query);
 	if (!empty($params)) {
-		bindFilterParams($stmt, $params);
+		bindFilterParams($stmt, $params); // Use the function from includes/functions.php
 	}
 	$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
 	$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -613,7 +564,7 @@ $page_title   = "Orders";
 										<td><?= htmlspecialchars($order['customer_phone'] ?? '—') ?></td>
 										<td>
 											<span style="max-width: 250px; word-break: break-word; font-size: 13px; color: var(--text-secondary);">
-												<?= htmlspecialchars($order['shipping_address']) ?>
+												<?= htmlspecialchars($order['shipping_address_full']) ?>
 											</span>
 										</td>
 										<td><strong><?= formatCurrency($order['total_amount']) ?></strong></td>
@@ -776,4 +727,3 @@ $page_title   = "Orders";
 	</script>
 </body>
 </html>
-

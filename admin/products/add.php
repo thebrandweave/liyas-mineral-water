@@ -43,15 +43,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_product'])) {
         storeProductDraft();
     } else {
         $image_name = null;
-        // RELATIVE PATH FROM THIS FILE: ../uploads/products/
         $upload_dir = __DIR__ . '/../uploads/products/';
-        if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
+
+        // --- DEBUGGING ---
+        if (!is_dir($upload_dir)) {
+            if (!mkdir($upload_dir, 0777, true)) {
+                die("Failed to create upload directory: " . $upload_dir);
+            }
+        }
+        if (!is_writable($upload_dir)) {
+            die("Upload directory is not writable: " . $upload_dir);
+        }
+        // --- END DEBUGGING ---
 
         if (!empty($_FILES['image']['name'])) {
+            if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                die("File upload error: " . $_FILES['image']['error']);
+            }
+
             $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
             $file = 'product_' . time() . '_' . uniqid() . '.' . $ext;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $file)) {
                 $image_name = $file;
+            } else {
+                die("Failed to move uploaded file.");
             }
         }
 

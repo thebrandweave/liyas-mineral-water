@@ -79,7 +79,7 @@ $contact_link = $base_path . 'contact/';
                 <span>Subtotal</span>
                 <span id="subtotal-price">₹0.00</span>
             </div>
-            <a href="#" class="checkout-btn">Proceed to Checkout</a>
+            <a href="<?php echo BASE_URL; ?>/checkout.php" class="checkout-btn">Proceed to Checkout</a>
         </div>
     </div>
 </nav>

@@ -1,3 +1,15 @@
+<?php
+require_once __DIR__ . '/../config/config.php';
+
+// Prevent browser caching
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
+// Fetch social links
+$social_links_stmt = $pdo->query("SELECT * FROM social_links WHERE status = 'active' ORDER BY sort_order ASC");
+$social_links = $social_links_stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,19 +20,19 @@
     <meta name="keywords" content="mineral water, premium water, healthy water, LIYAS, pure water">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
-    <link rel="shortcut icon" type="image/jpeg" href="../assets/images/logo/logo-bg.jpg">
-    <link rel="apple-touch-icon" href="../assets/images/logo/logo-bg.jpg">
-    <link rel="icon" type="image/jpeg" sizes="32x32" href="../assets/images/logo/logo-bg.jpg">
-    <link rel="icon" type="image/jpeg" sizes="16x16" href="../assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" href="<?php echo BASE_URL; ?>/assets/images/logo/logo-bg.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="<?php echo BASE_URL; ?>/assets/images/logo/logo-bg.jpg">
+    <link rel="apple-touch-icon" href="<?php echo BASE_URL; ?>/assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="<?php echo BASE_URL; ?>/assets/images/logo/logo-bg.jpg">
+    <link rel="icon" type="image/jpeg" sizes="16x16" href="<?php echo BASE_URL; ?>/assets/images/logo/logo-bg.jpg">
     
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/style.css">
     
-    <link rel="stylesheet" href="../assets/css/cart.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/cart.css">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
@@ -35,15 +47,18 @@
     
     <meta property="og:title" content="LIYAS Mineral Water - Premium Quality Water">
     <meta property="og:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
-    <meta property="og:image" content="../assets/images/logo/logo.png">
-    <meta property="og:url" content="https://liyas-water.com">
+    <meta property="og:image" content="<?php echo BASE_URL; ?>/assets/images/logo/logo.png">
+    <meta property="og:url" content="https.liyas-water.com">
     <meta property="og:type" content="website">
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LIYAS Mineral Water - Premium Quality Water">
     <meta name="twitter:description" content="Premium quality mineral water for a healthy lifestyle. Pure, refreshing, and naturally sourced.">
-    <meta name="twitter:image" content="assets/images/logo/logo.png">
+    <meta name="twitter:image" content="<?php echo BASE_URL; ?>/assets/images/logo/logo.png">
     
+    <script>
+        const BASE_URL = '<?php echo BASE_URL; ?>';
+    </script>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -51,7 +66,7 @@
         "name": "LIYAS Mineral Water",
         "description": "Premium quality mineral water for a healthy lifestyle",
         "url": "https://liyas-water.com",
-        "logo": "../assets/images/logo/logo.png",
+        "logo": "<?php echo BASE_URL; ?>/assets/images/logo/logo.png",
         "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+1-234-567-8900",
@@ -611,35 +626,41 @@
 
     </style>
 
-    <?php include '../components/navbar.php' ?>
+    <?php include '../components/navbar.php'; ?>
 
     <div id="splash-screen" aria-hidden="true">
         <div class="splash-layer" aria-hidden="true"></div>
         <div class="logo-text"> 
             <div class="row">
-            <img style="width: 100px; height: 100px;" src="../assets/images/logo/logo.png" alt="Liyas">
+            <img style="width: 100px; height: 100px;" src="<?php echo BASE_URL; ?>/assets/images/logo/logo.png" alt="Liyas">
             </div>
         </div>
         <div class="math-particles" aria-hidden="true" id="mathParticles"></div>
     </div>
 
 <!-- Top-right Login Icon (aligned with Back to Top button) -->
-<a href="login.php" class="top-login-btn" title="Login">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-       stroke-width="1.5" stroke="currentColor" class="login-svg">
-    <path stroke-linecap="round" stroke-linejoin="round"
-          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-  </svg>
-</a>
+<?php if (isset($_SESSION['user_id'])): ?>
+    <a href="<?php echo BASE_URL; ?>/logout.php" class="top-login-btn" title="Logout">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="login-svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m-3 0l-3 3m0 0l3 3m-3-3h12.75" />
+        </svg>
+    </a>
+<?php else: ?>
+    <a href="<?php echo BASE_URL; ?>/login.php" class="top-login-btn" title="Login">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="login-svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006 21h7.5a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+        </svg>
+    </a>
+<?php endif; ?>
 
 
 
     <div class="social-sidebar">
-        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+        <?php foreach ($social_links as $link): ?>
+            <a href="<?= htmlspecialchars($link['url']) ?>" class="social-icon" target="_blank" aria-label="<?= htmlspecialchars($link['platform']) ?>">
+                <i class="<?= htmlspecialchars($link['icon_class']) ?>"></i>
+            </a>
+        <?php endforeach; ?>
     </div>
     
     <button id="backToTop" title="Go to top"><i class="fas fa-arrow-up"></i></button>
@@ -648,7 +669,7 @@
         <div class="container">
             <div class="page-header-content">
                 <div class="page-breadcrumb">
-                    <a href="../">Home</a> <span>/</span> <span>Contact</span>
+                    <a href="<?php echo BASE_URL; ?>/">Home</a> <span>/</span> - <span>Contact</span>
                 </div>
                 <h1 class="page-title">Contact <span class="text-primary">Us</span></h1>
             </div>
@@ -658,7 +679,7 @@
         <div class="container">
             <div class="page-header-content">
                 <div class="page-breadcrumb">
-                    <a href="../">Home</a> <span>/</span> <span>Contact</span>
+                    <a href="<?php echo BASE_URL; ?>/">Home</a> <span>/</span> <span>Contact</span>
                 </div>
                 <h1 class="page-title">Contact <span class="text-primary">Us</span></h1>
 
@@ -702,7 +723,7 @@
 
     <?php include '../components/footer.php'; ?>
 
-    <script src="../assets/js/script.js"></script>
+
     
 
     <script>
@@ -864,6 +885,9 @@ function finishSplash() {
     </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/cart.js"></script>
+    <script>
+        var userIsLoggedIn = <?php echo json_encode(isset($_SESSION['user_id'])); ?>;
+    </script>
+    <script src="<?php echo BASE_URL; ?>/assets/js/cart.js"></script>
 </body>
 </html>

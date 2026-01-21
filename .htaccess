@@ -9,6 +9,9 @@
 # Root .htaccess - Security and Redirects
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Exclude cart API files from all rewrite rules
+    RewriteRule ^(add_to_cart|get_cart|update_cart_quantity|remove_from_cart|submit_review|get_product_details)\.php$ - [L]
     
     # Special redirect for /redeem.php to /redeem (301 permanent)
     RewriteCond %{THE_REQUEST} /redeem\.php[\s?] [NC]
@@ -19,7 +22,7 @@
     RewriteRule ^redeem/?$ redeem/index.php [L]
     
     # Redirect other old .php URLs to clean URLs (301 permanent redirect)
-    # BUT preserve query strings - exclude admin directory from this rule
+    # BUT preserve query strings - exclude admin directory and cart API from this rule
     RewriteCond %{THE_REQUEST} /([^.]+)\.php[\s?] [NC]
     RewriteCond %{REQUEST_URI} !^/redeem\.php$ [NC]
     RewriteCond %{REQUEST_URI} !^/admin/ [NC]

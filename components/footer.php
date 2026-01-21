@@ -5,6 +5,12 @@ $script_dir = dirname($script_path);
 $path_segments = array_filter(explode('/', $script_dir));
 $is_subdirectory = (count($path_segments) > 1);
 $asset_base = $is_subdirectory ? '../' : '';
+
+require_once __DIR__ . '/../config/config.php'; // Include config for database connection
+
+// Fetch social links
+$social_links_stmt = $pdo->query("SELECT * FROM social_links WHERE status = 'active' ORDER BY sort_order ASC");
+$social_links = $social_links_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
   <footer>
     <!-- content container (white layer INSIDE here) -->
@@ -21,11 +27,11 @@ $asset_base = $is_subdirectory ? '../' : '';
             Committed to quality, sustainability, and your health since 2003.
           </p>
           <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-x twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#"><i class="fab fa-github"></i></a>
+            <?php foreach ($social_links as $link): ?>
+                <a href="<?= htmlspecialchars($link['url']) ?>" target="_blank" aria-label="<?= htmlspecialchars($link['platform']) ?>">
+                    <i class="<?= htmlspecialchars($link['icon_class']) ?>"></i>
+                </a>
+            <?php endforeach; ?>
           </div>
         </div>
 
@@ -289,3 +295,10 @@ $asset_base = $is_subdirectory ? '../' : '';
     }
   }
   </style>
+
+<script>
+    // Pass PHP session status to JavaScript to be used by global scripts like cart.js
+    const userIsLoggedIn = <?php echo json_encode(isset($_SESSION['user_id'])); ?>;
+</script>
+<script src="<?php echo BASE_URL; ?>/assets/js/product-modal.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/js/cart.js"></script>

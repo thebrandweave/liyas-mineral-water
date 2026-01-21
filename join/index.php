@@ -88,7 +88,7 @@ body{
 }
 
 .logo{
-    position:absolute;top:30px;left:30px;width:42px;
+    position:absolute;top:30px;left:30px;width:75px;
     filter:brightness(0);z-index:3
 }
 
@@ -101,13 +101,13 @@ body{
 }
 
 .campaign-title{
-    margin-bottom:22px;
+    /* margin-bottom:22px; */
 }
 
 .campaign-title span{
-    font-family:'Manrope',sans-serif;
+    font-family:'Outfit',sans-serif;
     font-size:3.1rem;
-    font-weight:300;
+    font-weight:600; /* Reverted to original */
     letter-spacing:1.6px;
     color:var(--navy);
     display:inline-block;
@@ -131,7 +131,7 @@ body{
 .left-header p{
     max-width:420px;
     margin:0 auto;
-    opacity:.85;
+    opacity:.85; /* Reverted to original */
     color:var(--navy);
     font-weight:300;
 }
@@ -139,16 +139,33 @@ body{
 /* PRODUCT */
 .product{
     margin:46px auto 0;
-    width:220px;
+    width:238vh;
     /* background:rgba(255,255,255,.6); */
-    padding:22px;
+    padding:10px; /* Adjusted for thinner appearance */
     border-radius:18px;
+    text-align:left;
     backdrop-filter:blur(12px);
-    box-shadow:0 30px 60px rgba(0,60,120,.25);
+    /* box-shadow:0 30px 60px rgba(0,60,120,.25); */
     position:relative;
     z-index:3;
+
+
 }
-.product img{width:100%}
+.product img{width:100%; border-radius:18px;}
+
+/* Slogan below product image */
+.product-slogan {
+    text-align: left;
+    /* margin-top: 20px; */
+    font-size: 18px;
+    font-weight: 500;
+    color: #253a41; /* Using accent color for prominence */
+    text-shadow: 0 0 8px rgba(31, 182, 233, 0.3);
+    z-index: 3;
+    position: relative;
+     line-height: 1.6em;
+}
+
 
 /* WAVES */
 .waves{
@@ -228,6 +245,13 @@ body{
     background: var(--aqua-2);
 }
 
+.left-flex{
+    display:flex;
+    gap:13px;
+    align-items:center;
+    justofy-content:center;
+}
+
 .preview-container img, .preview-container video {
     max-height: 250px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
@@ -266,13 +290,19 @@ body{
         <h1 class="campaign-title">
             <span><?= htmlspecialchars($campaign['title']) ?></span>
         </h1>
-        <p><?= htmlspecialchars($campaign['description'] ?? '') ?></p>
+       
     </div>
-
+<div class="left-flex">
+    
     <?php if($campaign['file_path']): ?>
     <div class="product">
         <img src="../<?= htmlspecialchars($campaign['file_path']) ?>">
     </div>
+    <!-- <p class="product-slogan">Hydration that Wins!</p> -->
+    <p class="product-slogan"><?= htmlspecialchars($campaign['description']) ?></p>
+</div>
+   
+    
     <?php endif; ?>
 
     <svg class="waves" viewBox="0 24 150 28" preserveAspectRatio="none">
@@ -462,4 +492,3 @@ document.querySelectorAll('.upload-box').forEach(box => {
 
 </body>
 </html>
-

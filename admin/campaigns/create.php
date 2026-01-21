@@ -83,7 +83,10 @@ input, select {
         <label>Campaign Title</label>
         <input type="text" name="title" required>
     </div>
-
+    <div>
+        <label> Description</label>
+        <input type="text" name="description" required>
+    </div>
     <div>
         <label>Slug</label>
         <input type="text" name="slug" required>
@@ -180,11 +183,12 @@ try {
 
     /* Insert Campaign */
     $stmt = $db->prepare("
-        INSERT INTO campaigns (title, slug, status, start_date, end_date, created_by)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO campaigns (title,description, slug, status, start_date, end_date, created_by)
+        VALUES (?,?, ?, ?, ?, ?, ?)
     ");
     $stmt->execute([
         $_POST['title'],
+        $_POST['description'],
         $_POST['slug'],
         $_POST['status'],
         $_POST['start_date'],

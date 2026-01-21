@@ -1,3 +1,24 @@
+
+<style>
+    textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.5); /* Glass effect */
+    backdrop-filter: blur(5px);
+    resize: vertical; /* Allows user to adjust height only */
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #3b82f6; /* Liyas Blue */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+</style>
 <?php
 require_once '../../config/config.php';
 require_once '../includes/auth_check.php';
@@ -29,9 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $db->beginTransaction();
 
-        $stmtUpdate = $db->prepare("UPDATE campaigns SET title = ?, slug = ?, status = ?, start_date = ?, end_date = ? WHERE id = ?");
+        $stmtUpdate = $db->prepare("UPDATE campaigns SET title = ?, description = ?, slug = ?, status = ?, start_date = ?, end_date = ? WHERE id = ?");
         $stmtUpdate->execute([
-            $_POST['title'], $_POST['slug'], $_POST['status'], $_POST['start_date'],
+            $_POST['title'],  $_POST['description'], $_POST['slug'], $_POST['status'], $_POST['start_date'],
             !empty($_POST['end_date']) ? $_POST['end_date'] : null, $id
         ]);
 
@@ -125,13 +146,17 @@ if (!empty($_POST['questions'])) {
                             <label>Title</label>
                             <input type="text" name="title" value="<?= htmlspecialchars($campaign['title']) ?>" required>
                         </div>
-                        <div class="input-group">
+                        <div class="input-group">   
                             <label>Poster (Leave blank to keep current)</label>
                             <input type="file" name="poster" accept=".jpg,.jpeg,.png,.pdf">
                             <?php if($asset): ?>
                                 <div class="current-asset"><i class='bx bx-link'></i> Current: <a href="../../<?= $asset['file_path'] ?>" target="_blank">View File</a></div>
                             <?php endif; ?>
                         </div>
+<div class="input-group">
+    <label>Description</label>
+    <textarea name="description" required><?= htmlspecialchars($campaign['description']) ?></textarea>
+</div>
                         <div class="input-group"><label>Slug</label><input type="text" name="slug" value="<?= htmlspecialchars($campaign['slug']) ?>" required></div>
                         <div class="input-group"><label>Start Date</label><input type="date" name="start_date" value="<?= $campaign['start_date'] ?>" required></div>
                         <div class="input-group"><label>End Date</label><input type="date" name="end_date" value="<?= $campaign['end_date'] ?>"></div>

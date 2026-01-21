@@ -1,9 +1,17 @@
 <?php
-$script_path = $_SERVER['SCRIPT_NAME'];
-$script_dir = dirname($script_path);
-$path_segments = array_filter(explode('/', $script_dir));
-$is_subdirectory = (count($path_segments) > 1);
-$asset_base = $is_subdirectory ? '../' : '';
+// Fetch categories
+$categories_stmt = $pdo->query("SELECT * FROM categories ORDER BY name ASC");
+$categories = $categories_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch products with their category name
+$products_stmt = $pdo->query("
+    SELECT p.*, c.name as category_name
+    FROM products p
+    LEFT JOIN categories c ON p.category_id = c.category_id
+    WHERE p.status = 'active'
+    ORDER BY p.created_at DESC
+");
+$products = $products_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <style>
@@ -148,89 +156,49 @@ $asset_base = $is_subdirectory ? '../' : '';
 
       <select id="categoryFilter">
         <option value="">All Categories</option>
-        <option value="classic">Classic</option>
-        <option value="sparkling">Sparkling</option>
-        <option value="mini">Mini Pack</option>
+        <?php foreach ($categories as $category): ?>
+            <option value="<?= strtolower(htmlspecialchars($category['name'])) ?>"><?= htmlspecialchars($category['name']) ?></option>
+        <?php endforeach; ?>
       </select>
     </div>
 
     <!-- PRODUCT GRID -->
     <div class="product-grid">
 
-      <!-- PRODUCT 1 -->
-      <div class="product-card"
-           data-name="chobani complete vanilla greek"
-           data-litre="1"
-           data-category="classic">
+      <?php if (empty($products)): ?>
+        <p>No products found.</p>
+      <?php else: ?>
+        <?php foreach ($products as $product): ?>
+          <div class="product-card" 
+               onclick="openProductModal(<?= $product['product_id'] ?>)"
+               style="cursor: pointer;"
+               data-product-id="<?= $product['product_id'] ?>"
+               data-name="<?= strtolower(htmlspecialchars($product['name'])) ?>"
+               data-litre="1" 
+               data-category="<?= strtolower(htmlspecialchars($product['category_name'])) ?>">
 
-        <div class="size-badge">1 L</div>
+            <div class="size-badge">1 L</div>
 
-        <div class="product-image-wrap">
-          <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="LIYAS 1L Bottle">
-        </div>
+            <div class="product-image-wrap">
+              <img src="<?= BASE_URL ?>/admin/uploads/products/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+            </div>
 
-        <div class="product-info">
-          <p class="category">Classic</p>
-          <h4>Chobani Complete Vanilla Greek</h4>
-          <div class="rating">⭐⭐⭐⭐☆ <span>(4.0)</span></div>
-          <p class="by">By <span>Liyas</span></p>
-          <div class="price-section">
-            <p class="new-price">₹54.85</p>
-            <p class="old-price">₹55.80</p>
+            <div class="product-info">
+              <p class="category"><?= htmlspecialchars($product['category_name']) ?></p>
+              <h4><?= htmlspecialchars($product['name']) ?></h4>
+              <div class="rating">⭐⭐⭐⭐☆ <span>(4.0)</span></div>
+              <p class="by">By <span>Liyas</span></p>
+              <div class="price-section">
+                <p class="new-price">₹<?= htmlspecialchars($product['price']) ?></p>
+                <?php if ($product['discount'] > 0): ?>
+                    <p class="old-price">₹<?= htmlspecialchars($product['price'] + ($product['price'] * $product['discount'] / 100)) ?></p>
+                <?php endif; ?>
+              </div>
+              <button class="add-btn" onclick="event.stopPropagation();">Add</button>
+            </div>
           </div>
-          <button class="add-btn">Add</button>
-        </div>
-      </div>
-
-      <!-- PRODUCT 2 -->
-      <div class="product-card"
-           data-name="canada dry ginger ale"
-           data-litre="2"
-           data-category="sparkling">
-
-        <div class="size-badge">2 L</div>
-
-        <div class="product-image-wrap">
-          <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="LIYAS 2L Bottle">
-        </div>
-
-        <div class="product-info">
-          <p class="category">Sparkling</p>
-          <h4>Canada Dry Ginger Ale – 2L</h4>
-          <div class="rating">⭐⭐⭐⭐☆ <span>(4.0)</span></div>
-          <p class="by">By <span>Liyas</span></p>
-          <div class="price-section">
-            <p class="new-price">₹32.85</p>
-            <p class="old-price">₹33.80</p>
-          </div>
-          <button class="add-btn">Add</button>
-        </div>
-      </div>
-
-      <!-- PRODUCT 3 -->
-      <div class="product-card"
-           data-name="purelife natural spring water"
-           data-litre="1"
-           data-category="mini">
-
-        <div class="size-badge">1 L</div>
-
-        <div class="product-image-wrap">
-          <img src="<?php echo $asset_base; ?>assets/images/liyas-bottle.png" alt="LIYAS 1L Bottle">
-        </div>
-
-        <div class="product-info">
-          <p class="category">Mini Pack</p>
-          <h4>PureLife Natural Spring Water – 1L</h4>
-          <div class="rating">⭐⭐⭐⭐☆ <span>(4.3)</span></div>
-          <p class="by">By <span>Liyas</span></p>
-          <div class="price-section">
-            <p class="new-price">₹29.50</p>
-            <p class="old-price">₹31.00</p>
-          </div>
-          <button class="add-btn">Add</button>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
 
     </div>
   </div>

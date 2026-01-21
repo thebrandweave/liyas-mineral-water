@@ -1,4 +1,27 @@
-  <style>
+<?php
+require_once 'config/config.php';
+$page_title = 'Contact Us | LIYAS Mineral Water';
+
+// Fetch social links
+$social_links_stmt = $pdo->query("SELECT * FROM social_links WHERE status = 'active' ORDER BY sort_order ASC");
+$social_links = $social_links_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+include 'components/public-header.php';
+?>
+
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+
+
+<div class="social-sidebar">
+    <?php foreach ($social_links as $link): ?>
+        <a href="<?= htmlspecialchars($link['url']) ?>" class="social-icon" target="_blank" aria-label="<?= htmlspecialchars($link['platform']) ?>">
+            <i class="<?= htmlspecialchars($link['icon_class']) ?>"></i>
+        </a>
+    <?php endforeach; ?>
+</div>
+
+<style>
     * {
       margin: 0;
       padding: 0;
@@ -158,3 +181,7 @@
       document.getElementById("rightText").classList.add("visible");
     });
   </script>
+
+<?php
+include 'components/footer.php';
+?>

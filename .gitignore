@@ -6,7 +6,6 @@ config/db_config.php
 .env.local
 
 # Logs
-*.log
 error_log
 
 # Uploads (optional - uncomment if you don't want to track uploads)
