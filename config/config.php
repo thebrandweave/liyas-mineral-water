@@ -18,11 +18,11 @@ use Firebase\JWT\Key;
 // ============================================
 
 // Toggle this variable to switch environments
-$is_live = false; 
+$is_live = true; 
 
 if ($is_live) {
     // LIVE PRODUCTION
-    define('DB_HOST', 'https://liyasinternational.com/');
+    define('DB_HOST', 'localhost');
     define('DB_PORT', 3306);
     define('DB_USER', 'u232955123_liyas');
     define('DB_PASS', 'Brandweave@24');
