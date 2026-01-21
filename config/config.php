@@ -24,7 +24,7 @@ if ($is_live) {
     // LIVE PRODUCTION
     define('DB_HOST', 'localhost');
     define('DB_PORT', 3306);
-    define('DB_USER', 'u232955123_liyas');
+    define('DB_USER', 'u232955123_campaign');
     define('DB_PASS', 'Brandweave@24');
     define('DB_NAME_MAIN', 'u232955123_liyas_inter');
     define('DB_NAME_CAMPAIGN', 'u232955123_liyas_campaign'); // Adjust to your live campaign DB name
