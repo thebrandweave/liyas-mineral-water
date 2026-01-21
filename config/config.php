@@ -73,7 +73,11 @@ try {
 $JWT_SECRET = "super_secure_secret_987654321";
 $JWT_EXPIRE = 3600;
 
-define('BASE_URL', 'http://localhost/liyas-mineral-water');
+if ($is_live) {
+    define('BASE_URL', 'https://liyasinternational.com');
+} else {
+    define('BASE_URL', 'http://localhost/liyas-mineral-water');
+}
 
 $ROOT_PATH = dirname(__DIR__); 
 define('UPLOAD_DIR', '/uploads/');
